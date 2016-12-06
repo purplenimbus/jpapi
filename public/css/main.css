@@ -1,0 +1,46 @@
+.center-block {
+  float: none; }
+
+.valign {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translateY(-50%) translateX(50%); }
+
+.panel {
+  border-radius: 0px;
+  border-color: whitesmoke; }
+
+body {
+  padding-top: 50px; }
+  body .navbar {
+    margin: 0px;
+    border-bottom: 1px solid lightgray; }
+    body .navbar .navbar-right {
+      margin: 0px !important; }
+  body section#home {
+    height: 100vh;
+    position: relative; }
+    body section#home form {
+      width: 100%; }
+  body aside.sidebar {
+    font-size: 12px; }
+    body aside.sidebar .panel .panel-body h3 {
+      margin-top: 0px;
+      font-weight: bold;
+      font-size: inherit;
+      text-transform: uppercase; }
+  body main #content .jobs {
+    border: 1px solid whitesmoke; }
+    body main #content .jobs li {
+      padding: 0px; }
+      body main #content .jobs li .panel {
+        position: relative;
+        border: 0px;
+        border-bottom: 1px solid whitesmoke;
+        margin: 0px; }
+        body main #content .jobs li .panel .panel-body h4 {
+          font-size: 14px;
+          font-weight: bold; }
+
+/*# sourceMappingURL=main.css.map */

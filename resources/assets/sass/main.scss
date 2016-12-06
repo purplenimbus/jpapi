@@ -1,0 +1,71 @@
+$icon-font-path: '../fonts/';
+
+// bower:scss
+// endbower
+
+
+@import 'utitlities';
+
+body{
+	//margin-top: 50px;
+	padding-top:50px;
+	.navbar{
+		margin:0px;
+		border-bottom: 1px solid lightgray;
+		.navbar-right{
+			margin:0px !important;
+		}
+	}
+	section{
+		&#home{
+			height: 100vh;
+			position: relative;
+			form{
+				width:100%;
+			}
+		}
+		&#jobs{
+		
+		}
+	}
+	aside{
+		&.sidebar{
+			font-size: 12px;
+			.panel{
+				.panel-body{
+					h3{
+						margin-top:0px;
+						font-weight: bold;
+						font-size:inherit;
+						text-transform: uppercase;
+					}
+				}
+			}
+		}
+		&.inset{
+		
+		}
+	}
+	main{
+		#content{
+			.jobs{
+				border:1px solid whitesmoke;
+				li{
+					padding:0px;
+					.panel{
+						position:relative;
+						border:0px;
+						border-bottom: 1px solid whitesmoke;
+						margin:0px;
+						.panel-body{
+							h4{
+								font-size:14px;
+								font-weight:bold;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
