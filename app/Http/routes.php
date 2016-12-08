@@ -23,9 +23,12 @@ Route::get('/', function () {
 });*/
 
 //Job Routes
-Route::resource('jobs', 'JobController', ['only' => [
-    'index','show','update','store'
-]]);
 
-Route::get('/jobs/all', 'JobController@getJobs');
+Route::get('joboptions', 'JobController@joboptions');
+
+Route::resource('jobs', 'JobController', [
+		'only' 	=> ['index','show','update','store','jobtypes'],
+		'names' => ['jobtypes' => 'jobs.jobtypes']
+	]);
+
 

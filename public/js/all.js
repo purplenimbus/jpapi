@@ -15,7 +15,8 @@ angular
 		'ngResource',
 		'ngRoute',
 		'ngSanitize',
-		'ngTouch'
+		'ngTouch',
+		'xeditable'
 	])
 	.config(function ($routeProvider,$locationProvider) {
 		console.log('Route Provider',$routeProvider);
@@ -31,11 +32,20 @@ angular
 				controller	:	'JobsCtrl',
 				controllerAs: 	'jobs'
 			})
+			.when('/jobs/:jobId',{
+				templateUrl	:	'/views/partials/jobs/view-job.html',
+				controller	:	'JobCtrl',
+				controllerAs: 	'job'
+			})
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
 
 		//$locationProvider.html5Mode(true);
+	}).run(function(editableOptions,editableThemes) {
+		editableThemes.bs3.inputClass = 'input-sm';
+		editableThemes.bs3.buttonsClass = 'btn-sm';
+		editableOptions.theme = 'bs3';
 	});
   
 
@@ -49,12 +59,19 @@ angular
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
+		
+		if(!$rootScope.job){
+			$rootScope.job = {
+				
+			};
+		}
+		
 		
 		//var vm = this;
 		
@@ -110,6 +127,20 @@ angular.module('jpApp')
 			angular.element('#modal').modal('hide').remove();
 		};
 		
+		if(!$rootScope.job.options){
+			jobs.getData('joboptions',false).then(function(result){
+				console.log('Got a job options',result);
+				$rootScope.job.options = result.data;
+				$rootScope.job.options.job_status = [{
+					id 		: 	1,
+					name	:	'Draft',	
+				},{
+					id 		: 	2,
+					name	:	'Published',	
+				}];
+			});
+		}
+		
 	});
 
 'use strict';
@@ -122,7 +153,61 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location)
+	{
+		this.awesomeThings = [
+		  'HTML5 Boilerplate',
+		  'AngularJS',
+		  'Karma'
+		];
+		
+		console.log($route);
+		
+		if(!$scope.currentJob){
+			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
+				console.log('Got a job',result);
+				$scope.currentJob = result.data;
+			});
+		}
+		
+		//$scope.jobForm.data.id = $scope.currentJob.id;
+		$scope.updateJob = function(){
+			var data = {};
+			
+			angular.forEach($scope.jobForm.data,function(value,key){
+				//console.log('Value',value);
+				//console.log('Key',key);
+				if(value){
+					if(key === 'job_status'){
+						data['status'] = value.name
+					}else if(key === 'application_deadline'){
+						data[key] = value
+					}else{
+						data[key+'_id'] = value.id
+					}
+				}
+			});
+			
+			console.log('Data',data);
+			jobs.sendData('jobs',$route.current.params.jobId,data).then(function(result){
+				console.log('Got a Response',result);
+				$scope.currentJob = result.data;
+			});
+		}
+		
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:JobsCtrl
+ * @description
+ * # JobsCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -131,8 +216,9 @@ angular.module('jpApp')
 		];
 		
 		$scope.init	=	function(){
-			jobs.getJobs().then(function(result){
-				console.log('result',result);
+			jobs.getData('jobs').then(function(result){
+				console.log('Got some jobs',result);
+				$scope.jobs = result.data;
 			});
 		};
 		
@@ -391,8 +477,21 @@ angular.module('jpApp')
 	.service('jobs', function ($http) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
-			getJobs	:	function(){
-				return	$http.get('jobs');
+			getData	:	function($data,$id){
+				console.log($data+' id',$id);
+				if($id){
+					return $http.get($data+'/'+$id);
+				}else{
+					return	$http.get($data);
+				}
+			},
+			sendData	:	function($name,$id,$data){
+				console.log($name+' id',$id);
+				if($id){
+					return $http.put($name+'/'+$id,$data);
+				}else{
+					return	$http.post($name);
+				}
 			}
 		};
 	});

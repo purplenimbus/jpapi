@@ -15,7 +15,8 @@ angular
 		'ngResource',
 		'ngRoute',
 		'ngSanitize',
-		'ngTouch'
+		'ngTouch',
+		'xeditable'
 	])
 	.config(function ($routeProvider,$locationProvider) {
 		console.log('Route Provider',$routeProvider);
@@ -31,10 +32,19 @@ angular
 				controller	:	'JobsCtrl',
 				controllerAs: 	'jobs'
 			})
+			.when('/jobs/:jobId',{
+				templateUrl	:	'/views/partials/jobs/view-job.html',
+				controller	:	'JobCtrl',
+				controllerAs: 	'job'
+			})
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
 
 		//$locationProvider.html5Mode(true);
+	}).run(function(editableOptions,editableThemes) {
+		editableThemes.bs3.inputClass = 'input-sm';
+		editableThemes.bs3.buttonsClass = 'btn-sm';
+		editableOptions.theme = 'bs3';
 	});
   

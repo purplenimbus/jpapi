@@ -48,6 +48,8 @@
 	<script src="/bower_components/satellizer/dist/satellizer.js"></script>
 	<script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="/bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+	<script src="/bower_components/moment/moment.js"></script>
+	<script src="/bower_components/ckeditor/ckeditor.js"></script>
 	<!-- endbower -->
 	
 	<script src="{{ URL::asset('js/all.js') }}"></script>

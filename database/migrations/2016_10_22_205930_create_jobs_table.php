@@ -18,17 +18,17 @@ class CreateJobsTable extends Migration
 			$table->longText('description');
 			$table->integer('company_id')->default(1);
 			$table->integer('job_category_id')->default(1);
-			$table->integer('type_id')->default(1);
-			$table->integer('level_id')->default(1);
-			$table->integer('salary_id')->default(1);
-			$table->integer('location_id')->default(1);
+			$table->integer('job_type_id')->default(1);
+			$table->integer('job_level_id')->default(1);
+			$table->integer('job_salary_id')->default(1);
+			$table->integer('job_location_id')->default(1);
 			$table->integer('job_class')->default(1); //Between Level 1 - 5 , level 5 being the best jobs
 			$table->integer('salary');
-			$table->integer('currency_id');
+			$table->integer('job_currency_id');
 			$table->date('application_deadline')->nullable();
 			$table->integer('min_experience')->default(1);
 			$table->string('min_qualification')->default('none');
-			$table->integer('ref_id')->nullable();
+			$table->integer('job_ref_id')->nullable();
 			$table->string('ref_url')->nullable();
 			$table->date('ref_date')->nullable();
 			$table->string('status')->default('draft');

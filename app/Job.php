@@ -45,6 +45,11 @@ class Job extends Model
 	public function job_type(){
 		return $this->belongsTo('App\Job_Type');
 	}
+	
+	//Bind Job to Job Level
+	public function job_level(){
+		return $this->belongsTo('App\Job_Level');
+	}
 	//Bind Job to Salary
 	public function salary(){
 		return $this->belongsTo('App\Salary');

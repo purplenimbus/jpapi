@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs)
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -17,8 +17,9 @@ angular.module('jpApp')
 		];
 		
 		$scope.init	=	function(){
-			jobs.getJobs().then(function(result){
-				console.log('result',result);
+			jobs.getData('jobs').then(function(result){
+				console.log('Got some jobs',result);
+				$scope.jobs = result.data;
 			});
 		};
 		

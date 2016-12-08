@@ -8,12 +8,19 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
+		
+		if(!$rootScope.job){
+			$rootScope.job = {
+				
+			};
+		}
+		
 		
 		//var vm = this;
 		
@@ -68,5 +75,19 @@ angular.module('jpApp')
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('hide').remove();
 		};
+		
+		if(!$rootScope.job.options){
+			jobs.getData('joboptions',false).then(function(result){
+				console.log('Got a job options',result);
+				$rootScope.job.options = result.data;
+				$rootScope.job.options.job_status = [{
+					id 		: 	1,
+					name	:	'Draft',	
+				},{
+					id 		: 	2,
+					name	:	'Published',	
+				}];
+			});
+		}
 		
 	});

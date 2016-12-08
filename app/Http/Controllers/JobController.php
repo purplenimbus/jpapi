@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use	App\Job;
+use	App\Job_Type;
+use	App\Job_Category;
+use	App\Job_Level;
 
 class JobController extends Controller
 {
@@ -16,14 +19,13 @@ class JobController extends Controller
      */
     public function index()
     {		
-		return view('layouts.pages.jobs', [ 'page_title' => 'Jobs' 
-											//'jobs' => Job::all()
-											]);
-    }
-	
-	public function getJobs()
-    {		
-		return 'Job';//Job::find(1);
+		$jobs	=	Job::all();
+		
+		foreach($jobs as $job){
+			$job['company'] = $job->company->name;
+		}
+			
+		return $jobs->toJson();
     }
 
     /**
@@ -47,10 +49,12 @@ class JobController extends Controller
     {
         $job	=	Job::findorfail($id);
 		
-		return view('layouts.pages.jobs.view-job', [ 
-													'page_title' => $job->title , 
-													'job' => $job
-													]);
+		$job['company']			= $job->company->name;
+		$job['job_category'] 	= $job->job_category->name;
+		$job['job_type'] 		= $job->job_type->name;
+		$job['job_level'] 		= $job->job_level->name;
+		
+		return $job->toJson();
     }
 
     /**
@@ -68,13 +72,16 @@ class JobController extends Controller
 		
 		foreach($requests as $key => $req){
 			if($request->has($key)){
-				$job[$key]	=	$request[$key];
+				$job[$key]	=	$request->input($key);
+				//echo $request[$key];
 			}
 		}
 		
 		$job->save();
 		
-		return json_encode((object)['id'	=>	$job->id ]);		
+		$payload = json_encode($requests);
+		
+		return json_encode((object)['id'	=>	$job->id , 'payload'	=>	$payload ]);		
     }
 
     /**
@@ -87,4 +94,26 @@ class JobController extends Controller
     {
         //
     }
+	
+	/**
+     * Return a list of job options i.e job types , job category and job levels
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function joboptions()
+    {
+        //
+		$job_types = Job_Type::all();
+		$job_levels = Job_Level::all();
+		$job_cats = Job_Category::all();
+		
+		$job_options = [
+			"job_levels" => $job_levels,
+			"job_categories" => $job_cats,
+			"job_types" => $job_types
+		];
+		
+		return json_encode($job_options);
+    }
+	
 }
