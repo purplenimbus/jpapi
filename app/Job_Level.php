@@ -15,6 +15,14 @@ class Job_Level extends Model
     protected $fillable = [
         'name','description'
     ];
+	/**
+     * The attributes that are visible to the client;
+     *
+     * @var array
+     */
+	protected $visible = [
+        'id','name','description'
+    ];
 	
 	//Bind Job Level to Job Model
 	public function jobs(){

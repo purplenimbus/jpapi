@@ -153,13 +153,17 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
+		
+		var self = this;
+		
+		this.data = {};
 		
 		console.log($route);
 		
@@ -170,29 +174,38 @@ angular.module('jpApp')
 			});
 		}
 		
-		//$scope.jobForm.data.id = $scope.currentJob.id;
-		$scope.updateJob = function(){
-			var data = {};
+		$scope.jobOptions = function(options) {
+			switch(options){
+				case 'job_status' :  return function(){
+					var selected = $filter('filter')($rootScope.job.options.job_status, {value: $scope.currentJob.status});
+					return ($scope.currentJob.status && selected.length) ? selected[0].text : 'Not set';
+				}
+				break;
+			}
 			
+		};
+		
+		$scope.updateJob = function(){
 			angular.forEach($scope.jobForm.data,function(value,key){
 				//console.log('Value',value);
 				//console.log('Key',key);
 				if(value){
 					if(key === 'job_status'){
-						data['status'] = value.name
+						self.data['status'] = value.name
 					}else if(key === 'application_deadline'){
-						data[key] = value
+						self.data[key] = value
 					}else{
-						data[key+'_id'] = value.id
+						self.data[key+'_id'] = value.id
 					}
 				}
 			});
 			
-			console.log('Data',data);
-			jobs.sendData('jobs',$route.current.params.jobId,data).then(function(result){
-				console.log('Got a Response',result);
-				$scope.currentJob = result.data;
-			});
+			console.log('Data',this.data);
+			
+			//jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
+				//console.log('Got a Response',result);
+				//$scope.currentJob = result.data;
+			//});
 		}
 		
 	});
@@ -207,7 +220,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location)
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -216,9 +229,13 @@ angular.module('jpApp')
 		];
 		
 		$scope.init	=	function(){
+			var str = '';
 			jobs.getData('jobs').then(function(result){
 				console.log('Got some jobs',result);
 				$scope.jobs = result.data;
+				str	=	'<li class="col-md-6" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
+				angular.element('ul.jobs').append($compile(str)($scope))
+				angular.element('.loading').hide();
 			});
 		};
 		
@@ -490,7 +507,7 @@ angular.module('jpApp')
 				if($id){
 					return $http.put($name+'/'+$id,$data);
 				}else{
-					return	$http.post($name);
+					return	$http.post($name,$data);
 				}
 			}
 		};

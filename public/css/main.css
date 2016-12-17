@@ -11,6 +11,21 @@
   border-radius: 0px;
   border-color: #ddd; }
 
+.loading {
+  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1000; }
+  .loading img {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 100px;
+    left: 50%; }
+
 body {
   padding-top: 70px; }
   body .navbar {
@@ -23,6 +38,8 @@ body {
     position: relative; }
     body section#home form {
       width: 100%; }
+  body .sub-header h1 {
+    margin: 0px; }
   body aside.sidebar {
     font-size: 12px; }
     body aside.sidebar .panel .panel-body .header {
@@ -49,28 +66,30 @@ body {
         body aside.sidebar .panel .panel-body dl.row dd span {
           color: gray;
           font-style: italic; }
-          body aside.sidebar .panel .panel-body dl.row dd span select.form-control {
+          body aside.sidebar .panel .panel-body dl.row dd span select.form-control, body aside.sidebar .panel .panel-body dl.row dd span input.form-control {
             margin-bottom: 10px;
             text-transform: capitalize; }
-  body main #content .jobs li {
-    padding-right: 10px;
-    padding-left: 10px; }
-    body main #content .jobs li .panel {
-      position: relative;
-      border: 1px solid lightgray; }
-      body main #content .jobs li .panel .panel-body h4 {
-        font-size: 14px;
-        font-weight: bold; }
-      body main #content .jobs li .panel .panel-body small {
-        color: gray; }
-  body main #content .panel .panel-heading h1 {
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 0px; }
-  body main #content .panel .panel-body .job_details li h2 {
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 0px; }
+  body main #content {
+    position: relative; }
+    body main #content .jobs li {
+      padding-right: 10px;
+      padding-left: 10px; }
+      body main #content .jobs li .panel {
+        position: relative;
+        border: 1px solid lightgray; }
+        body main #content .jobs li .panel .panel-body h4 {
+          font-size: 14px;
+          font-weight: bold; }
+        body main #content .jobs li .panel .panel-body small {
+          color: gray; }
+    body main #content .panel .panel-heading h1 {
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 0px; }
+    body main #content .panel .panel-body .job_details li h2 {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 0px; }
 
 /*# sourceMappingURL=main.css.map */

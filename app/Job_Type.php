@@ -12,6 +12,14 @@ class Job_Type extends Model
      * @var array
      */
 	protected  $fillable	=	['name','description'];
+	/**
+     * The attributes that are visible to the client;
+     *
+     * @var array
+     */
+	protected $visible = [
+        'id','name','description'
+    ];
 	
 	//Get all Jobs from Location
 	public function jobs(){

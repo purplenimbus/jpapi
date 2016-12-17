@@ -14,6 +14,14 @@ class Job_Category extends Model
     protected $fillable = [
         'name','description'
     ];
+	/**
+     * The attributes that are visible to the client;
+     *
+     * @var array
+     */
+	protected $visible = [
+        'id','name','description'
+    ];
 	
 	//Bind Job Category to Job Model
 	public function jobs(){

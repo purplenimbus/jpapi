@@ -24,7 +24,7 @@ class JobController extends Controller
 		foreach($jobs as $job){
 			$job['company'] = $job->company->name;
 		}
-			
+
 		return $jobs->toJson();
     }
 
@@ -53,6 +53,8 @@ class JobController extends Controller
 		$job['job_category'] 	= $job->job_category->name;
 		$job['job_type'] 		= $job->job_type->name;
 		$job['job_level'] 		= $job->job_level->name;
+		
+		
 		
 		return $job->toJson();
     }

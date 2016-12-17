@@ -29,6 +29,25 @@ class Job extends Model
 		'ref_job_id',
 		'ref_url'
     ];
+	
+	protected $visible = [
+		'id',
+        'title',
+		'description',
+		'company',
+		'salary',
+		'job_category',
+		'job_type',
+		'job_level',
+		'application_deadline',
+		'min_experience',
+		'min_qualification',
+		'salary',
+		'status',
+		'ref_id',
+		'ref_url'
+    ];
+	
 	//Bind Job to Company
 	public function company(){
 		return $this->belongsTo('App\Company');

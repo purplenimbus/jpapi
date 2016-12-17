@@ -1,0 +1,30 @@
+<div class="row">
+	<form editable-form name="jobForm" onaftersave="updateJob()">
+		<aside class="col-md-3 sidebar" ng-include="'views/partials/jobs/sidebar.html'"></aside>
+		<main class="col-md-6">
+			<div id="content">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<ul class="job_details list-unstyled">
+							<li>
+								<h2>Job Description</h2>
+								<span editable-textarea="currentJob.description" e-label="Job Description">
+									{{ currentJob.description || 'No Job description' }}
+								</span>
+							</li>
+							<li>
+								<h2>Required Skills</h2>
+								<span editable-textarea="currentJob.skills" e-label="Required Skills">
+									{{ currentJob.skills || 'No Job Skills' }}
+								</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</main>
+		<aside class="col-md-3 inset">
+			
+		</aside>
+	</form>
+</div>

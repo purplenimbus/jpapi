@@ -1,0 +1,88 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="clearfix header">
+			<h3 class="pull-left">Job Details</h3>
+			
+			<a ng-click="apply()" class="pull-right btn btn-primary btn-xs hide" ng-show="!jobForm.$visible">
+				Apply
+			</a>  
+			<a ng-click="jobForm.$show()" class="btn btn-default btn-xs pull-right" ng-show="!jobForm.$visible">
+				Edit Job
+			</a>
+			
+			<span ng-show="jobForm.$visible" class="pull-right">
+				<button type="submit" class="btn btn-primary btn-xs" ng-disabled="jobForm.$waiting">
+				  Save
+				</button>
+				<button type="button" class="btn btn-default btn-xs" ng-disabled="jobForm.$waiting" ng-click="jobForm.$cancel()">
+				  Cancel
+				</button>
+			</span>
+		</div>
+		<dl class="row">
+			<dt class="col-md-4">Post Status</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-select="jobForm.data.job_status" e-ng-options="g as g.name for g in $root.job.options.job_status track by g.id">
+					{{ jobOptions('job_status') }}
+				</span>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Title</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-text="jobForm.data.job_title">
+					{{ currentJob.title || 'No Job Title' }}
+				</span>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Category</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-select="jobForm.data.job_category" e-ng-options="g as g.name for g in $root.job.options.job_categories track by g.id">
+					{{ jobForm.data.job_category.name || currentJob.job_category.name }}
+				</span>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Level</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-select="jobForm.data.job_level" e-ng-options="g as g.name for g in $root.job.options.job_levels track by g.id">
+					{{ jobForm.data.job_level.name || currentJob.job_level.name }}
+				</span>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Location</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-text="currentJob.job_location">
+					{{ currentJob.location.name || 'No Location Set' }}
+				</span>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Company</dt>
+			<dd class="col-md-8 text-right">
+				<a href="#company/{{ currentJob.company.id }}" title="{{ currentJob.company.name }}">
+					{{ currentJob.company.name }}
+				</a>
+			</dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-md-4">Type</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-select="jobForm.data.job_type" e-ng-options="g as g.name for g in $root.job.options.job_types track by g.id">
+					{{ jobForm.data.job_type.name || currentJob.job_type.name }}
+				</span>
+			</dd>
+		</dl>
+		<h3>Job Information</h3>
+		<dl class="row">
+			<dt class="col-md-4">Deadline</dt>
+			<dd class="col-md-8 text-right">
+				<span editable-date="jobForm.data.application_deadline">
+					{{ (jobForm.data.application_deadline | date:"fullDate") || (currentJob.application_deadline | date:"fullDate") }}
+				</span>
+			</dd>
+		</dl>
+	</div>
+</div>

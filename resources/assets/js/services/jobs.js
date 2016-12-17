@@ -24,7 +24,7 @@ angular.module('jpApp')
 				if($id){
 					return $http.put($name+'/'+$id,$data);
 				}else{
-					return	$http.post($name);
+					return	$http.post($name,$data);
 				}
 			}
 		};

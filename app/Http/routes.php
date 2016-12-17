@@ -27,8 +27,8 @@ Route::get('/', function () {
 Route::get('joboptions', 'JobController@joboptions');
 
 Route::resource('jobs', 'JobController', [
-		'only' 	=> ['index','show','update','store','jobtypes'],
-		'names' => ['jobtypes' => 'jobs.jobtypes']
-	]);
+	'only' 	=> ['index','show','update','store','jobtypes'],
+	'names' => ['jobtypes' => 'jobs.jobtypes']
+]);
 
 

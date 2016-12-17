@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location)
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -17,9 +17,13 @@ angular.module('jpApp')
 		];
 		
 		$scope.init	=	function(){
+			var str = '';
 			jobs.getData('jobs').then(function(result){
 				console.log('Got some jobs',result);
 				$scope.jobs = result.data;
+				str	=	'<li class="col-md-6" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
+				angular.element('ul.jobs').append($compile(str)($scope))
+				angular.element('.loading').hide();
 			});
 		};
 		

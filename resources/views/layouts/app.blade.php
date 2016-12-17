@@ -18,7 +18,7 @@
 	@include('partials.nav')
 
     <div class="container-fluid">
-		<div ng-view>
+		<div ng-view id="view">
 		
 		</div>
 		{{-- @yield('page') --}}
