@@ -1,4 +1,16 @@
-<nav class="navbar navbar-default navbar-fixed-top" ng-controller="AuthCtrl">
+<nav class="light-blue lighten-1" role="navigation" ng-controller="AuthCtrl">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+		<ul class="right hide-on-med-and-down">
+			<li><li><a href="#jobs">Jobs 2</a></li></li>
+		</ul>
+
+		<ul id="nav-mobile" class="side-nav" style="transform: translateX(-100%);">
+			<li><a href="#">Navbar Link</a></li>
+		</ul>
+		<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<nav class="navbar navbar-default navbar-fixed-top hide" ng-controller="AuthCtrl">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -21,7 +33,7 @@
 						</div><!-- /input-group -->
 					</form>
 				</li>
-				<li><a href="#jobs">Jobs</a></li>
+				<li><a href="#jobs">Jobs 2</a></li>
 			</ul>
 			<div class="navbar-right">
 				<button type="button" class="btn btn-default navbar-btn" ng-click="signIn($event)">Sign in</button>

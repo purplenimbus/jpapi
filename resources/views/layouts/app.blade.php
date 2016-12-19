@@ -8,8 +8,8 @@
     <title>Job Portal | </title>
 	
 	<!-- bower:css -->
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
 	<link rel="stylesheet" href="/bower_components/angular-xeditable/dist/css/xeditable.css" />
+	<link rel="stylesheet" href="/bower_components/materialize/bin/materialize.css" />
 	<!-- endbower -->
 	
 	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
@@ -38,7 +38,6 @@
 	<!-- bower:js -->
 	<script src="/bower_components/jquery/dist/jquery.js"></script>
 	<script src="/bower_components/angular/angular.js"></script>
-	<script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="/bower_components/angular-animate/angular-animate.js"></script>
 	<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="/bower_components/angular-resource/angular-resource.js"></script>
@@ -50,6 +49,7 @@
 	<script src="/bower_components/angular-xeditable/dist/js/xeditable.js"></script>
 	<script src="/bower_components/moment/moment.js"></script>
 	<script src="/bower_components/ckeditor/ckeditor.js"></script>
+	<script src="/bower_components/materialize/bin/materialize.js"></script>
 	<!-- endbower -->
 	
 	<script src="{{ URL::asset('js/all.js') }}"></script>
