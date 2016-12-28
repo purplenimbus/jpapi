@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "bootstrap-sass": "^3.0.0",
+    "elixir-jshint": "^1.2.3",
     "gulp": "^3.9.1",
     "laravel-elixir": "^5.0.0",
     "laravel-elixir-wiredep": "^2.1.0"

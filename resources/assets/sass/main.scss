@@ -7,11 +7,11 @@ $gray : #ddd;
 $primary-color : red;
 
 
-@import 'utitlities';
+@import 'utilities';
 
 body{
 	//margin-top: 50px;
-	padding-top:70px;
+	//padding-top:70px;
 	.navbar{
 		margin:0px;
 		border-bottom: 1px solid lightgray;
@@ -109,7 +109,7 @@ body{
 					}
 				}
 			}
-			.panel{
+			.card{
 				.panel-heading{
 					h1{
 						font-weight:bold;
@@ -117,7 +117,7 @@ body{
 						margin-top:0px;
 					}
 				}
-				.panel-body{
+				.card-content{
 					.job_details{
 						li{
 							h2{

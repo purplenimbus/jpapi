@@ -153,7 +153,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -169,8 +169,9 @@ angular.module('jpApp')
 		
 		if(!$scope.currentJob){
 			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-				console.log('Got a job',result);
 				$scope.currentJob = result.data;
+				console.log('Got a job',$scope.currentJob);
+				angular.element('.loading').hide();
 			});
 		}
 		
@@ -182,7 +183,6 @@ angular.module('jpApp')
 				}
 				break;
 			}
-			
 		};
 		
 		$scope.updateJob = function(){
@@ -208,6 +208,17 @@ angular.module('jpApp')
 			//});
 		}
 		
+		$scope.edit = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'Edit Job',
+				modalBody	=	'',
+				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn-primary btn-lg btn-block',	ngClick	:	''	},'Login');
+				
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				console.log(result);
+			});
+		}
+		
 	});
 
 'use strict';
@@ -231,10 +242,11 @@ angular.module('jpApp')
 		$scope.init	=	function(){
 			var str = '';
 			jobs.getData('jobs').then(function(result){
-				console.log('Got some jobs',result);
+				Materialize.toast('Got some jobs'+result.data.length, 3000)
+				//console.log('Got some jobs',result);
 				$scope.jobs = result.data;
-				str	=	'<li class="col-md-6" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
-				angular.element('ul.jobs').append($compile(str)($scope))
+				str	=	'<li class="col m12" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
+				angular.element('ul.jobs').append($compile(str)($scope));
 				angular.element('.loading').hide();
 			});
 		};
@@ -254,7 +266,7 @@ angular.module('jpApp')
  */
 angular.module('jpApp')
 	.controller('MainCtrl', function () {
-
+		angular.element('.loading').hide();
 	});
 
 'use strict';
@@ -531,26 +543,19 @@ angular.module('jpApp')
 			var str	=	'',
 				deferred	=	$q.defer();
 			
-			str	+=	'<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
-			str	+=		'<div class="modal-dialog '+((type === 'small') ? 'modal-sm' : ( type === 'large ') ? 'modal-lg' : '' )+'" role="document">';
-			str	+=			'<div class="modal-content">';
-			str	+=				'<div class="modal-header">';
-			str	+=					'<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal($event)"><span aria-hidden="true">&times;</span></button>';
-			str	+=					'<h4 class="modal-title">'+title+'</h4>';
-			str	+=				'</div>';
-			str	+=				'<div class="modal-body">'+body+'</div>';
-			str	+=				footer ? '<div class="modal-footer">'+footer+'</div>' : '';
-			str	+=			'</div>';
+			str	+=	'<div id="modal" class="modal '+type+'">';
+			str	+=		'<div class="modal-content">';
+			str	+=			'<h4>'+title+'</h4>';
+			str	+=			body;
 			str	+=		'</div>';
+			str	+=		footer ? '<div class="modal-footer">'+footer+'</div>' : '';
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));
 			
 			deferred.resolve(str);
 			
-			angular.element('#modal').modal('show').on('hidden.bs.modal', function () {
-				this.remove();
-			});
+			angular.element('#modal').modal({ complete : function(){ angular.element('#modal').remove(); } }).modal('open');
 			
 			return deferred.promise;
 		}

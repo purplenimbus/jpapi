@@ -19,10 +19,11 @@ angular.module('jpApp')
 		$scope.init	=	function(){
 			var str = '';
 			jobs.getData('jobs').then(function(result){
-				console.log('Got some jobs',result);
+				Materialize.toast('Got some jobs'+result.data.length, 3000)
+				//console.log('Got some jobs',result);
 				$scope.jobs = result.data;
-				str	=	'<li class="col-md-6" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
-				angular.element('ul.jobs').append($compile(str)($scope))
+				str	=	'<li class="col m12" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
+				angular.element('ul.jobs').append($compile(str)($scope));
 				angular.element('.loading').hide();
 			});
 		};

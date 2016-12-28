@@ -1,6 +1,8 @@
 var elixir = require('laravel-elixir');
 var gulp = require("gulp");
 var wiredep = require("laravel-elixir-wiredep");
+ 
+require( 'elixir-jshint' );
 
 var paths = {
     'bootstrap': './public/bower_components/bootstrap-sass/assets/'
@@ -28,4 +30,5 @@ elixir(function(mix) {
     mix.sass('main.scss','public/css/', {includePaths: [paths.bootstrap + 'stylesheets/']})
 		.scriptsIn()
         .wiredep('resources/views/layouts.app.blade.php');
+		//.jshint();
 });

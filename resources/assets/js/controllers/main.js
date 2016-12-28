@@ -9,5 +9,5 @@
  */
 angular.module('jpApp')
 	.controller('MainCtrl', function () {
-
+		angular.element('.loading').hide();
 	});

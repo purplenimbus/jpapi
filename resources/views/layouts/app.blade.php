@@ -13,16 +13,27 @@
 	<!-- endbower -->
 	
 	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body ng-app="jpApp">
 	@include('partials.nav')
 
-    <div class="container-fluid">
-		<div ng-view id="view">
-		
+	<div class="loading">
+		<div class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue-only">
+			  <div class="circle-clipper left">
+				<div class="circle"></div>
+			  </div><div class="gap-patch">
+				<div class="circle"></div>
+			  </div><div class="circle-clipper right">
+				<div class="circle"></div>
+			  </div>
+			</div>
 		</div>
-		{{-- @yield('page') --}}
-    </div>
+	</div>
+	<div ng-view id="view">
+	
+	</div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>

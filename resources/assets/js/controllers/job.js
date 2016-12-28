@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -24,8 +24,9 @@ angular.module('jpApp')
 		
 		if(!$scope.currentJob){
 			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-				console.log('Got a job',result);
 				$scope.currentJob = result.data;
+				console.log('Got a job',$scope.currentJob);
+				angular.element('.loading').hide();
 			});
 		}
 		
@@ -37,7 +38,6 @@ angular.module('jpApp')
 				}
 				break;
 			}
-			
 		};
 		
 		$scope.updateJob = function(){
@@ -61,6 +61,17 @@ angular.module('jpApp')
 				//console.log('Got a Response',result);
 				//$scope.currentJob = result.data;
 			//});
+		}
+		
+		$scope.edit = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'Edit Job',
+				modalBody	=	'',
+				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn-primary btn-lg btn-block',	ngClick	:	''	},'Login');
+				
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				console.log(result);
+			});
 		}
 		
 	});
