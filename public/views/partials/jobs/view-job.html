@@ -11,16 +11,23 @@
 			<div class="left">
 				{{ currentJob.title }} 
 				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_level.name }}
+					{{ currentJob.job_category.name }}
 				</span>
 			</div>
-			<div class="right">
+			<div class="right text-right">
+				<span>
+					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_type.name }}
+				</span>
+				<span>
+					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_level.name }}
+				</span>
 			</div>
 		</div>
 	</aside>
 	<section class="row description grey lighten-2">
 		<div class="container">
 			<h6>Job Description</h6>
+			<div ng-bind-html="currentJob.description"></div>
 		</div>
 	</section>
 	<section class="row skills grey lighten-1">

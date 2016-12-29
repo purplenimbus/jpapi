@@ -17,11 +17,15 @@ angular.module('jpApp')
 				deferred	=	$q.defer();
 			
 			str	+=	'<div id="modal" class="modal '+type+'">';
-			str	+=		'<div class="modal-content">';
-			str	+=			'<h4>'+title+'</h4>';
-			str	+=			body;
+			str += 		'<div class="container">';
+			str	+=			'<div class="modal-content">';
+			str += 				'<div class="row">';
+			str	+=					title;
+			str	+=				'</div>';
+			str	+=				'<div class="row">'+body+'</div>';
+			str	+=			'</div>';
+			str	+=			footer ? '<div class="modal-footer">'+footer+'</div>' : '';
 			str	+=		'</div>';
-			str	+=		footer ? '<div class="modal-footer">'+footer+'</div>' : '';
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));

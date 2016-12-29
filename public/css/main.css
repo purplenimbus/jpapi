@@ -32,6 +32,19 @@ section {
   padding: 10px 0;
   margin: 0px !important; }
 
+.modal.bottom-sheet {
+  max-height: 80%; }
+  .modal.bottom-sheet .range-field {
+    margin-top: 0px; }
+  .modal.bottom-sheet .modal-footer .btn {
+    margin: 0px 5px; }
+
+.pac-container {
+  z-index: 10000; }
+
+#salary {
+  margin: 15px 0px; }
+
 body .navbar {
   margin: 0px;
   border-bottom: 1px solid lightgray; }

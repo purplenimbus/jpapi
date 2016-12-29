@@ -7,6 +7,7 @@ use App\Job_Category;
 use App\Job_Type;
 use App\Job_Level;
 use App\Job;
+use App\Salary;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 //use database\seeds\JobSeeder;
@@ -141,6 +142,13 @@ class DatabaseSeeder extends Seeder
 			$job_type		=	new Job_Type;
 			$job_type->name	=	strtolower($type);
 			$job_type->save();
+		}
+		
+		//Populate Salary Type
+		foreach($this->salary_types as $type){
+			$salary_type		=	new Salary;
+			$salary_type->name	=	strtolower($type);
+			$salary_type->save();
 		}
 		
 		//Create Some random Data

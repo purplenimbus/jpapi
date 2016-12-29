@@ -27,7 +27,8 @@ class Job extends Model
 		'status',
 		'ref_id',
 		'ref_job_id',
-		'ref_url'
+		'ref_url',
+		'skills'
     ];
 	
 	protected $visible = [
@@ -42,6 +43,7 @@ class Job extends Model
 		'application_deadline',
 		'min_experience',
 		'min_qualification',
+		'skills',
 		'salary',
 		'status',
 		'ref_id',

@@ -14,8 +14,7 @@ class CreateSalariesTable extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('salary')->default(1);
-			$table->string('salary_type',10)->default('Annually');
+			$table->string('name',10)->default('Annually');
             $table->timestamps();
         });
     }

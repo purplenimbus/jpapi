@@ -5,7 +5,8 @@ var wiredep = require("laravel-elixir-wiredep");
 require( 'elixir-jshint' );
 
 var paths = {
-    'bootstrap': './public/bower_components/bootstrap-sass/assets/'
+    'bootstrap': './public/bower_components/bootstrap-sass/assets/',
+    'materialize': './public/bower_components/materialize/sass/'
 }
 
 /*
@@ -27,8 +28,12 @@ elixir.config.js.browserify.watchify = {
 }
  
 elixir(function(mix) {
-    mix.sass('main.scss','public/css/', {includePaths: [paths.bootstrap + 'stylesheets/']})
+    mix.sass('main.scss','public/css/', {includePaths: [paths.bootstrap + 'stylesheets/',paths.materialize+'components/']})
+		//.scripts(['./public/bower_components/materialize/extras/noUiSlider/nouislider.min.js'])
 		.scriptsIn()
+		.styles([
+			'./public/bower_components/materialize/extras/noUiSlider/nouislider.css'
+		])
         .wiredep('resources/views/layouts.app.blade.php');
 		//.jshint();
 });

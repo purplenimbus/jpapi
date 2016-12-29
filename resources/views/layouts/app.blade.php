@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="jpApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Job Portal | </title>
+    <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
 	<link rel="stylesheet" href="/bower_components/angular-xeditable/dist/css/xeditable.css" />
 	<link rel="stylesheet" href="/bower_components/materialize/bin/materialize.css" />
 	<!-- endbower -->
+	<link rel="stylesheet" href="/bower_components/materialize/extras/noUiSlider/nouislider.css" />
 	
 	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body ng-app="jpApp">
+<body class=" @{{ $location.base }}">
 	@include('partials.nav')
 
 	<div class="loading">
@@ -64,5 +65,7 @@
 	<!-- endbower -->
 	
 	<script src="{{ URL::asset('js/all.js') }}"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
+	<script src="/bower_components/materialize/extras/noUiSlider/nouislider.min.js"></script>	
 </body>
 </html>

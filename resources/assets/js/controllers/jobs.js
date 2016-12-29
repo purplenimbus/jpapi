@@ -8,13 +8,15 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile)
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile,$rootScope)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
+				
+		$rootScope.$location.title = $rootScope.$location.base;
 		
 		$scope.init	=	function(){
 			var str = '';

@@ -12,6 +12,11 @@ class Salary extends Model
      * @var array
      */
     protected $fillable = [
-        'salary','salary_type'
+        'salary_type'
+    ];
+	
+	protected $visible = [
+		'id',
+		'name'
     ];
 }

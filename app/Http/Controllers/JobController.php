@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use	App\Job;
+use	App\Salary;
 use	App\Job_Type;
 use	App\Job_Category;
 use	App\Job_Level;
@@ -54,7 +55,7 @@ class JobController extends Controller
 		$job['job_type'] 		= $job->job_type->name;
 		$job['job_level'] 		= $job->job_level->name;
 		
-		
+		//unset($job['company']['']);
 		
 		return $job->toJson();
     }
@@ -108,11 +109,13 @@ class JobController extends Controller
 		$job_types = Job_Type::all();
 		$job_levels = Job_Level::all();
 		$job_cats = Job_Category::all();
+		$salary_types = Salary::all();
 		
 		$job_options = [
 			"job_levels" => $job_levels,
-			"job_categories" => $job_cats,
-			"job_types" => $job_types
+			"job_categorys" => $job_cats,
+			"job_types" => $job_types,
+			"salary_types" => $salary_types
 		];
 		
 		return json_encode($job_options);

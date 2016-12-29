@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,$location,$route) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
@@ -19,6 +19,9 @@ angular.module('jpApp')
 			$rootScope.job = {
 				
 			};
+			$rootScope.$location = {};
+		
+			$rootScope.$location.base = $location.path().split('\/')[1];
 		}
 		
 		
