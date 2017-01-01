@@ -14,6 +14,7 @@
 	border-color: $gray;
 }
 
+/*
 .loading{
 	background: rgba(white,0.5);
 	width:100%;
@@ -26,7 +27,13 @@
 		position: absolute;
 		top: 200px;
 		left: 50%;
+		transform: translateY(-50%) translateX(-50%);
 	}
+}
+*/
+
+.progress{
+	margin:0px;
 }
 
 &.toolbar{
@@ -60,4 +67,20 @@ section{
 
 #salary{
 	margin: 15px 0px;
+}
+
+input:not([type]), 
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="url"], 
+input[type="time"],
+input[type="date"], 
+input[type="datetime"], 
+input[type="datetime-local"], 
+input[type="tel"], 
+input[type="number"], 
+input[type="search"], 
+textarea.materialize-textarea{
+	text-transform:capitalize;
 }

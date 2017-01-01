@@ -132,4 +132,27 @@ body{
 			}
 		}
 	}
+	&.jobs{
+		.view-job{
+			h1,h6{
+				font-weight:300;
+			}
+			aside{
+				&.toolbar{
+					h1{
+						margin: 0px;
+						font-size: 30px;
+					}
+					.info{
+						span{
+							line-height: 33px;
+							i{
+							
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

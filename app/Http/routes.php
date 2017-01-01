@@ -31,4 +31,11 @@ Route::resource('jobs', 'JobController', [
 	'names' => ['jobtypes' => 'jobs.jobtypes']
 ]);
 
+Route::get('companyoptions', 'CompanyController@companyoptions');
+
+Route::resource('companies', 'CompanyController', [
+	'only' 	=> ['index','show','update','store','jobtypes'],
+	'names' => ['companytypes' => 'companies.companytypes']
+]);
+
 

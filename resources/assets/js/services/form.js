@@ -16,7 +16,7 @@ angular.module('jpApp')
 				
 				str	+=	'<form>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup(elements.glyph('user'),{ 	
+				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
 														type		:	'email',	
 														cls			:	'input-lg'	,	
 														placeholder	:	'Email'	,	
@@ -26,7 +26,7 @@ angular.module('jpApp')
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup(elements.glyph('lock'),{ 	
+				str	+=	elements.column(12,elements.form.inputGroup('lock',{ 	
 														type		:	'password',	
 														cls			:	'input-lg'	,	
 														placeholder	:	'Password'	,	
@@ -34,6 +34,9 @@ angular.module('jpApp')
 														name		:	'password',
 														required	:	true
 													}));
+				str	+=	'</div>';
+				str	+=	'<div class="row form-group">';
+				str	+=	elements.column(12,elements.button({ ngClick : 'login',label:'login' , cls : 'btn-large col s12' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				

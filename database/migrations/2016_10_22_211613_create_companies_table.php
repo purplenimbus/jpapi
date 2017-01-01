@@ -24,6 +24,7 @@ class CreateCompaniesTable extends Migration
 			$table->string('logo')->nullable();
 			$table->string('address')->nullable();
 			$table->string('zipcode',10)->nullable();
+			$table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

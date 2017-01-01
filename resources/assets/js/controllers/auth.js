@@ -8,20 +8,27 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,$location,$route) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
 		
+		$rootScope.logged_in = false;
+		
+		angular.element(".dropdown-button").dropdown();
+        angular.element(".account-collapse").sideNav();
+		
 		if(!$rootScope.job){
-			$rootScope.job = {
-				
-			};
+			$rootScope.job = {};
 			$rootScope.$location = {};
 		
 			$rootScope.$location.base = $location.path().split('\/')[1];
+		}
+		
+		if(!$rootScope.company){
+			$rootScope.company = {};
 		}
 		
 		
@@ -64,15 +71,27 @@ angular.module('jpApp')
         };
 		
 		$scope.signIn	=	function(){
-			var modalType	=	'small',
-				modalTitle	=	'Login',
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
-				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn-primary btn-lg btn-block',	ngClick	:	'login($event)'	},'Login');
+				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
 				
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				console.log(result);
 				
 			});
+		};
+		
+		$scope.view_account = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'Login',
+				modalBody	=	$rootScope.logged_in ? 'View account' : form.login(),
+				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
+				
+				modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+					console.log(result);
+					
+				});
 		};
 		
 		$scope.closeModal	=	function(){
@@ -84,6 +103,20 @@ angular.module('jpApp')
 				console.log('Got a job options',result);
 				$rootScope.job.options = result.data;
 				$rootScope.job.options.job_status = [{
+					id 		: 	1,
+					name	:	'Draft',	
+				},{
+					id 		: 	2,
+					name	:	'Published',	
+				}];
+			});
+		}
+		
+		if(!$rootScope.company.options){		
+			companies.getData('companyoptions',false).then(function(result){
+				console.log('Got a job options',result);
+				$rootScope.company.options = result.data;
+				$rootScope.company.options.company_status = [{
 					id 		: 	1,
 					name	:	'Draft',	
 				},{

@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile,$rootScope)
+	.controller('CompaniesCtrl', function ($scope,jobs,companies,$routeParams,$route,$location,$compile,$rootScope)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -22,12 +22,11 @@ angular.module('jpApp')
 		
 		$scope.init	=	function(){
 			var str = '';
-			jobs.getData('jobs').then(function(result){
-				Materialize.toast('Got some jobs'+result.data.length, 3000)
-				//console.log('Got some jobs',result);
-				$scope.jobs = result.data;
-				str	=	'<li class="col m12" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
-				angular.element('ul.jobs').append($compile(str)($scope));
+			companies.getData('companies').then(function(result){
+				Materialize.toast('Got some companies'+result.data.length, 3000);
+				$scope.companies = result.data;
+				str	=	'<li class="col m12" ng-repeat="company in companies" ng-include="\'views/partials/companies/company.html\'"></li>';
+				angular.element('ul.companies').append($compile(str)($scope));
 				angular.element('.progress').hide();
 			});
 		};

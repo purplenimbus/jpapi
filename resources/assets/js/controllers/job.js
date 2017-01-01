@@ -18,21 +18,29 @@ angular.module('jpApp')
 		
 		$rootScope.$location.title = '';
 		
+		angular.element('.progress').show();
+		
 		var autocomplete,self = this;
 		
 		this.data = {};
 		
 		console.log($route);
 		
-		if(!$scope.currentJob){
+		$scope.init = function(){
 			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
 				$scope.currentJob = result.data;
-				$scope.cache = result.data;
+				//$scope.currentJob.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
+				console.log('Date',result.data.application_deadline);
+				$scope.cache = $scope.currentJob;
+				$scope.currentJob.pay = {};
 				console.log('Got a job',$scope.currentJob);
 				$rootScope.$location.title = $scope.currentJob.title;
-				angular.element('.loading').hide();
+				angular.element('.progress').hide();
 			});
-
+		};
+		
+		if(!$scope.currentJob){
+			$scope.init();
 		}
 		
 		$scope.jobOptions = function(options) {
@@ -45,29 +53,31 @@ angular.module('jpApp')
 			}
 		};
 		
-		$scope.updateJob = function(){
-			angular.forEach($scope.currentJob,function(value,key){
-				console.log('Value',value);
-				console.log('Key',key);
-				/*if(value){
-					if(key === 'job_status'){
-						self.data['status'] = value.name
-					}else if(key === 'application_deadline'){
-						self.data[key] = value
-					}else{
-						self.data[key+'_id'] = value.id
-					}
-				}*/
-			});
+		$scope.updateJob = function(){			
 			
-			this.data = $scope.currentJob;
+			this.data	=	{
+				id : $scope.currentJob.id,
+				title : $scope.currentJob.title,
+				description : $scope.currentJob.description,
+				company_id : $scope.currentJob.company.id,
+				job_category_id : $scope.currentJob.job_category.id,
+				job_type_id : $scope.currentJob.job_type.id,
+				job_level_id : $scope.currentJob.job_level.id,
+				application_deadline : $scope.currentJob.application_deadline,
+				salary : $scope.currentJob.salary,
+				status : $scope.currentJob.status,
+				min_experience : $scope.currentJob.min_experience,
+				min_qualification : $scope.currentJob.min_qualification.name,
+			}
 			
 			console.log('Data',this.data);
 			
-			//jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
-				//console.log('Got a Response',result);
-				//$scope.currentJob = result.data;
-			//});
+			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
+				console.log('Got a Response',result);
+				$scope.cancel();
+				////$scope.currentJob = result.data;
+			});
+			
 		}
 		
 		$scope.cancel = function(){
@@ -77,6 +87,7 @@ angular.module('jpApp')
 			//angular.element('#modal form').get(0).reset();
 			//$scope.currentJob = $scope.cache;
 			$route.reload();
+			$scope.init();
 		}
 		
 		$scope.edit = function(){
@@ -88,46 +99,10 @@ angular.module('jpApp')
 			modalTitle	+=	'<h4 class="left">Edit Job</h4>';
 			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'job_category' , model:'currentJob.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
 			
-			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	},'Cancel');
-			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	},'Save');
+			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
+			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
 			
-			modalBody	+=	'<form>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.input({ type:'text' ,colSize: 3, cls:'autocomplete', model:'currentJob.title' , label : 'Job Title' , name : 'job_title' , required:true });
-			modalBody	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Type' , name : 'job_type' , model:'currentJob.job_type' , required:true});
-			modalBody	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentJob.job_level' , required:true});
-			modalBody	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Category' , name : 'job_category' , model:'currentJob.job_category' , required:true});
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentJob.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
-			modalBody	+=			elements.form.select({ colSize: 6, cls:'' , model:'currentJob.min_qualifications' , label : 'Minimum Qualification' , name : 'job_min_qualification' });
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.range({ colSize: 12, cls:'', model:'currentJob.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
-			modalBody	+=		'</div>';			
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			'<div class="range-field col m12">';
-			modalBody	+=				'<label>Salary</label>';
-			modalBody	+=				'<div id="salary"></div>';
-			modalBody	+=			'</div>';
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.select({ colSize: 12, cls:'', model:'currentJob.salary_type' , label : 'Salary Type' , name : 'salary_type' , required:true });
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentJob.description' , required:true});
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			'<div class="range-field col m12">';
-			modalBody	+=			'<label>Required Skills</label>';
-			modalBody	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentJob.required_skills',chipType : 'chips-initial'});
-			modalBody	+=			'</div>';
-			modalBody	+=		'</div>';
-			modalBody	+=		'<div class="row">';
-			modalBody	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentJob.application_deadline', required:true });
-			modalBody	+=		'</div>';
-			modalBody	+=	'</form>';
-        
+			modalBody	=	jobs.editJob();
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
@@ -175,30 +150,39 @@ angular.module('jpApp')
 					});
 				});
 				
-				var slider = angular.element('#salary').get(0);
+				var slider = angular.element('#pay').get(0);
 				
 				noUiSlider.create(slider, {
-				   start: [20, 80],
-				   connect: true,
-				   step: 500,
-				   range: {
-					 'min': 0,
-					 'max': 1000000000
-				   },
-				   format: wNumb({
-					 decimals: 0
-				   })
+					start: [0, 100],
+					connect: true,
+					step: 5,
+					range: {
+						'min': 0,
+						'max': 1000
+					},
+					format: wNumb({
+						decimals: 0,
+						thousand: '.',
+						prefix: '$',
+						postfix: ',000',
+					})
 				});
 				
-				slider.noUiSlider.on('change', function(value){
-					$scope.currentJob.salary  = value;
+				slider.noUiSlider.on('update', function(value,handle){
+					//console.log('Slider Changed',value);
+					$scope.currentJob.pay.value  = value;
+					$scope.currentJob.salary  = value.toString();
+					$scope.currentJob.pay.min = value[0];
+					angular.element('.range-field span.min').html(value[0]);
+					$scope.currentJob.pay.max  = value[1];
+					angular.element('.range-field span.max').html(value[1]);
 				});
 				
 				
 				$('.datepicker').pickadate({
 					selectMonths: true, // Creates a dropdown to control month
 				}).on('change',function(e){
-					$scope.currentJob.application_deadline = new Date(angular.element(e.currentTarget).val());
+					$scope.currentJob.application_deadline = angular.element(e.currentTarget).val();
 				});
         
 				

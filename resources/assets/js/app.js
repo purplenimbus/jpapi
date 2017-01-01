@@ -37,6 +37,16 @@ angular
 				controller	:	'JobCtrl',
 				controllerAs: 	'job'
 			})
+			.when('/companies',{
+				templateUrl	:	'/views/companies.html',
+				controller	:	'CompaniesCtrl',
+				controllerAs: 	'Companies'
+			})
+			.when('/companies/:companyId',{
+				templateUrl	:	'/views/partials/companies/view-company.html',
+				controller	:	'CompanyCtrl',
+				controllerAs: 	'Company'
+			})
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});

@@ -29,10 +29,11 @@ angular.module('jpApp')
 		button	:	function(object,body){
 			var str	=	'';
 			
-			str	+=	'<button class="btn '+object.cls+'"';
+			str	+=	'<button class="btn ';
+			str +=		object.cls ? object.cls+'"' : '"';
 			str	+=		object.type		?	'type="'+object.type+'"'	:	'';
 			str	+=		object.ngClick	?	'ng-click="'+object.ngClick+'">'	:	'>';
-			str	+=		body;
+			str	+=		object.label ? object.label : 'Button Label';
 			str	+=	'</button>';
 			
 			return str;
@@ -42,7 +43,8 @@ angular.module('jpApp')
 			input	:	function(object){
 				var	str	=	'';
 				
-				str +=	'<div class="input-field col m'+object.colSize.toString()+' s12">';
+				str +=	'<div class="input-field ';
+				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'col s12">';
 				str	+=	'<input ';
 				str	+=	object.type	?	'type="'+object.type+'"' : '';
 				str	+=	object.cls  ? 	'class="'+object.cls+'"' : '';
@@ -65,9 +67,9 @@ angular.module('jpApp')
 			inputGroup	:	function(icon,object){
 				var str		=	'',
 					self	=	this;
-				
-				str	+=	'<div class="input-group">';
-				str	+=		'<span class="input-group-addon">'+icon+'</span>';
+		
+				str	+=	'<div class="input-field">';
+				str	+=		'<i class="material-icons prefix">'+icon+'</i>';
 				str	+=		self.input(object);
 				str	+=	'</div>';
 				
@@ -81,7 +83,8 @@ angular.module('jpApp')
 				str +=	'<select ';
 				str +=	object.cls ? 'class="'+object.cls+'"' : '';
 				str +=	object.model ? 'ng-model="'+object.model+'"' : '';
-				str	+=	object.required	?	' data-required="true"'	:	'';
+				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
+				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str +=	'ng-options="g as g.name for g in $root.job.options.'+object.name+'s track by g.id">';
 				//str +=	'<option value="" disabled selected>Choose your option</option>';
 				str +=	'</select>';
@@ -96,7 +99,7 @@ angular.module('jpApp')
 				str +=	'<textarea class="materialize-textarea';
 				str +=	object.cls ? object.cls+'"' : '"';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
-				str	+=	object.required	?	' data-required="true"'	:	'';
+				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str +=	object.model ? 'ng-model="'+object.model+'">' : '>';
 				str +=	'</textarea>';
 				//str +=	object.label ? '<label>'+object.label+'</label>' : '';
@@ -113,7 +116,7 @@ angular.module('jpApp')
 				var str	=	'';
 				
 				str	+=	'<p class="range-field col m'+object.colSize.toString()+' s12">';
-				str	+=		'<label>'+object.label+(object.required ? '*' : '')+'</label>';
+				str	+=		'<label>'+object.label+(object.required ? '*' : '')+' '+( object.model ? ' ( {{ '+object.model+' }} years )' : '' )+'</label>';
 				str	+=		'<input type="range"';
 				str	+=		object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=		object.model	?	' ng-model="'+object.model+'" '	:	'';
@@ -133,6 +136,8 @@ angular.module('jpApp')
 				str	+=	object.label1;
 				str	+=	'	  <input type="checkbox"';
 				str	+=	object.model	?	' ng-model="'+object.model+'" '	:	'';
+				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
+				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str	+=	'	  >';
 				str	+=	'	  <span class="lever"></span>';
 				str	+=	object.label2;
@@ -149,7 +154,9 @@ angular.module('jpApp')
 				str	+= ' <input type="date" ';
 				str	+= 'class="datepicker';
 				str +=	object.cls ? object.cls+'"' : '"';
+				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.model	?	' ng-model="'+object.model+'" '	:	'';
+				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str	+=	object.required ? 'required />' : ' />';
 				str += '</div>';
 				return str;

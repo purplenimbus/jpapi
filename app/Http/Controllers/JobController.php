@@ -75,8 +75,8 @@ class JobController extends Controller
 		
 		foreach($requests as $key => $req){
 			if($request->has($key)){
-				$job[$key]	=	$request->input($key);
-				//echo $request[$key];
+				$job[$key]	=  $request->input($key);
+				//echo $request->input($key);
 			}
 		}
 		
@@ -106,16 +106,38 @@ class JobController extends Controller
     public function joboptions()
     {
         //
-		$job_types = Job_Type::all();
-		$job_levels = Job_Level::all();
-		$job_cats = Job_Category::all();
-		$salary_types = Salary::all();
+		$job_types = Job_Type::all()->sortBy('name');
+		$job_levels = Job_Level::all()->sortBy('name');
+		$job_cats = Job_Category::all()->sortBy('name');
+		$salary_types = Salary::all()->sortBy('name');
 		
 		$job_options = [
 			"job_levels" => $job_levels,
 			"job_categorys" => $job_cats,
 			"job_types" => $job_types,
-			"salary_types" => $salary_types
+			"salary_types" => $salary_types,
+			"job_min_qualifications" 		=> [
+				[
+					'id' => 0,
+					'name' => 'None'
+				],[
+					'id' => 1,
+					'name' => 'Highschool Diploma'
+				],[
+					'id' => 2,
+					'name' => 'University Diploma'
+				],[
+					'id' => 3,
+					'name' => 'Univerisity Degree (Bsc)'
+				],[
+					'id' => 4,
+					'name' => 'Masters Degree (Msc)'
+				],[
+					'id' => 5,
+					'name' => 'Doctorate (Phd)'
+				]
+			]
+
 		];
 		
 		return json_encode($job_options);
