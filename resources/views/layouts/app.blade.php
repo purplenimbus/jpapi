@@ -53,6 +53,8 @@
 	<script src="/bower_components/moment/moment.js"></script>
 	<script src="/bower_components/ckeditor/ckeditor.js"></script>
 	<script src="/bower_components/materialize/bin/materialize.js"></script>
+	<script src="/bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+	<script src="/bower_components/angular-typeahead/dist/angular-typeahead.js"></script>
 	<!-- endbower -->
 	
 	<script src="{{ URL::asset('js/all.js') }}"></script>

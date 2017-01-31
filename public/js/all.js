@@ -69,7 +69,7 @@ angular
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
@@ -90,6 +90,10 @@ angular.module('jpApp')
 		
 		if(!$rootScope.company){
 			$rootScope.company = {};
+			
+			$rootScope.$location = {};
+		
+			$rootScope.$location.base = $location.path().split('\/')[1];
 		}
 		
 		
@@ -159,6 +163,7 @@ angular.module('jpApp')
 			angular.element('#modal').modal('hide').remove();
 		};
 		
+		/*
 		if(!$rootScope.job.options){
 			jobs.getData('joboptions',false).then(function(result){
 				console.log('Got a job options',result);
@@ -170,12 +175,17 @@ angular.module('jpApp')
 					id 		: 	2,
 					name	:	'Published',	
 				}];
+				var job_cookie = JSON.stringify($rootScope.job.options);
+				console.log('Job Cookie',job_cookie);
+				auth.setCookie('job_options',job_cookie,1);
 			});
+		}else{
+			console.log('Job Options',auth.getCookie('job_options'));
 		}
 		
 		if(!$rootScope.company.options){		
 			companies.getData('companyoptions',false).then(function(result){
-				console.log('Got a job options',result);
+				console.log('Got company options',result);
 				$rootScope.company.options = result.data;
 				$rootScope.company.options.company_status = [{
 					id 		: 	1,
@@ -184,9 +194,14 @@ angular.module('jpApp')
 					id 		: 	2,
 					name	:	'Published',	
 				}];
+				var company_cookie = JSON.stringify($rootScope.job.options);
+				console.log('Company Cookie',company_cookie);
+				auth.setCookie('company_options',company_cookie,1);
 			});
+		}else{
+			console.log('Company Options',auth.getCookie('company_options'));
 		}
-		
+		*/
 	});
 
 'use strict';
@@ -214,7 +229,7 @@ angular.module('jpApp')
 		$scope.init	=	function(){
 			var str = '';
 			companies.getData('companies').then(function(result){
-				Materialize.toast('Got some companies'+result.data.length, 3000);
+				Materialize.toast('Got some companies '+result.data.length, 3000);
 				$scope.companies = result.data;
 				str	=	'<li class="col m12" ng-repeat="company in companies" ng-include="\'views/partials/companies/company.html\'"></li>';
 				angular.element('ul.companies').append($compile(str)($scope));
@@ -256,24 +271,24 @@ angular.module('jpApp')
 		
 		$scope.init = function(){
 			companies.getData('companies',$route.current.params.companyId).then(function(result){
-				$scope.currentCompany = result.data;
-				//$scope.currentCompany.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
-				$scope.cache = $scope.currentCompany;
-				console.log('Got a Company',$scope.currentCompany);
-				$rootScope.$location.title = $scope.currentCompany.title;
+				$scope.currentAsset = result.data;
+				//$scope.currentAsset.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
+				$scope.cache = $scope.currentAsset;
+				console.log('Got a Company',$scope.currentAsset);
+				$rootScope.$location.title = $scope.currentAsset.title;
 				angular.element('.progress').hide();
 			});
 		};
 		
-		if(!$scope.currentCompany){
+		if(!$scope.currentAsset){
 			$scope.init();
 		}
 		
 		$scope.companyOptions = function(options) {
 			switch(options){
 				case 'company_status' :  return function(){
-					var selected = $filter('filter')($rootScope.company.options.company_status, {value: $scope.currentCompany.status});
-					return ($scope.currentCompany.status && selected.length) ? selected[0].text : 'Not set';
+					var selected = $filter('filter')($rootScope.company.options.company_status, {value: $scope.currentAsset.status});
+					return ($scope.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
 				}
 				break;
 			}
@@ -282,23 +297,26 @@ angular.module('jpApp')
 		$scope.updateCompany = function(){			
 			
 			this.data	=	{
-				id : $scope.currentCompany.id,
-				title : $scope.currentCompany.title,
-				description : $scope.currentCompany.description,
-				company_category_id : $scope.currentCompany.company_category.id,
-				email : $scope.currentCompany.email,
-				phone : $scope.currentCompany.phone,
-				status : $scope.currentCompany.status,
+				id : $scope.currentAsset.id,
+				name : $scope.currentAsset.name,
+				description : $scope.currentAsset.description,
+				company_category_id : $scope.currentAsset.company_category.id,
+				email : $scope.currentAsset.email,
+				address : $scope.currentAsset.address,
+				zipcode	: $scope.currentAsset.zipcode,
+				phone : $scope.currentAsset.phone,
+				logo : $scope.currentAsset.phone,
+				status : $scope.currentAsset.status
 			}
 			
 			console.log('Data',this.data);
-			
-			company.sendData('jobs',$route.current.params.companyId,this.data).then(function(result){
+			/*
+			company.sendData('companies',$route.current.params.companyId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
-				////$scope.currentCompany = result.data;
+				////$scope.currentAsset = result.data;
 			});
-			
+			*/
 		}
 		
 		$scope.cancel = function(){
@@ -306,7 +324,7 @@ angular.module('jpApp')
 			angular.element('#modal').modal('close');
 			//angular.element('#job_location').val('');
 			//angular.element('#modal form').get(0).reset();
-			//$scope.currentCompany = $scope.cache;
+			//$scope.currentAsset = $scope.cache;
 			$route.reload();
 			$scope.init();
 		}
@@ -318,7 +336,7 @@ angular.module('jpApp')
 				modalFooter	=	'';
 			
 			modalTitle	+=	'<h4 class="left">Edit Company</h4>';
-			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'job_category' , model:'currentCompany.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
+			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'company_category' , model:'currentAsset.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
 			
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateCompany()'	, label : 'Save'});
@@ -336,17 +354,19 @@ angular.module('jpApp')
 				};
 				
 				CKEDITOR.replace( 'company_description' ).on( 'change', function( evt ) {
-					$scope.currentCompany.description = evt.editor.getData();
+					$scope.currentAsset.description = evt.editor.getData();
 				});
 				
+				/*
 				angular.element('.chips-initial').on('chip.add', function(e, chip){
-					$scope.currentCompany.required_skills = angular.element(this).material_chip('data');
+					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
-					$scope.currentCompany.required_skills = angular.element(this).material_chip('data');
+					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).material_chip({
 					placeholder: 'Skills',
-					data: $scope.currentCompany.required_skills
+					data: $scope.currentAsset.required_skills
 				});
+				*/
 				
 				// Create the autocomplete object, restricting the search to geographical
 				// location types.
@@ -361,49 +381,17 @@ angular.module('jpApp')
 					
 					//console.log('Place',place);
 					
-					$scope.currentCompany.location.name = place.name ? place.name : '';
+					$scope.currentAsset.location.name = place.name ? place.name : '';
 					
 					place.address_components.map(function(value,key){
 						//console.log('Value',value);
-						$scope.currentCompany.location[value.types[0]] = {};
-						$scope.currentCompany.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						$scope.currentCompany.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+						$scope.currentAsset.location[value.types[0]] = {};
+						$scope.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						$scope.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
 					});
 				});
 				
 				var slider = angular.element('#employees').get(0);
-				
-				noUiSlider.create(slider, {
-					start: [0, 100],
-					connect: true,
-					step: 5,
-					range: {
-						'min': 0,
-						'max': 1000
-					},
-					format: wNumb({
-						decimals: 0,
-						thousand: '.',
-					})
-				});
-				
-				slider.noUiSlider.on('update', function(value,handle){
-					//console.log('Slider Changed',value);
-					$scope.currentCompany.employees.value  = value;
-					$scope.currentCompany.salary  = value.toString();
-					$scope.currentCompany.employees.min = value[0];
-					angular.element('.range-field span.min').html(value[0]);
-					$scope.currentCompany.employees.max  = value[1];
-					angular.element('.range-field span.max').html(value[1]);
-				});
-				
-				/*
-				$('.datepicker').pickadate({
-					selectMonths: true, // Creates a dropdown to control month
-				}).on('change',function(e){
-					$scope.currentCompany.application_deadline = angular.element(e.currentTarget).val();
-				});
-				*/
 				
 			});
 		}
@@ -440,26 +428,26 @@ angular.module('jpApp')
 		
 		$scope.init = function(){
 			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-				$scope.currentJob = result.data;
-				//$scope.currentJob.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
+				$scope.currentAsset = result.data;
+				//$scope.currentAsset.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
 				console.log('Date',result.data.application_deadline);
-				$scope.cache = $scope.currentJob;
-				$scope.currentJob.pay = {};
-				console.log('Got a job',$scope.currentJob);
-				$rootScope.$location.title = $scope.currentJob.title;
+				$scope.cache = $scope.currentAsset;
+				$scope.currentAsset.pay = {};
+				console.log('Got a job',$scope.currentAsset);
+				$rootScope.$location.title = $scope.currentAsset.title;
 				angular.element('.progress').hide();
 			});
 		};
 		
-		if(!$scope.currentJob){
+		if(!$scope.currentAsset){
 			$scope.init();
 		}
 		
 		$scope.jobOptions = function(options) {
 			switch(options){
 				case 'job_status' :  return function(){
-					var selected = $filter('filter')($rootScope.job.options.job_status, {value: $scope.currentJob.status});
-					return ($scope.currentJob.status && selected.length) ? selected[0].text : 'Not set';
+					var selected = $filter('filter')($rootScope.job.options.job_status, {value: $scope.currentAsset.status});
+					return ($scope.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
 				}
 				break;
 			}
@@ -468,18 +456,18 @@ angular.module('jpApp')
 		$scope.updateJob = function(){			
 			
 			this.data	=	{
-				id : $scope.currentJob.id,
-				title : $scope.currentJob.title,
-				description : $scope.currentJob.description,
-				company_id : $scope.currentJob.company.id,
-				job_category_id : $scope.currentJob.job_category.id,
-				job_type_id : $scope.currentJob.job_type.id,
-				job_level_id : $scope.currentJob.job_level.id,
-				application_deadline : $scope.currentJob.application_deadline,
-				salary : $scope.currentJob.salary,
-				status : $scope.currentJob.status,
-				min_experience : $scope.currentJob.min_experience,
-				min_qualification : $scope.currentJob.min_qualification.name,
+				id : $scope.currentAsset.id,
+				title : $scope.currentAsset.title,
+				description : $scope.currentAsset.description,
+				company_id : $scope.currentAsset.company.id,
+				job_category_id : $scope.currentAsset.job_category.id,
+				job_type_id : $scope.currentAsset.job_type.id,
+				job_level_id : $scope.currentAsset.job_level.id,
+				application_deadline : $scope.currentAsset.application_deadline,
+				salary : $scope.currentAsset.salary,
+				status : $scope.currentAsset.status,
+				min_experience : $scope.currentAsset.min_experience,
+				min_qualification : $scope.currentAsset.min_qualification.name,
 			}
 			
 			console.log('Data',this.data);
@@ -487,7 +475,7 @@ angular.module('jpApp')
 			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
-				////$scope.currentJob = result.data;
+				////$scope.currentAsset = result.data;
 			});
 			
 		}
@@ -497,7 +485,7 @@ angular.module('jpApp')
 			angular.element('#modal').modal('close');
 			//angular.element('#job_location').val('');
 			//angular.element('#modal form').get(0).reset();
-			//$scope.currentJob = $scope.cache;
+			//$scope.currentAsset = $scope.cache;
 			$route.reload();
 			$scope.init();
 		}
@@ -509,7 +497,7 @@ angular.module('jpApp')
 				modalFooter	=	'';
 			
 			modalTitle	+=	'<h4 class="left">Edit Job</h4>';
-			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'job_category' , model:'currentJob.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
+			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'status' , model:'currentAsset.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
 			
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
@@ -527,16 +515,16 @@ angular.module('jpApp')
 				};
 				
 				CKEDITOR.replace( 'job_description' ).on( 'change', function( evt ) {
-					$scope.currentJob.description = evt.editor.getData();
+					$scope.currentAsset.description = evt.editor.getData();
 				});
 				
 				angular.element('.chips-initial').on('chip.add', function(e, chip){
-					$scope.currentJob.required_skills = angular.element(this).material_chip('data');
+					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
-					$scope.currentJob.required_skills = angular.element(this).material_chip('data');
+					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).material_chip({
 					placeholder: 'Skills',
-					data: $scope.currentJob.required_skills
+					data: $scope.currentAsset.required_skills
 				});
 				
 				// Create the autocomplete object, restricting the search to geographical
@@ -552,13 +540,13 @@ angular.module('jpApp')
 					
 					//console.log('Place',place);
 					
-					$scope.currentJob.location.name = place.name ? place.name : '';
+					$scope.currentAsset.location.name = place.name ? place.name : '';
 					
 					place.address_components.map(function(value,key){
 						//console.log('Value',value);
-						$scope.currentJob.location[value.types[0]] = {};
-						$scope.currentJob.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						$scope.currentJob.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+						$scope.currentAsset.location[value.types[0]] = {};
+						$scope.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						$scope.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
 					});
 				});
 				
@@ -582,11 +570,11 @@ angular.module('jpApp')
 				
 				slider.noUiSlider.on('update', function(value,handle){
 					//console.log('Slider Changed',value);
-					$scope.currentJob.pay.value  = value;
-					$scope.currentJob.salary  = value.toString();
-					$scope.currentJob.pay.min = value[0];
+					$scope.currentAsset.pay.value  = value;
+					$scope.currentAsset.salary  = value.toString();
+					$scope.currentAsset.pay.min = value[0];
 					angular.element('.range-field span.min').html(value[0]);
-					$scope.currentJob.pay.max  = value[1];
+					$scope.currentAsset.pay.max  = value[1];
 					angular.element('.range-field span.max').html(value[1]);
 				});
 				
@@ -594,10 +582,46 @@ angular.module('jpApp')
 				$('.datepicker').pickadate({
 					selectMonths: true, // Creates a dropdown to control month
 				}).on('change',function(e){
-					$scope.currentJob.application_deadline = angular.element(e.currentTarget).val();
+					$scope.currentAsset.application_deadline = angular.element(e.currentTarget).val();
 				});
         
+				// instantiate the bloodhound suggestion engine
+				var bloodhound = new Bloodhound({
+					datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
+					queryTokenizer: Bloodhound.tokenizers.whitespace,
+					local: [
+					  { num: 'one' },
+					  { num: 'two' },
+					  { num: 'three' },
+					  { num: 'four' },
+					  { num: 'five' },
+					  { num: 'six' },
+					  { num: 'seven' },
+					  { num: 'eight' },
+					  { num: 'nine' },
+					  { num: 'ten' }
+					]
+				});
 				
+				// initialize the bloodhound suggestion engine
+				bloodhound.initialize();
+				
+				$scope.jobTypes = {
+					displayKey: 'num',
+					source: bloodhound.ttAdapter(),
+					templates: {
+						empty: [
+							'<div class="tt-suggestion tt-empty-message">',
+							'No results were found ...',
+							'</div>'
+						].join('\n'),
+					}
+				};
+				
+				// Typeahead options object
+				$scope.typeahead = {
+					displayKey: 'title'
+				};
 			});
 		}
 		
@@ -746,7 +770,27 @@ angular.module('jpApp')
 													});
 				
 				return deferred.promise;
-			}
+			},
+			setCookie : function(cname, cvalue, exdays) {
+				var d = new Date();
+				d.setTime(d.getTime() + (exdays*24*60*60*1000));
+				var expires = "expires="+ d.toUTCString();
+				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+			},
+			getCookie : function(cname) {
+				var name = cname + "=";
+				var ca = document.cookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return "";
+			} 
 		};
 	});
 
@@ -783,21 +827,23 @@ angular.module('jpApp')
 				var str	=	'';
 				
 					str	+=	'<form>';
+					str +=		elements.row(elements.toolbar('ng-click="action()"'));
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentCompany.name' , label : 'Company Name' , name : 'company_name' , required:true });
-					str	+=			elements.form.select({ colSize: 6, cls:'' , label : 'Company Category' , name : 'company_category' , model:'currentCompany.company_category' , required:true});
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentCompany.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.name' , label : 'Company Name' , name : 'company_name' , required:true });
+					str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'address' ,colSize: 4, cls:'', model:'currentCompany.address' , label : 'Company Address' , name : 'compant_address' , required:false });
+					str	+=			elements.form.input({ type:'text' ,colSize: 8, cls:'', model:'currentAsset.address' , label : 'Company Address' , name : 'company_address' , required:false });
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.zipcode' , label : 'Zipcode' , name : 'zipcode' , required:false });
 					str +=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Company Description' , name : 'company_description' , model:'currentCompany.description' , required:true});
+					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Company Description' , name : 'company_description' , model:'currentAsset.description' , required:true});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'email' ,colSize: 4, cls:'', model:'currentCompany.email' , label : 'Email Address' , name : 'email' , required:false });
-					str	+=			elements.form.input({ type:'tel' ,colSize: 4, cls:'', model:'currentCompany.phone' , label : 'Phone Number' , name : 'phone' , required:false });
-					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentCompany.logo' , label : 'Company Logo' , name : 'logo' });
+					str	+=			elements.form.input({ type:'email' ,colSize: 4, cls:'', model:'currentAsset.email' , label : 'Email Address' , name : 'email' , required:false });
+					str	+=			elements.form.input({ type:'tel' ,colSize: 4, cls:'', model:'currentAsset.phone' , label : 'Phone Number' , name : 'phone' , required:false });
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.logo' , label : 'Company Logo' , name : 'logo' });
 					str	+=		'</div>';
 					str	+=	'</form>';
 					
@@ -809,15 +855,54 @@ angular.module('jpApp')
 'use strict';
 
 /**
- * @ngdoc service
+ * @ngdoc factory
  * @name jpApp.elements
  * @description
  * # elements
- * Factory in the jpApp.
+ * The Elements Factory in the jpApp.
+ * This factory is used to generate all basic HTML elements for the UI.
  */
 angular.module('jpApp')
   .factory('elements', function () {
+	var mockup = [
+		{
+			icon : 'insert_chart',
+			color : 'red'
+		},{
+			icon : 'formal_quote',
+			color : 'yellow darken-1'
+		},{
+			icon : 'publish',
+			color : 'green'
+		},{
+			icon : 'attach_file',
+			color : 'blue'
+		}
+	];
     return {
+		/**
+		 * Returns a row HTML element
+		 * @param {String} body - The body of the row element
+		 * @param {String} cls - additional classes for the row element
+		 * @returns {String}
+		 */
+		row		:	function(body,cls){
+			var str = '';
+			
+			str += '<div class="row';
+			str += cls ? cls : '';
+			str += '">';
+			str += 		body;
+			str += '</div>';
+			
+			return str;
+		},
+		/**
+		 * Returns a column HTML element
+		 * @param {Integer} str - num of columns 1-12
+		 * @param {String} body - The body of the column element
+		 * @returns {String}
+		 */
 		column	:	function(num,body){
 			var str=	'';
 			if( typeof num ===	'number'){
@@ -834,6 +919,15 @@ angular.module('jpApp')
 				return str;
 			}
 		},
+		/**
+		 * Returns a button HTML element
+		 * @param {Object} object - The object holding the button element properties
+		 * @param {String} object.cls - The button class
+		 * @param {String} object.type - The button type
+		 * @param {String} object.ngClick - ngClick event for the button
+		 * @param {String} object.label - The button label
+		 * @returns {String}
+		 */
 		button	:	function(object,body){
 			var str	=	'';
 			
@@ -846,8 +940,49 @@ angular.module('jpApp')
 			
 			return str;
 		},
-		form	:	{
+		/**
+		 * Returns a materalize button toolbar
+		 * @param {string} action - The action associated the primary button
+		 * @param {string} icon - The icon for the secondary button
+		 * @param {array} array - The array holding the secondary buttons objects
+		 * @param {String} array.value.color - The secondary button color based on materialize
+		 * @param {String} array.value.action - The secondary action
+		 * @param {String} array.value.icon - The secondary button icon
+		 * @returns {String}
+		 */
+		toolbar : function(action,type,icon,array){
+			var str = '';
 			
+			str += '<div class="fixed-action-btn '+(type ? 'horizontal' : '')+' click-to-toggle">';
+			str += '	<a class="btn-floating btn-large red" '+action+'>';
+			str += '	  <i class="material-icons">'+(icon ? icon : 'menu')+'</i>';
+			str += '	</a>';
+			if(array){ 
+			str += '<ul>';
+				angular.forEach(array,function(value,key){
+					str += value ? '<li><a class="btn-floating '+(value.color ? value.color : 'red')+'" '+(value.action ? value.action : '')+'><i class="material-icons">'+(value.icon ? value.icon : 'insert_chart')+'</i></a></li>' : '';
+				});
+			str += '</ul>';
+			}
+			str += '</div>';;
+		},
+		/**
+		 * Returns the form object for generic form elements
+		 * @returns {object}
+		 */
+		form	:	{
+			/**
+			 * Returns an input element
+			 * @param {object} object - The object holding the input element attributes
+			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the input element
+			 * @param {string} object.label - The label for the input field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the input element
+			 * @param {String} object.value - The value attribute for the input element
+			 * @param {boolean} object.required - The required attribute for the input element. Used for validation
+			 * @returns {String}
+			 */
 			input	:	function(object){
 				var	str	=	'';
 				
@@ -861,6 +996,7 @@ angular.module('jpApp')
 				str	+=	object.value	?	' ng-value="'+object.model+'" '	:	'';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
+				str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';
@@ -871,7 +1007,12 @@ angular.module('jpApp')
 
 				return str;
 			},
-			
+			/**
+			 * Returns an input group element
+			 * @param {icon} object - The icon for the element attributes 
+			 * @param {object} object - The object holding the element attributes
+			 * @returns {String}
+			 */
 			inputGroup	:	function(icon,object){
 				var str		=	'',
 					self	=	this;
@@ -883,7 +1024,16 @@ angular.module('jpApp')
 				
 				return str;
 			},
-			
+			/**
+			 * Returns a select element
+			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the input element
+			 * @param {string} object.label - The label for the input field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the input element
+			 * @param {boolean} object.required - The required attribute for the input element. Used for validation
+			 * @returns {String}
+			 */
 			select	:	function(object){
 				var str	=	'';
 				
@@ -893,13 +1043,24 @@ angular.module('jpApp')
 				str +=	object.model ? 'ng-model="'+object.model+'"' : '';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
-				str +=	'ng-options="g as g.name for g in $root.job.options.'+object.name+'s track by g.id">';
+				str +=	'ng-options="g as g.name for g in $root[\''+object.asset+'\'].options.'+object.name+'s track by g.id">';
 				//str +=	'<option value="" disabled selected>Choose your option</option>';
 				str +=	'</select>';
 				str +=	object.label ? '<label>'+object.label+(object.required ? ' *' : '')+'</label>' : '';
 				str +=	'</div>';
+				
 				return str;
 			},
+			/**
+			 * Returns a textarea element
+			 * @param {Integer} object.colSize - The column size of the element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label - The label for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			textarea	:	function(object){
 				var str	=	'';
 				
@@ -912,14 +1073,33 @@ angular.module('jpApp')
 				str +=	'</textarea>';
 				//str +=	object.label ? '<label>'+object.label+'</label>' : '';
 				str +=	'</div>';
+				
 				return str;
 			},
+			/**
+			 * Returns the materialize chips component
+			 * @param {object} object - The object holding the chip element properties
+			 * @param {string} object.chipType - The chip type based on the materialize
+			 * @returns {String}
+			 */
 			chips	:	function(object){
 				var str	=	'';
 				
 				str	+=	' <div class="chips '+object.chipType+'"></div>';
 				return 	str;
 			},
+			/**
+			 * Returns the materialize range component
+			 * @param {object} object - The object holding the range element properties
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label - The label for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {String} object.min - The maximum range
+			 * @param {String} object.max - The minimum range
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			range	:	function(object){
 				var str	=	'';
 				
@@ -936,6 +1116,17 @@ angular.module('jpApp')
 				
 				return str;
 			},
+			/**
+			 * Returns a switch element
+			 * @param {Integer} object.colSize - The column size of the element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label1 - The label1 for the element
+			 * @param {string} object.label2 - The label2 for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			check	:	function(object){
 				var str	=	'';
 				
@@ -954,6 +1145,16 @@ angular.module('jpApp')
   
 				return str;
 			},
+			/**
+			 * Returns a date element
+			 * @param {Integer} object.colSize - The column size of the date element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the date element
+			 * @param {string} object.label - The label for the date field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the date element
+			 * @param {boolean} object.required - The required attribute for the date element. Used for validation
+			 * @returns {String}
+			 */
 			date	:	function(object){
 				var str	=	'';
 				
@@ -967,9 +1168,18 @@ angular.module('jpApp')
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str	+=	object.required ? 'required />' : ' />';
 				str += '</div>';
+				
+				return str;
+			},
+			typeahead : function(){
 				return str;
 			}
 		},
+		/**
+		 * Returns materalize icons
+		 * @param {String} type - The type of icon based on https://material.io/icons/
+		 * @returns {String}
+		 */
 		glyph	:	function(type){
 			var str	=	'';
 			
@@ -1046,6 +1256,12 @@ angular.module('jpApp')
 	.service('jobs', function ($http,elements) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
+			/**
+			 * Returns a $http.get promise
+			 * @param {object} $data - The data for the GET request
+			 * @param {integer} $id - The id for the GET request
+			 * @returns {Promise}
+			 */
 			getData	:	function($data,$id){
 				console.log($data+' id',$id);
 				if($id){
@@ -1054,6 +1270,13 @@ angular.module('jpApp')
 					return	$http.get($data);
 				}
 			},
+			/**
+			 * Returns a $http.put or post promise
+			 * @param {String} $name - The name of the PUT/POST endpoint
+			 * @param {object} $data - The data for the PUT/POST request
+			 * @param {integer} $id - The id for the PUT/POST enpoint
+			 * @returns {Promise}
+			 */
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
 				if($id){
@@ -1062,43 +1285,48 @@ angular.module('jpApp')
 					return	$http.post($name,$data);
 				}
 			},
+			/**
+			 * Returns the form to edit jobs
+			 * @returns {String}
+			 */
 			editJob		:	function(){
 				var str	=	'';
 				
 					str	+=	'<form>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 3, cls:'autocomplete', model:'currentJob.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Type' , name : 'job_type' , model:'currentJob.job_type' , required:true});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentJob.job_level' , required:true});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Category' , name : 'job_category' , model:'currentJob.job_category' , required:true});
+					str	+=			elements.form.input({ type:'text' ,colSize: 3, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
+					str	+=			elements.form.input({ type:'text', colSize: 3, cls:'' , label : 'Job Type Typeahead' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job',typeahead : { datasets:'jobTypes'}});
+					str	+=			elements.form.select({ colSize: 3, cls:'hide' , label : 'Job Type' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job'});
+					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentAsset.job_level' , required:true, asset :'job'});
+					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Category' , name : 'job_cat' , model:'currentAsset.job_category' , required:true, asset :'job'});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentJob.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
-					str	+=			elements.form.select({ colSize: 6, cls:'' , model:'currentJob.min_qualification' , label : 'Minimum Qualification' , name : 'job_min_qualification' });
+					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
+					str	+=			elements.form.select({ colSize: 6, cls:'' , model:'currentAsset.min_qualification' , label : 'Minimum Qualification' , name : 'job_min_qualification' , asset :'job'});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentJob.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
+					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
 					str	+=		'</div>';			
 					str	+=		'<div class="row">';
 					str	+=			'<div class="range-field col m12">';
-					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentJob.salary_type.name }}</label>';
+					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>';
 					str	+=				'<div id="pay"></div>';
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.select({ colSize: 12, cls:'', model:'currentJob.salary_type' , label : 'Salary Type' , name : 'salary_type' , required:true });
+					str	+=			elements.form.select({ colSize: 12, cls:'', model:'currentAsset.salary_type' , label : 'Salary Type' , name : 'salary_type' , required:true , asset :'job'});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentJob.description' , required:true});
+					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
 					str	+=			'<div class="range-field col m12">';
 					str	+=			'<label>Required Skills</label>';
-					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentJob.required_skills',chipType : 'chips-initial'});
+					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-initial'});
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentJob.application_deadline', required:true });
+					str	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentAsset.application_deadline', required:true });
 					str	+=		'</div>';
 					str	+=	'</form>';
 					

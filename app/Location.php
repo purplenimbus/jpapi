@@ -12,7 +12,7 @@ class Location extends Model
      * @var array
      */
     protected $fillable = [
-        'name','locality','city','city_code','state','state_code','country','country_code','zipcode'
+        'name','locality','city','city_code','state','state_code','country','country_code','zipcode','long','lat'
     ];
 	//Get all Jobs from Location
 	public function jobs(){

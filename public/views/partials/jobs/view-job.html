@@ -1,4 +1,4 @@
-<div class="view-job">
+<div class="view-asset">
 	<div class="fixed-action-btn">
 		<div class="container">
 			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
@@ -6,36 +6,53 @@
 			</a>
 		</div>
 	</div>
-	<aside class="row toolbar grey lighten-3">
-		<div class="container">
-			<div class="left">
-				<h1>{{ currentJob.title }} </h1>
-			</div>
-			<div class="right text-right info">
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_category.name }}
-				</span>
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_type.name }}
-				</span>
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentJob.job_level.name }}
-				</span>
+	<aside class="toolbar thick">
+		<div class="row grey lighten-1">
+			<div class="container">
+				<div class="title center">
+					<h1>{{ currentAsset.title }}</h1>
+					<div class="info">
+						<ul class="collection">
+							<li ng-show="currentAsset.job_category.name">
+								<i class="material-icons">info_outline</i>{{ currentAsset.job_category.name }}
+							</li>
+							<li ng-show="currentAsset.job_type.name">
+								<i class="material-icons">work</i>{{ currentAsset.job_type.name }}
+							</li>
+							<li ng-show="currentAsset.job_level.name">
+								<i class="material-icons">group_work</i>{{ currentAsset.job_level.name }}
+							</li>
+							<li ng-show="currentAsset.salary_type.name">
+								<i class="material-icons">monetization_on</i> Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}
+							</li>
+							<li ng-show="currentAsset.application_deadline">
+								<i class="material-icons">date_range</i>{{ currentAsset.application_deadline }}
+							</li>
+						</ul>
+					</div>
+					<a ng-click="apply()" class="btn">Apply</a>
+				</div>
 			</div>
 		</div>
 	</aside>
-	<section class="row description grey lighten-2">
+	<section class="row grey lighten-3 info thick">
 		<div class="container">
-			<h6>Job Description</h6>
-			<div ng-bind-html="currentJob.description">{{ currentJob.description }}</div>
+			<h6 class="center">Job Description</h6>
+			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 		</div>
 	</section>
-	<section class="row skills grey lighten-1">
+	<section class="row skills lighten-3 thick" ng-show="currentAsset.required_skills.length > 1">
 		<div class="container">
-			<h6>Required Skills</h6>
+			<h6 class="center">Required Skills</h6>
 			<div class="skills">
-				<div class="chip" ng-repeat="skill in currentJob.required_skills">{{ skill.tag }}</div>
+				<div class="chip" ng-repeat="skill in currentAsset.required_skills">{{ skill.tag }}</div>
 			</div>
 		</div>
-	</section>	
+	</section>
+	<section class="row company thick">
+		<div class="container">
+			<h6 class="center">About {{ currentAsset.company.name }}</h6>
+			{{ currentAsset.company.description }}
+		</div>
+	</section>		
 </div>

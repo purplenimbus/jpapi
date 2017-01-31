@@ -84,3 +84,17 @@ input[type="search"],
 textarea.materialize-textarea{
 	text-transform:capitalize;
 }
+
+.thick{
+	padding:40px 0;
+}
+
+.bottom{
+	bottom:0px;
+	position:absolute;
+}
+
+.top{
+	top:0px;
+	position:absolute;
+}

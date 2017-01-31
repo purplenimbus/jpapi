@@ -22,6 +22,9 @@ class CreateLocationsTable extends Migration
 			$table->string('state_code',5)->nullable();
 			$table->string('country',20);
 			$table->string('country_code',5)->nullable();
+			$table->longText('description')->nullable();
+			$table->decimal('long', 9, 6)->nullable();
+			$table->decimal('lat', 9, 6)->nullable();
             $table->timestamps();
         });
     }

@@ -26,6 +26,6 @@ class Company extends Model
 	
 	//Get all jobs from this company
 	public function category(){
-		return $this->hasMany('App\Company_Category');
+		return $this->hasMany('App\Company_Category','id','company_category_id');
 	}
 }

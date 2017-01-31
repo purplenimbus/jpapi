@@ -67,6 +67,17 @@ input[type="search"],
 textarea.materialize-textarea {
   text-transform: capitalize; }
 
+.thick {
+  padding: 40px 0; }
+
+.bottom {
+  bottom: 0px;
+  position: absolute; }
+
+.top {
+  top: 0px;
+  position: absolute; }
+
 body .navbar {
   margin: 0px;
   border-bottom: 1px solid lightgray; }
@@ -81,6 +92,34 @@ body section#home {
 
 body .sub-header h1 {
   margin: 0px; }
+
+body aside.toolbar {
+  padding: 0px; }
+  body aside.toolbar .row {
+    margin: 0px; }
+    body aside.toolbar .row .title {
+      padding: 15px 0;
+      margin: 0px;
+      position: relative; }
+      body aside.toolbar .row .title h1 {
+        margin: 0px;
+        font-size: 30px; }
+    body aside.toolbar .row span {
+      line-height: 33px; }
+    body aside.toolbar .row .title .info ul {
+      border: 0px; }
+      body aside.toolbar .row .title .info ul li {
+        text-transform: uppercase;
+        margin-right: 10px;
+        display: inline-block;
+        background: transparent;
+        border: 0px;
+        font-size: 10px;
+        min-height: initial; }
+        body aside.toolbar .row .title .info ul li i {
+          font-size: inherit;
+          margin-right: 5px;
+          vertical-align: middle; }
 
 body aside.sidebar {
   font-size: 12px; }
@@ -135,14 +174,7 @@ body main #content {
     text-transform: uppercase;
     margin-top: 0px; }
 
-body.jobs .view-job h1, body.jobs .view-job h6 {
+body main .view-asset h1, body main .view-asset h6 {
   font-weight: 300; }
-
-body.jobs .view-job aside.toolbar h1 {
-  margin: 0px;
-  font-size: 30px; }
-
-body.jobs .view-job aside.toolbar .info span {
-  line-height: 33px; }
 
 /*# sourceMappingURL=main.css.map */

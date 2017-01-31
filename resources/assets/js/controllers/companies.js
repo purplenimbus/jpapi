@@ -23,7 +23,7 @@ angular.module('jpApp')
 		$scope.init	=	function(){
 			var str = '';
 			companies.getData('companies').then(function(result){
-				Materialize.toast('Got some companies'+result.data.length, 3000);
+				Materialize.toast('Got some companies '+result.data.length, 3000);
 				$scope.companies = result.data;
 				str	=	'<li class="col m12" ng-repeat="company in companies" ng-include="\'views/partials/companies/company.html\'"></li>';
 				angular.element('ul.companies').append($compile(str)($scope));

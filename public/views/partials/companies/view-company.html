@@ -1,4 +1,4 @@
-<div class="view-job">
+<div class="view-asset">
 	<div class="fixed-action-btn">
 		<div class="container">
 			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
@@ -9,33 +9,27 @@
 	<aside class="row toolbar grey lighten-3">
 		<div class="container">
 			<div class="left">
-				<h1>{{ currentCompany.name }} </h1>
+				<h1>{{ currentAsset.name }} </h1>
 			</div>
 			<div class="right text-right info">
 				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentCompany.job_category.name }}
-				</span>
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentCompany.job_type.name }}
-				</span>
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentCompany.job_level.name }}
+					<i class="material-icons tiny">insert_chart</i> {{ currentAsset.company_category.name }}
 				</span>
 			</div>
 		</div>
 	</aside>
-	<section class="row skills grey lighten-1">
+	<section class="row hide info grey lighten-1">
 		<div class="container">
-			<h6>Required Skills</h6>
-			<div class="skills">
-				<div class="chip" ng-repeat="skill in currentCompany.required_skills">{{ skill.tag }}</div>
+			<div class="row">
+				<div class="col m4 s12">{{ currentAsset.address }}</div>
+				<div class="col m4 s12">{{ currentAsset.zip }}</div>
 			</div>
 		</div>
 	</section>	
 	<section class="row description lighten-2">
 		<div class="container">
 			<h6>Company Description</h6>
-			<div ng-bind-html="currentCompany.description">{{ currentCompany.description }}</div>
+			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 		</div>
 	</section>
 </div>

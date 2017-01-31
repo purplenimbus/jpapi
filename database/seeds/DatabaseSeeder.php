@@ -6,6 +6,7 @@ use App\Company_Category;
 use App\Job_Category;
 use App\Job_Type;
 use App\Job_Level;
+use App\Job_Skill;
 use App\Job;
 use App\Salary;
 use Illuminate\Database\Seeder;
@@ -96,6 +97,12 @@ class DatabaseSeeder extends Seeder
 								];
 								
 		$this->job_types	=	['Uncategorized','Full-Time','Part-Time','Contract','Freelance'];
+		
+		$this->job_skills	=	[	'Photoshop','Illustrator',
+									'Dreamweaver','HTML','Javascript',
+									'CSS','Angular JS','React JS','Microsoft Office',
+									'Microsoft Word','Microsoft Excel','Microsoft Access',
+									'ASP.Net','Java','PHP','Ruby','Django','Python'];
 	}
 	
     public function run()
@@ -149,6 +156,13 @@ class DatabaseSeeder extends Seeder
 			$salary_type		=	new Salary;
 			$salary_type->name	=	strtolower($type);
 			$salary_type->save();
+		}
+		
+		//Populate Job Skills
+		foreach($this->job_skills as $skill){
+			$job_skills		=	new Job_Skill;
+			$job_skills->name	=	strtolower($skill);
+			$job_skills->save();
 		}
 		
 		//Create Some random Data

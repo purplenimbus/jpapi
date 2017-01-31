@@ -1,15 +1,54 @@
 'use strict';
 
 /**
- * @ngdoc service
+ * @ngdoc factory
  * @name jpApp.elements
  * @description
  * # elements
- * Factory in the jpApp.
+ * The Elements Factory in the jpApp.
+ * This factory is used to generate all basic HTML elements for the UI.
  */
 angular.module('jpApp')
   .factory('elements', function () {
+	var mockup = [
+		{
+			icon : 'insert_chart',
+			color : 'red'
+		},{
+			icon : 'formal_quote',
+			color : 'yellow darken-1'
+		},{
+			icon : 'publish',
+			color : 'green'
+		},{
+			icon : 'attach_file',
+			color : 'blue'
+		}
+	];
     return {
+		/**
+		 * Returns a row HTML element
+		 * @param {String} body - The body of the row element
+		 * @param {String} cls - additional classes for the row element
+		 * @returns {String}
+		 */
+		row		:	function(body,cls){
+			var str = '';
+			
+			str += '<div class="row';
+			str += cls ? cls : '';
+			str += '">';
+			str += 		body;
+			str += '</div>';
+			
+			return str;
+		},
+		/**
+		 * Returns a column HTML element
+		 * @param {Integer} str - num of columns 1-12
+		 * @param {String} body - The body of the column element
+		 * @returns {String}
+		 */
 		column	:	function(num,body){
 			var str=	'';
 			if( typeof num ===	'number'){
@@ -26,6 +65,15 @@ angular.module('jpApp')
 				return str;
 			}
 		},
+		/**
+		 * Returns a button HTML element
+		 * @param {Object} object - The object holding the button element properties
+		 * @param {String} object.cls - The button class
+		 * @param {String} object.type - The button type
+		 * @param {String} object.ngClick - ngClick event for the button
+		 * @param {String} object.label - The button label
+		 * @returns {String}
+		 */
 		button	:	function(object,body){
 			var str	=	'';
 			
@@ -38,8 +86,49 @@ angular.module('jpApp')
 			
 			return str;
 		},
-		form	:	{
+		/**
+		 * Returns a materalize button toolbar
+		 * @param {string} action - The action associated the primary button
+		 * @param {string} icon - The icon for the secondary button
+		 * @param {array} array - The array holding the secondary buttons objects
+		 * @param {String} array.value.color - The secondary button color based on materialize
+		 * @param {String} array.value.action - The secondary action
+		 * @param {String} array.value.icon - The secondary button icon
+		 * @returns {String}
+		 */
+		toolbar : function(action,type,icon,array){
+			var str = '';
 			
+			str += '<div class="fixed-action-btn '+(type ? 'horizontal' : '')+' click-to-toggle">';
+			str += '	<a class="btn-floating btn-large red" '+action+'>';
+			str += '	  <i class="material-icons">'+(icon ? icon : 'menu')+'</i>';
+			str += '	</a>';
+			if(array){ 
+			str += '<ul>';
+				angular.forEach(array,function(value,key){
+					str += value ? '<li><a class="btn-floating '+(value.color ? value.color : 'red')+'" '+(value.action ? value.action : '')+'><i class="material-icons">'+(value.icon ? value.icon : 'insert_chart')+'</i></a></li>' : '';
+				});
+			str += '</ul>';
+			}
+			str += '</div>';;
+		},
+		/**
+		 * Returns the form object for generic form elements
+		 * @returns {object}
+		 */
+		form	:	{
+			/**
+			 * Returns an input element
+			 * @param {object} object - The object holding the input element attributes
+			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the input element
+			 * @param {string} object.label - The label for the input field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the input element
+			 * @param {String} object.value - The value attribute for the input element
+			 * @param {boolean} object.required - The required attribute for the input element. Used for validation
+			 * @returns {String}
+			 */
 			input	:	function(object){
 				var	str	=	'';
 				
@@ -53,6 +142,7 @@ angular.module('jpApp')
 				str	+=	object.value	?	' ng-value="'+object.model+'" '	:	'';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
+				str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';
@@ -63,7 +153,12 @@ angular.module('jpApp')
 
 				return str;
 			},
-			
+			/**
+			 * Returns an input group element
+			 * @param {icon} object - The icon for the element attributes 
+			 * @param {object} object - The object holding the element attributes
+			 * @returns {String}
+			 */
 			inputGroup	:	function(icon,object){
 				var str		=	'',
 					self	=	this;
@@ -75,7 +170,16 @@ angular.module('jpApp')
 				
 				return str;
 			},
-			
+			/**
+			 * Returns a select element
+			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the input element
+			 * @param {string} object.label - The label for the input field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the input element
+			 * @param {boolean} object.required - The required attribute for the input element. Used for validation
+			 * @returns {String}
+			 */
 			select	:	function(object){
 				var str	=	'';
 				
@@ -85,13 +189,24 @@ angular.module('jpApp')
 				str +=	object.model ? 'ng-model="'+object.model+'"' : '';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
-				str +=	'ng-options="g as g.name for g in $root.job.options.'+object.name+'s track by g.id">';
+				str +=	'ng-options="g as g.name for g in $root[\''+object.asset+'\'].options.'+object.name+'s track by g.id">';
 				//str +=	'<option value="" disabled selected>Choose your option</option>';
 				str +=	'</select>';
 				str +=	object.label ? '<label>'+object.label+(object.required ? ' *' : '')+'</label>' : '';
 				str +=	'</div>';
+				
 				return str;
 			},
+			/**
+			 * Returns a textarea element
+			 * @param {Integer} object.colSize - The column size of the element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label - The label for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			textarea	:	function(object){
 				var str	=	'';
 				
@@ -104,14 +219,33 @@ angular.module('jpApp')
 				str +=	'</textarea>';
 				//str +=	object.label ? '<label>'+object.label+'</label>' : '';
 				str +=	'</div>';
+				
 				return str;
 			},
+			/**
+			 * Returns the materialize chips component
+			 * @param {object} object - The object holding the chip element properties
+			 * @param {string} object.chipType - The chip type based on the materialize
+			 * @returns {String}
+			 */
 			chips	:	function(object){
 				var str	=	'';
 				
 				str	+=	' <div class="chips '+object.chipType+'"></div>';
 				return 	str;
 			},
+			/**
+			 * Returns the materialize range component
+			 * @param {object} object - The object holding the range element properties
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label - The label for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {String} object.min - The maximum range
+			 * @param {String} object.max - The minimum range
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			range	:	function(object){
 				var str	=	'';
 				
@@ -128,6 +262,17 @@ angular.module('jpApp')
 				
 				return str;
 			},
+			/**
+			 * Returns a switch element
+			 * @param {Integer} object.colSize - The column size of the element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the element
+			 * @param {string} object.label1 - The label1 for the element
+			 * @param {string} object.label2 - The label2 for the element
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the element
+			 * @param {boolean} object.required - The required attribute for the element. Used for validation
+			 * @returns {String}
+			 */
 			check	:	function(object){
 				var str	=	'';
 				
@@ -146,6 +291,16 @@ angular.module('jpApp')
   
 				return str;
 			},
+			/**
+			 * Returns a date element
+			 * @param {Integer} object.colSize - The column size of the date element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the date element
+			 * @param {string} object.label - The label for the date field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the date element
+			 * @param {boolean} object.required - The required attribute for the date element. Used for validation
+			 * @returns {String}
+			 */
 			date	:	function(object){
 				var str	=	'';
 				
@@ -159,9 +314,18 @@ angular.module('jpApp')
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				str	+=	object.required ? 'required />' : ' />';
 				str += '</div>';
+				
+				return str;
+			},
+			typeahead : function(){
 				return str;
 			}
 		},
+		/**
+		 * Returns materalize icons
+		 * @param {String} type - The type of icon based on https://material.io/icons/
+		 * @returns {String}
+		 */
 		glyph	:	function(type){
 			var str	=	'';
 			

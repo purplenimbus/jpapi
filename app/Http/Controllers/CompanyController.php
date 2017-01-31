@@ -20,7 +20,11 @@ class CompanyController extends Controller
     public function index()
     {		
 		$companies	=	Company::all();
-
+		
+		foreach($companies as $company){
+			$company['company_cat'] = $company->category;
+		}
+		
 		return $companies->toJson();
     }
 	
@@ -31,9 +35,11 @@ class CompanyController extends Controller
      */
     public function companyoptions()
     {
-		$company_types = Company_Category::all()->sortBy('name');
+		$company_types = [
+			"company_cats" => Company_Category::all()->sortBy('name')
+		];
 		
-		return $company_types->toJson();
+		return json_encode($company_types);
 	}
 	
 	/**
@@ -47,8 +53,36 @@ class CompanyController extends Controller
         $company	=	Company::findorfail($id);
 		
 		$company['jobs']			= isset($company->jobs) ? $company->jobs : '';
+		$company['company_cats']			= 200;//$company->category;
 		//unset($job['company']['']);
 		
 		return $company->toJson();
+    }
+	
+	/**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+		$company		=	Company::findorfail($id);
+		
+		$requests	=	$request->all();
+		
+		foreach($requests as $key => $req){
+			if($request->has($key)){
+				$company[$key]	=  $request->input($key);
+				//echo $request->input($key);
+			}
+		}
+		
+		$company->save();
+		
+		$payload = json_encode($requests);
+		
+		return json_encode((object)['id'	=>	$company->id , 'payload'	=>	$payload ]);		
     }
 }

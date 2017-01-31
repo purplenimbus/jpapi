@@ -16,7 +16,8 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 		'name' => $faker->company,
 		'address' => $faker->streetAddress,
 		'email' => $faker->safeEmail,
-		'phone' => $faker->phoneNumber
+		'phone' => $faker->phoneNumber,
+		'description' => $faker->text($maxNbChars = 500) 
     ];
 	
 	echo $company['name']."\r\n";
@@ -26,7 +27,8 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Job::class, function (Faker\Generator $faker) {
     $job = [
-		'title' => $faker->jobTitle
+		'title' => $faker->jobTitle,
+		'description' => $faker->text($maxNbChars = 500) 
     ];
 	
 	echo $job['title']."\r\n";

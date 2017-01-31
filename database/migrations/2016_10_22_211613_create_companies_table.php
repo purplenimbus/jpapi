@@ -17,8 +17,8 @@ class CreateCompaniesTable extends Migration
 			$table->string('name',100);
 			$table->longText('description')->nullable();
 			$table->integer('employee_num')->default(1);
-			$table->integer('category_id')->default(1);
-			$table->integer('location_id')->unsigned();
+			$table->integer('company_category_id')->default(1);
+			$table->integer('company_location_id')->unsigned();
 			$table->string('email');
 			$table->string('phone');
 			$table->string('logo')->nullable();

@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route) {
+	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
@@ -29,6 +29,10 @@ angular.module('jpApp')
 		
 		if(!$rootScope.company){
 			$rootScope.company = {};
+			
+			$rootScope.$location = {};
+		
+			$rootScope.$location.base = $location.path().split('\/')[1];
 		}
 		
 		
@@ -98,6 +102,7 @@ angular.module('jpApp')
 			angular.element('#modal').modal('hide').remove();
 		};
 		
+		/*
 		if(!$rootScope.job.options){
 			jobs.getData('joboptions',false).then(function(result){
 				console.log('Got a job options',result);
@@ -109,12 +114,17 @@ angular.module('jpApp')
 					id 		: 	2,
 					name	:	'Published',	
 				}];
+				var job_cookie = JSON.stringify($rootScope.job.options);
+				console.log('Job Cookie',job_cookie);
+				auth.setCookie('job_options',job_cookie,1);
 			});
+		}else{
+			console.log('Job Options',auth.getCookie('job_options'));
 		}
 		
 		if(!$rootScope.company.options){		
 			companies.getData('companyoptions',false).then(function(result){
-				console.log('Got a job options',result);
+				console.log('Got company options',result);
 				$rootScope.company.options = result.data;
 				$rootScope.company.options.company_status = [{
 					id 		: 	1,
@@ -123,7 +133,12 @@ angular.module('jpApp')
 					id 		: 	2,
 					name	:	'Published',	
 				}];
+				var company_cookie = JSON.stringify($rootScope.job.options);
+				console.log('Company Cookie',company_cookie);
+				auth.setCookie('company_options',company_cookie,1);
 			});
+		}else{
+			console.log('Company Options',auth.getCookie('company_options'));
 		}
-		
+		*/
 	});
