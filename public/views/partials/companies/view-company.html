@@ -6,15 +6,24 @@
 			</a>
 		</div>
 	</div>
-	<aside class="row toolbar grey lighten-3">
-		<div class="container">
-			<div class="left">
-				<h1>{{ currentAsset.name }} </h1>
-			</div>
-			<div class="right text-right info">
-				<span>
-					<i class="material-icons tiny">insert_chart</i> {{ currentAsset.company_category.name }}
-				</span>
+	<aside class="toolbar thick lighten-3">
+		<div class="row">
+			<div class="container">
+				<div class="title center grey-text text-lighten-5">
+					<h1>{{ currentAsset.name }} </h1>
+					<div class="chips">
+						<div class="chip grey-text text-lighten-5">
+							{{ currentAsset.company_category[0].name }}
+						</div>
+					</div>
+					<div class="info">
+						<ul class="collection">
+							<li ng-show="currentAsset.job_category.name">
+								<i class="material-icons">insert_chart</i> {{ currentAsset.company_category[0].name }}
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</aside>
@@ -26,10 +35,18 @@
 			</div>
 		</div>
 	</section>	
-	<section class="row description lighten-2">
+	<section class="row description grey lighten-3 thick">
 		<div class="container">
-			<h6>Company Description</h6>
+			<h6 class="center">About {{ currentAsset.name }}</h6>
 			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
+		</div>
+	</section>
+	<section class="row jobs lighten-2 thick">
+		<div class="container">
+			<h6 class="center">Job Openings</h6>
+			<div class="collection">
+				<a href="#jobs/{{ job.id }}" ng-repeat="job in currentAsset.jobs" class="collection-item">{{ job.title }}</a>
+			</div>
 		</div>
 	</section>
 </div>

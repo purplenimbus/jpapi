@@ -10,5 +10,8 @@
     "gulp": "^3.9.1",
     "laravel-elixir": "^5.0.0",
     "laravel-elixir-wiredep": "^2.1.0"
+  },
+  "dependencies": {
+    "laravel-elixir-imagemin": "^0.2.3"
   }
 }

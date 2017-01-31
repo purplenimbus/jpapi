@@ -52,11 +52,12 @@ class CompanyController extends Controller
     {
         $company	=	Company::findorfail($id);
 		
-		$company['jobs']			= isset($company->jobs) ? $company->jobs : '';
-		$company['company_cats']			= 200;//$company->category;
-		//unset($job['company']['']);
+		$company['jobs']		= 	$company->jobs;
+		$company['company_category']	= 	$company->category;
 		
-		return $company->toJson();
+		//echo $company['jobs'][0];
+				
+		return json_encode($company);
     }
 	
 	/**

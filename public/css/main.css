@@ -94,8 +94,12 @@ body .sub-header h1 {
   margin: 0px; }
 
 body aside.toolbar {
-  padding: 0px; }
+  background: url("/images/view-job-bg.jpg");
+  background-size: cover;
+  padding: 0px;
+  background-position: center bottom; }
   body aside.toolbar .row {
+    background-color: rgba(0, 0, 0, 0.7);
     margin: 0px; }
     body aside.toolbar .row .title {
       padding: 15px 0;
@@ -104,22 +108,35 @@ body aside.toolbar {
       body aside.toolbar .row .title h1 {
         margin: 0px;
         font-size: 30px; }
+      body aside.toolbar .row .title .chips {
+        margin-top: 15px;
+        border: none !important;
+        margin-bottom: 0px;
+        min-height: 0px; }
+        body aside.toolbar .row .title .chips .chip {
+          background: transparent;
+          border: 2px solid lightgray;
+          margin: 0px;
+          line-height: 26px; }
+          body aside.toolbar .row .title .chips .chip a {
+            color: lightgray; }
+      body aside.toolbar .row .title .info ul {
+        margin: 10px 0;
+        border: 0px; }
+        body aside.toolbar .row .title .info ul li {
+          text-transform: uppercase;
+          margin-right: 10px;
+          display: inline-block;
+          background: transparent;
+          border: 0px;
+          font-size: 10px;
+          min-height: initial; }
+          body aside.toolbar .row .title .info ul li i {
+            font-size: inherit;
+            margin-right: 5px;
+            vertical-align: middle; }
     body aside.toolbar .row span {
       line-height: 33px; }
-    body aside.toolbar .row .title .info ul {
-      border: 0px; }
-      body aside.toolbar .row .title .info ul li {
-        text-transform: uppercase;
-        margin-right: 10px;
-        display: inline-block;
-        background: transparent;
-        border: 0px;
-        font-size: 10px;
-        min-height: initial; }
-        body aside.toolbar .row .title .info ul li i {
-          font-size: inherit;
-          margin-right: 5px;
-          vertical-align: middle; }
 
 body aside.sidebar {
   font-size: 12px; }

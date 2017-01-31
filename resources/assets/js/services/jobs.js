@@ -49,11 +49,11 @@ angular.module('jpApp')
 				
 					str	+=	'<form>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 3, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 3, cls:'' , label : 'Job Type Typeahead' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job',typeahead : { datasets:'jobTypes'}});
-					str	+=			elements.form.select({ colSize: 3, cls:'hide' , label : 'Job Type' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job'});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentAsset.job_level' , required:true, asset :'job'});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Category' , name : 'job_cat' , model:'currentAsset.job_category' , required:true, asset :'job'});
+					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'' , label : 'Job Type Typeahead' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job',typeahead : { datasets:'jobTypes'}});
+					str	+=			elements.form.select({ colSize: 2, cls:'hide' , label : 'Job Type' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job'});
+					str	+=			elements.form.select({ colSize: 2, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentAsset.job_level' , required:true, asset :'job'});
+					str	+=			elements.form.select({ colSize: 2, cls:'' , label : 'Job Category' , name : 'job_cat' , model:'currentAsset.job_category' , required:true, asset :'job'});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });

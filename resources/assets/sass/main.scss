@@ -39,8 +39,12 @@ body{
 	}
 	aside{
 		&.toolbar{
+			background:url('/images/view-job-bg.jpg');
+			background-size:cover;
 			padding:0px;
+			background-position: center bottom;
 			.row{
+				background-color:rgba(black,0.7);
 				margin:0px;
 				.title{
 					padding : 15px 0;
@@ -50,20 +54,24 @@ body{
 						margin: 0px;
 						font-size: 30px;
 					}
-				}
-				.info{
-					
-				}
-				span{
-					line-height: 33px;
-					i{
-					
+					.chips{
+						margin-top: 15px;
+						border: none !important;
+						margin-bottom: 0px;
+						min-height: 0px;
+						.chip{
+							background: transparent;
+							border: 2px solid lightgray;
+							margin:0px;
+							line-height: 26px;
+							a{
+								color: lightgray;
+							}
+						}
 					}
-				}
-
-				.title{
 					.info{
 						ul{
+							margin: 10px 0;
 							border:0px;
 							li{
 								text-transform:uppercase;
@@ -80,6 +88,12 @@ body{
 								}
 							}
 						}
+					}
+				}
+				span{
+					line-height: 33px;
+					i{
+					
 					}
 				}
 			}

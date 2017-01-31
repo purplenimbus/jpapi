@@ -3,6 +3,7 @@ var gulp = require("gulp");
 var wiredep = require("laravel-elixir-wiredep");
  
 require( 'elixir-jshint' );
+require('laravel-elixir-imagemin');
 
 var paths = {
     'bootstrap': './public/bower_components/bootstrap-sass/assets/',
@@ -26,6 +27,11 @@ elixir.config.js.browserify.watchify = {
         poll: true
     }
 }
+
+elixir.config.images = {
+    folder: 'img',
+    outputFolder: 'img'
+};
  
 elixir(function(mix) {
     mix.sass('main.scss','public/css/', {includePaths: [paths.bootstrap + 'stylesheets/',paths.materialize+'components/']})
@@ -34,6 +40,7 @@ elixir(function(mix) {
 		.styles([
 			'./public/bower_components/materialize/extras/noUiSlider/nouislider.css'
 		])
-        .wiredep('resources/views/layouts.app.blade.php');
+        .wiredep('resources/views/layouts.app.blade.php')
 		//.jshint();
+		.imagemin();
 });
