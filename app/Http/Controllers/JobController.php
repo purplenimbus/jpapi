@@ -20,13 +20,35 @@ class JobController extends Controller
 	var $job_levels;
 	var $job_skills;
 	var $salary_types;
+	var $min_qualifications;
 	
     function __construct(){
-		$this->job_types = Job_Type::all()->sortBy('name');
-		$this->job_levels = Job_Level::all()->sortBy('name');
-		$this->job_cats = Job_Category::all()->sortBy('name');
-		$this->job_skills = Job_Skill::all()->sortBy('name');
-		$this->salary_types = Salary::all()->sortBy('name');
+		$this->job_types = Job_Type::all();
+		$this->job_levels = Job_Level::all();
+		$this->job_cats = Job_Category::all();
+		$this->job_skills = Job_Skill::all();
+		$this->salary_types = Salary::all();
+		$this->min_qualifications = [
+				[
+					'id' => 0,
+					'name' => 'None'
+				],[
+					'id' => 1,
+					'name' => 'Highschool Diploma'
+				],[
+					'id' => 2,
+					'name' => 'University Diploma'
+				],[
+					'id' => 3,
+					'name' => 'Univerisity Degree (Bsc)'
+				],[
+					'id' => 4,
+					'name' => 'Masters Degree (Msc)'
+				],[
+					'id' => 5,
+					'name' => 'Doctorate (Phd)'
+				]
+			];
 	}
 	/**
      * Display a listing of the resource.
@@ -164,10 +186,21 @@ class JobController extends Controller
 	}
 	
 	/**
+     * Return a list of job qualifications
+     *
+     * @return string 
+     */
+    public function min_qualifications()
+    {
+		return json_encode($this->min_qualifications);
+	}
+	
+	/**
      * Return a list of job options i.e job types , job category and job levels
      *
      * @return \Illuminate\Http\Response
      */
+	/*
     public function joboptions()
     {
 		
@@ -203,5 +236,5 @@ class JobController extends Controller
 		
 		return json_encode($job_options);
     }
-	
+	*/
 }

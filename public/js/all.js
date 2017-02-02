@@ -305,7 +305,7 @@ angular.module('jpApp')
 				address : $scope.currentAsset.address,
 				zipcode	: $scope.currentAsset.zipcode,
 				phone : $scope.currentAsset.phone,
-				logo : $scope.currentAsset.phone,
+				logo : $scope.currentAsset.logo,
 				status : $scope.currentAsset.status
 			}
 			
@@ -341,7 +341,7 @@ angular.module('jpApp')
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateCompany()'	, label : 'Save'});
 			
-			modalBody	=	companies.editCompany();
+			modalBody	=	form.editCompany();
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
@@ -408,7 +408,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -471,13 +471,13 @@ angular.module('jpApp')
 			}
 			
 			console.log('Data',this.data);
-			
+			/*
 			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
 				////$scope.currentAsset = result.data;
 			});
-			
+			*/
 		}
 		
 		$scope.cancel = function(){
@@ -502,7 +502,7 @@ angular.module('jpApp')
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
 			
-			modalBody	=	jobs.editJob();
+			modalBody	=	form.editJob();
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
@@ -579,49 +579,43 @@ angular.module('jpApp')
 				});
 				
 				
-				$('.datepicker').pickadate({
+				angular.element('.datepicker').pickadate({
 					selectMonths: true, // Creates a dropdown to control month
 				}).on('change',function(e){
-					$scope.currentAsset.application_deadline = angular.element(e.currentTarget).val();
+					$scope.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
 				});
-        
-				// instantiate the bloodhound suggestion engine
-				var bloodhound = new Bloodhound({
-					datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
-					queryTokenizer: Bloodhound.tokenizers.whitespace,
-					local: [
-					  { num: 'one' },
-					  { num: 'two' },
-					  { num: 'three' },
-					  { num: 'four' },
-					  { num: 'five' },
-					  { num: 'six' },
-					  { num: 'seven' },
-					  { num: 'eight' },
-					  { num: 'nine' },
-					  { num: 'ten' }
-					]
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+										
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/'+name).ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//suggestion:'<div class="collection-item">{{value}}</div>'
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						}
+					}).bind('typeahead:change', function(ev, suggestion) {
+						console.log('Selection: ' + suggestion);
+						console.log('event: ' + ev);
+						//$scope.currentAsset
+					});
+					
 				});
-				
-				// initialize the bloodhound suggestion engine
-				bloodhound.initialize();
-				
-				$scope.jobTypes = {
-					displayKey: 'num',
-					source: bloodhound.ttAdapter(),
-					templates: {
-						empty: [
-							'<div class="tt-suggestion tt-empty-message">',
-							'No results were found ...',
-							'</div>'
-						].join('\n'),
-					}
-				};
-				
-				// Typeahead options object
-				$scope.typeahead = {
-					displayKey: 'title'
-				};
+
 			});
 		}
 		
@@ -655,8 +649,8 @@ angular.module('jpApp')
 				Materialize.toast('Got some jobs'+result.data.length, 3000)
 				//console.log('Got some jobs',result);
 				$scope.jobs = result.data;
-				str	=	'<li class="col m12" ng-repeat="job in jobs" ng-include="\'views/partials/jobs/job.html\'"></li>';
-				angular.element('ul.jobs').append($compile(str)($scope));
+				str	=	'<a href="#jobs/{{ job.id }}" class="collection-item" ng-repeat="job in jobs">{{ job.title }}</a>';
+				angular.element('div.jobs').append($compile(str)($scope));
 				angular.element('.progress').hide();
 			});
 		};
@@ -807,6 +801,12 @@ angular.module('jpApp')
 	.service('companies', function ($http,elements) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
+			/**
+			 * Returns a $http.get promise
+			 * @param {object} $data - The data for the GET request
+			 * @param {integer} $id - The id for the GET request
+			 * @returns {Promise}
+			 */
 			getData	:	function($data,$id){
 				console.log($data+' id',$id);
 				if($id){
@@ -815,6 +815,12 @@ angular.module('jpApp')
 					return	$http.get($data);
 				}
 			},
+			/**
+			 * Returns a $http.post/put promise
+			 * @param {object} $data - The data for the GET request
+			 * @param {integer} $id - The id for the GET request
+			 * @returns {Promise}
+			 */
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
 				if($id){
@@ -823,32 +829,6 @@ angular.module('jpApp')
 					return	$http.post($name,$data);
 				}
 			},
-			editCompany		:	function(){
-				var str	=	'';
-				
-					str	+=	'<form>';
-					str +=		elements.row(elements.toolbar('ng-click="action()"'));
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.name' , label : 'Company Name' , name : 'company_name' , required:true });
-					str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
-					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 8, cls:'', model:'currentAsset.address' , label : 'Company Address' , name : 'company_address' , required:false });
-					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.zipcode' , label : 'Zipcode' , name : 'zipcode' , required:false });
-					str +=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Company Description' , name : 'company_description' , model:'currentAsset.description' , required:true});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'email' ,colSize: 4, cls:'', model:'currentAsset.email' , label : 'Email Address' , name : 'email' , required:false });
-					str	+=			elements.form.input({ type:'tel' ,colSize: 4, cls:'', model:'currentAsset.phone' , label : 'Phone Number' , name : 'phone' , required:false });
-					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.logo' , label : 'Company Logo' , name : 'logo' });
-					str	+=		'</div>';
-					str	+=	'</form>';
-					
-				return str;
-			}
 		};
 	});
 
@@ -878,7 +858,7 @@ angular.module('jpApp')
 			icon : 'attach_file',
 			color : 'blue'
 		}
-	];
+	], self = this;
     return {
 		/**
 		 * Returns a row HTML element
@@ -984,7 +964,7 @@ angular.module('jpApp')
 			 * @returns {String}
 			 */
 			input	:	function(object){
-				var	str	=	'';
+				var	str	=	'',self = this;
 				
 				str +=	'<div class="input-field ';
 				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'col s12">';
@@ -996,7 +976,7 @@ angular.module('jpApp')
 				str	+=	object.value	?	' ng-value="'+object.model+'" '	:	'';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
-				str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
+				//str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';
@@ -1004,7 +984,36 @@ angular.module('jpApp')
 				str	+=	object.label ?  object.label+(object.required ? ' *' : '') : '';
 				str +=  '</label>';
 				str +=  '</div>';
-
+				/*
+				if(object.typeahead){
+					var bloodhound = self.bloodhound('/'+object.asset);
+					
+					console.log('Bloodhound',bloodhound);
+					console.log('Name','#'+object.name);
+					console.log('Element',angular.element('#'+object.name));
+					
+					angular.element('#'+object.name).typeahead(null, {
+						name: object.name,
+						display: 'name',
+						source: bloodhound.ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//suggestion:'<div class="collection-item">{{value}}</div>'
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						}
+					});
+				}
+				*/
 				return str;
 			},
 			/**
@@ -1171,8 +1180,19 @@ angular.module('jpApp')
 				
 				return str;
 			},
-			typeahead : function(){
-				return str;
+			/**
+			 * Returns the bloodhound twitter typeahead element
+			 * @param {string} source - bloodhound prefetch url
+			 * @returns {object}
+			 */
+			bloodhound : function(source){
+				var bloodhound = new Bloodhound({
+					datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+					queryTokenizer: Bloodhound.tokenizers.whitespace,
+					prefetch: source,
+				});
+				
+				return bloodhound;
 			}
 		},
 		/**
@@ -1203,6 +1223,10 @@ angular.module('jpApp')
 	.service('form', function (elements) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return	{
+			/**
+			 * Returns the login form
+			 * @returns {String}
+			 */
 			login	:	function(){
 				var	str	=	'';
 				
@@ -1234,10 +1258,89 @@ angular.module('jpApp')
 				
 				return str;
 			},
-			
+			/**
+			 * Returns the Registration form
+			 * @returns {String}
+			 */
 			register	:	function(){
 				var str	=	'';
 				
+				return str;
+			},
+			/**
+			 * Returns the form to edit a job
+			 * @returns {String}
+			 */
+			editJob		:	function(){
+				var str	=	'';
+				
+					str	+=	'<form>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type' , name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_types',typeahead : { datasets:'jobTypes'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_levels',typeahead : { datasets:'jobLevels'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_categories',typeahead : { datasets:'jobCategories'}});
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
+					str	+=			elements.form.input({ type:'text', colSize: 6, cls:'typeahead' , label : 'Minimum Qualification' , name : 'min_qualifications' , model:'currentAsset.min_qualification' , required:true , asset :'min_qualification',typeahead : { datasets:'minQualification'}});
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
+					str	+=		'</div>';			
+					str	+=		'<div class="row">';
+					str	+=			'<div class="range-field col m12">';
+					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>';
+					str	+=				'<div id="pay"></div>';
+					str	+=			'</div>';
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'text', colSize: 12, cls:'typeahead' , label : 'Salary Type' , name : 'salary_types' , model:'currentAsset.salary_type.name' , required:true , asset :'salary_types',typeahead : { datasets:'salaryTypes'}});
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true});
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			'<div class="range-field col m12">';
+					str	+=			'<label>Required Skills</label>';
+					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-initial'});
+					str	+=			'</div>';
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentAsset.application_deadline', required:true });
+					str	+=		'</div>';
+					str	+=	'</form>';
+					
+				return str;
+			},
+			/**
+			 * Returns the edit company form
+			 * @returns {string}
+			 */
+			editCompany		:	function(){
+				var str	=	'';
+				
+					str	+=	'<form>';
+					//str +=		elements.row(elements.toolbar('ng-click="action()"'));
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.name' , label : 'Company Name' , name : 'company_name' , required:true });
+					str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'text' ,colSize: 8, cls:'', model:'currentAsset.address' , label : 'Company Address' , name : 'company_address' , required:false });
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.zipcode' , label : 'Zipcode' , name : 'zipcode' , required:false });
+					str +=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Company Description' , name : 'company_description' , model:'currentAsset.description' , required:true});
+					str	+=		'</div>';
+					str	+=		'<div class="row">';
+					str	+=			elements.form.input({ type:'email' ,colSize: 4, cls:'', model:'currentAsset.email' , label : 'Email Address' , name : 'email' , required:false });
+					str	+=			elements.form.input({ type:'tel' ,colSize: 4, cls:'', model:'currentAsset.phone' , label : 'Phone Number' , name : 'phone' , required:false });
+					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.logo' , label : 'Company Logo' , name : 'logo' });
+					str	+=		'</div>';
+					str	+=	'</form>';
+					
 				return str;
 			}
 		};
@@ -1285,53 +1388,6 @@ angular.module('jpApp')
 					return	$http.post($name,$data);
 				}
 			},
-			/**
-			 * Returns the form to edit jobs
-			 * @returns {String}
-			 */
-			editJob		:	function(){
-				var str	=	'';
-				
-					str	+=	'<form>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 3, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 3, cls:'' , label : 'Job Type Typeahead' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job',typeahead : { datasets:'jobTypes'}});
-					str	+=			elements.form.select({ colSize: 3, cls:'hide' , label : 'Job Type' , name : 'job_type' , model:'currentAsset.job_type' , required:true , asset :'job'});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Level' , name : 'job_level' , model:'currentAsset.job_level' , required:true, asset :'job'});
-					str	+=			elements.form.select({ colSize: 3, cls:'' , label : 'Job Category' , name : 'job_cat' , model:'currentAsset.job_category' , required:true, asset :'job'});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
-					str	+=			elements.form.select({ colSize: 6, cls:'' , model:'currentAsset.min_qualification' , label : 'Minimum Qualification' , name : 'job_min_qualification' , asset :'job'});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
-					str	+=		'</div>';			
-					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12">';
-					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>';
-					str	+=				'<div id="pay"></div>';
-					str	+=			'</div>';
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.select({ colSize: 12, cls:'', model:'currentAsset.salary_type' , label : 'Salary Type' , name : 'salary_type' , required:true , asset :'job'});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12">';
-					str	+=			'<label>Required Skills</label>';
-					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-initial'});
-					str	+=			'</div>';
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentAsset.application_deadline', required:true });
-					str	+=		'</div>';
-					str	+=	'</form>';
-					
-				return str;
-			}
 		};
 	});
 

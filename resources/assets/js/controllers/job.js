@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -71,13 +71,13 @@ angular.module('jpApp')
 			}
 			
 			console.log('Data',this.data);
-			
+			/*
 			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
 				////$scope.currentAsset = result.data;
 			});
-			
+			*/
 		}
 		
 		$scope.cancel = function(){
@@ -102,7 +102,7 @@ angular.module('jpApp')
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
 			
-			modalBody	=	jobs.editJob();
+			modalBody	=	form.editJob();
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
@@ -179,49 +179,43 @@ angular.module('jpApp')
 				});
 				
 				
-				$('.datepicker').pickadate({
+				angular.element('.datepicker').pickadate({
 					selectMonths: true, // Creates a dropdown to control month
 				}).on('change',function(e){
-					$scope.currentAsset.application_deadline = angular.element(e.currentTarget).val();
+					$scope.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
 				});
-        
-				// instantiate the bloodhound suggestion engine
-				var bloodhound = new Bloodhound({
-					datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
-					queryTokenizer: Bloodhound.tokenizers.whitespace,
-					local: [
-					  { num: 'one' },
-					  { num: 'two' },
-					  { num: 'three' },
-					  { num: 'four' },
-					  { num: 'five' },
-					  { num: 'six' },
-					  { num: 'seven' },
-					  { num: 'eight' },
-					  { num: 'nine' },
-					  { num: 'ten' }
-					]
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+										
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/'+name).ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//suggestion:'<div class="collection-item">{{value}}</div>'
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						}
+					}).bind('typeahead:change', function(ev, suggestion) {
+						console.log('Selection: ' + suggestion);
+						console.log('event: ' + ev);
+						//$scope.currentAsset
+					});
+					
 				});
-				
-				// initialize the bloodhound suggestion engine
-				bloodhound.initialize();
-				
-				$scope.jobTypes = {
-					displayKey: 'num',
-					source: bloodhound.ttAdapter(),
-					templates: {
-						empty: [
-							'<div class="tt-suggestion tt-empty-message">',
-							'No results were found ...',
-							'</div>'
-						].join('\n'),
-					}
-				};
-				
-				// Typeahead options object
-				$scope.typeahead = {
-					displayKey: 'title'
-				};
+
 			});
 		}
 		

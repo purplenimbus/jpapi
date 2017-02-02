@@ -28,10 +28,10 @@
 								<i class="material-icons">group_work</i>{{ currentAsset.job_level.name }}
 							</li>
 							<li ng-show="currentAsset.salary_type.name">
-								<i class="material-icons">monetization_on</i> Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}
+								<i class="material-icons">monetization_on</i> Salary <span class="min">{{ currentAsset.salary | date }}</span> - <span class="max"></span> {{ currentAsset.salary_type.name }}
 							</li>
 							<li ng-show="currentAsset.application_deadline">
-								<i class="material-icons">date_range</i>{{ currentAsset.application_deadline }}
+								<i class="material-icons">date_range</i>{{ currentAsset.application_deadline | date }}
 							</li>
 						</ul>
 					</div>

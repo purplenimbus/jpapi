@@ -29,8 +29,8 @@ elixir.config.js.browserify.watchify = {
 }
 
 elixir.config.images = {
-    folder: 'img',
-    outputFolder: 'img'
+    folder: './public/images',
+    outputFolder: './public/img'
 };
  
 elixir(function(mix) {

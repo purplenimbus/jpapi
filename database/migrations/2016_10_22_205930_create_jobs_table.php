@@ -27,7 +27,7 @@ class CreateJobsTable extends Migration
 			$table->integer('job_currency_id');
 			$table->date('application_deadline')->nullable();
 			$table->integer('min_experience')->default(1);
-			$table->string('min_qualification_id')->default('none');
+			$table->string('min_qualification')->default('none');
 			$table->integer('job_ref_id')->nullable();
 			$table->string('ref_url')->nullable();
 			$table->date('ref_date')->nullable();

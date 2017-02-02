@@ -78,6 +78,32 @@ textarea.materialize-textarea {
   top: 0px;
   position: absolute; }
 
+.twitter-typeahead {
+  width: 100%; }
+
+.tt-menu {
+  margin-top: -20px;
+  width: 100%; }
+  .tt-menu .tt-suggestion {
+    background: white;
+    padding: 10px; }
+    .tt-menu .tt-suggestion:hover, .tt-menu .tt-suggestion:focus {
+      background: #1de9b6;
+      color: white; }
+
+.chips.hollow {
+  margin-top: 15px;
+  border: none !important;
+  margin-bottom: 0px;
+  min-height: 0px; }
+  .chips.hollow .chip {
+    background: transparent;
+    border: 2px solid lightgray;
+    margin: 0px;
+    line-height: 26px; }
+    .chips.hollow .chip a {
+      color: lightgray; }
+
 body .navbar {
   margin: 0px;
   border-bottom: 1px solid lightgray; }
@@ -159,7 +185,7 @@ body aside.sidebar {
       color: gray;
       line-height: 30px; }
     body aside.sidebar .panel .panel-body dl.row dd {
-      color: red;
+      color: #1de9b6;
       line-height: 30px; }
       body aside.sidebar .panel .panel-body dl.row dd span {
         color: gray;

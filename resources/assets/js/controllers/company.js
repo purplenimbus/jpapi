@@ -62,7 +62,7 @@ angular.module('jpApp')
 				address : $scope.currentAsset.address,
 				zipcode	: $scope.currentAsset.zipcode,
 				phone : $scope.currentAsset.phone,
-				logo : $scope.currentAsset.phone,
+				logo : $scope.currentAsset.logo,
 				status : $scope.currentAsset.status
 			}
 			
@@ -98,7 +98,7 @@ angular.module('jpApp')
 			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateCompany()'	, label : 'Save'});
 			
-			modalBody	=	companies.editCompany();
+			modalBody	=	form.editCompany();
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();

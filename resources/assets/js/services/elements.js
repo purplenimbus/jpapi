@@ -24,7 +24,7 @@ angular.module('jpApp')
 			icon : 'attach_file',
 			color : 'blue'
 		}
-	];
+	], self = this;
     return {
 		/**
 		 * Returns a row HTML element
@@ -130,7 +130,7 @@ angular.module('jpApp')
 			 * @returns {String}
 			 */
 			input	:	function(object){
-				var	str	=	'';
+				var	str	=	'',self = this;
 				
 				str +=	'<div class="input-field ';
 				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'col s12">';
@@ -142,7 +142,7 @@ angular.module('jpApp')
 				str	+=	object.value	?	' ng-value="'+object.model+'" '	:	'';
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
-				str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
+				//str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';
@@ -150,7 +150,36 @@ angular.module('jpApp')
 				str	+=	object.label ?  object.label+(object.required ? ' *' : '') : '';
 				str +=  '</label>';
 				str +=  '</div>';
-
+				/*
+				if(object.typeahead){
+					var bloodhound = self.bloodhound('/'+object.asset);
+					
+					console.log('Bloodhound',bloodhound);
+					console.log('Name','#'+object.name);
+					console.log('Element',angular.element('#'+object.name));
+					
+					angular.element('#'+object.name).typeahead(null, {
+						name: object.name,
+						display: 'name',
+						source: bloodhound.ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//suggestion:'<div class="collection-item">{{value}}</div>'
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						}
+					});
+				}
+				*/
 				return str;
 			},
 			/**
@@ -317,8 +346,19 @@ angular.module('jpApp')
 				
 				return str;
 			},
-			typeahead : function(){
-				return str;
+			/**
+			 * Returns the bloodhound twitter typeahead element
+			 * @param {string} source - bloodhound prefetch url
+			 * @returns {object}
+			 */
+			bloodhound : function(source){
+				var bloodhound = new Bloodhound({
+					datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+					queryTokenizer: Bloodhound.tokenizers.whitespace,
+					prefetch: source,
+				});
+				
+				return bloodhound;
 			}
 		},
 		/**

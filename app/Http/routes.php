@@ -31,6 +31,7 @@ Route::get('job_levels', 'JobController@job_levels');
 Route::get('job_types', 'JobController@job_types');
 Route::get('job_skills', 'JobController@job_skills');
 Route::get('salary_types', 'JobController@salary_types');
+Route::get('min_qualifications', 'JobController@min_qualifications');
 
 Route::resource('jobs', 'JobController', [
 	'only' 	=> ['index','show','update','store','jobtypes'],

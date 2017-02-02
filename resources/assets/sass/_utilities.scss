@@ -98,3 +98,36 @@ textarea.materialize-textarea{
 	top:0px;
 	position:absolute;
 }
+
+.twitter-typeahead{
+	width:100%;
+}
+
+.tt-menu{
+    margin-top: -20px;
+    width: 100%;
+	.tt-suggestion{
+		background: white;
+		padding: 10px;
+		&:hover,&:focus{
+			background:$primary-color;
+			color:white;
+		}
+	}
+}
+
+.chips.hollow{
+	margin-top: 15px;
+	border: none !important;
+	margin-bottom: 0px;
+	min-height: 0px;
+	.chip{
+		background: transparent;
+		border: 2px solid lightgray;
+		margin:0px;
+		line-height: 26px;
+		a{
+			color: lightgray;
+		}
+	}
+}
