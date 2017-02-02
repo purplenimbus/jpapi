@@ -143,6 +143,9 @@ angular.module('jpApp')
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				//str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
+				if(object.typeahead){
+					str +=  object.asset ? 'data-asset="'+object.asset+'"' : '';
+				}
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';

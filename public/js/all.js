@@ -455,6 +455,8 @@ angular.module('jpApp')
 		
 		$scope.updateJob = function(){			
 			
+			console.log('Scope Data',$scope.currentAsset);
+			
 			this.data	=	{
 				id : $scope.currentAsset.id,
 				title : $scope.currentAsset.title,
@@ -471,13 +473,13 @@ angular.module('jpApp')
 			}
 			
 			console.log('Data',this.data);
-			/*
+			
 			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
 				////$scope.currentAsset = result.data;
 			});
-			*/
+			
 		}
 		
 		$scope.cancel = function(){
@@ -596,24 +598,33 @@ angular.module('jpApp')
 						hint: true,
 						highlight: true,
 						minLength: 0,
+						limit: 10,
 						templates: {
 							empty: [
 								'<div class="tt-suggestion tt-empty-message collection">',
 								'No results were found ...',
 								'</div>'
 							].join('\n'),
-							//suggestion:'<div class="collection-item">{{value}}</div>'
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
 						},
 						classNames: {
 							selectable: 'collection-item',
 							dataset : 'collection'
-						}
-					}).bind('typeahead:change', function(ev, suggestion) {
-						console.log('Selection: ' + suggestion);
-						console.log('event: ' + ev);
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						$scope.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + $scope.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + $scope.currentAsset[asset].name);
 						//$scope.currentAsset
 					});
-					
 				});
 
 			});
@@ -977,6 +988,9 @@ angular.module('jpApp')
 				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
 				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
 				//str +=  object.typeahead ? 'sf-typeahead options="typeahead" datasets="'+object.typeahead.datasets+'"' : '';
+				if(object.typeahead){
+					str +=  object.asset ? 'data-asset="'+object.asset+'"' : '';
+				}
 				str	+=	'>';
 				str	+=	'<label ';
 				str	+=	object.model	?	' class="active" '	:	'';
@@ -1277,9 +1291,9 @@ angular.module('jpApp')
 					str	+=	'<form>';
 					str	+=		'<div class="row">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type' , name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_types',typeahead : { datasets:'jobTypes'}});
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_levels',typeahead : { datasets:'jobLevels'}});
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_categories',typeahead : { datasets:'jobCategories'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type' , name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_type',typeahead : { datasets:'jobTypes'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_level',typeahead : { datasets:'jobLevels'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_category',typeahead : { datasets:'jobCategories'}});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
@@ -1289,19 +1303,19 @@ angular.module('jpApp')
 					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
 					str	+=		'</div>';			
 					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12">';
+					str	+=			'<div class="range-field col m12 s12">';
 					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>';
 					str	+=				'<div id="pay"></div>';
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text', colSize: 12, cls:'typeahead' , label : 'Salary Type' , name : 'salary_types' , model:'currentAsset.salary_type.name' , required:true , asset :'salary_types',typeahead : { datasets:'salaryTypes'}});
+					str	+=			elements.form.input({ type:'text', colSize: 12, cls:'typeahead' , label : 'Salary Type' , name : 'salary_types' , model:'currentAsset.salary_type.name' , required:true , asset :'salary_type',typeahead : { datasets:'salaryTypes'}});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
 					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12">';
+					str	+=			'<div class="range-field col m12 s12">';
 					str	+=			'<label>Required Skills</label>';
 					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-initial'});
 					str	+=			'</div>';

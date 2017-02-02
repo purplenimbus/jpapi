@@ -55,6 +55,8 @@ angular.module('jpApp')
 		
 		$scope.updateJob = function(){			
 			
+			console.log('Scope Data',$scope.currentAsset);
+			
 			this.data	=	{
 				id : $scope.currentAsset.id,
 				title : $scope.currentAsset.title,
@@ -71,13 +73,13 @@ angular.module('jpApp')
 			}
 			
 			console.log('Data',this.data);
-			/*
+			
 			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
 				////$scope.currentAsset = result.data;
 			});
-			*/
+			
 		}
 		
 		$scope.cancel = function(){
@@ -196,24 +198,33 @@ angular.module('jpApp')
 						hint: true,
 						highlight: true,
 						minLength: 0,
+						limit: 10,
 						templates: {
 							empty: [
 								'<div class="tt-suggestion tt-empty-message collection">',
 								'No results were found ...',
 								'</div>'
 							].join('\n'),
-							//suggestion:'<div class="collection-item">{{value}}</div>'
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
 						},
 						classNames: {
 							selectable: 'collection-item',
 							dataset : 'collection'
-						}
-					}).bind('typeahead:change', function(ev, suggestion) {
-						console.log('Selection: ' + suggestion);
-						console.log('event: ' + ev);
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						$scope.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + $scope.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + $scope.currentAsset[asset].name);
 						//$scope.currentAsset
 					});
-					
 				});
 
 			});
