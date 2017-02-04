@@ -14,7 +14,7 @@ class CreateJobSkillsTable extends Migration
     {
         Schema::create('job__skills', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('name');
+			$table->string('tag');
 			$table->longText('description')->nullable();
 			$table->string('image')->nullable();
             $table->timestamps();

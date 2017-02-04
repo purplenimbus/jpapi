@@ -59,14 +59,17 @@ angular.module('jpApp')
 			 * Returns the form to edit a job
 			 * @returns {String}
 			 */
-			editJob		:	function(){
+			editJob		:	function(id){
+				
+				//console.log('Job id',id);
+				
 				var str	=	'';
 				
 					str	+=	'<form>';
 					str	+=		'<div class="row">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type' , name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_type',typeahead : { datasets:'jobTypes'}});
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_level',typeahead : { datasets:'jobLevels'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type e.g Full time , Part time..', name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_type',typeahead : { datasets:'jobTypes'}});
+					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level e.g Entry , Junior, Intermediate..' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_level',typeahead : { datasets:'jobLevels'}});
 					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_category',typeahead : { datasets:'jobCategories'}});
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
@@ -91,7 +94,7 @@ angular.module('jpApp')
 					str	+=		'<div class="row">';
 					str	+=			'<div class="range-field col m12 s12">';
 					str	+=			'<label>Required Skills</label>';
-					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-initial'});
+					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';
@@ -112,7 +115,8 @@ angular.module('jpApp')
 					//str +=		elements.row(elements.toolbar('ng-click="action()"'));
 					str	+=		'<div class="row">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.name' , label : 'Company Name' , name : 'company_name' , required:true });
-					str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
+					str	+=			elements.form.input({ type:'text', colSize: 4, cls:'typeahead' , label : 'Company Type e.g Software , Construction ', name : 'company_cat' , model:'currentAsset.company_category[0].name' , required:true , asset :'company_category',typeahead : { datasets:'companyCats'}});
+					//str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
 					str	+=		'</div>';
 					str	+=		'<div class="row">';

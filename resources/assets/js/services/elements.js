@@ -350,6 +350,32 @@ angular.module('jpApp')
 				return str;
 			},
 			/**
+			 * Returns a radio element
+			 * @param {Integer} object.colSize - The column size of the date element ( Defaults to 12 )
+			 * @param {string} object.cls - addtional classes for the date element
+			 * @param {string} object.label - The label for the date field
+			 * @param {String} object.model - The 2 way data binding for to the $scope (Angular Js)
+			 * @param {String} object.name - The name attribute for the date element
+			 * @param {boolean} object.required - The required attribute for the date element. Used for validation
+			 * @returns {String}
+			 */
+			radio	:	function(object){
+				var str	=	'';
+				
+				str +=	'<div class="col s12 m'+object.colSize.toString()+'">';
+				str	+= ' <input type="radio" ';
+				str	+= 'class="datepicker';
+				str +=	object.cls ? object.cls+'"' : '"';
+				str	+=	object.name	?	' name="'+object.name+'" id="'+object.name+'"'	:	'';
+				str	+=	object.model	?	' ng-model="'+object.model+'" '	:	'';
+				str	+=	object.required	?	' data-required="true" required="true"'	:	'';
+				str	+=	object.required ? 'required />' : ' />';
+				str +=	object.label ? '<label>'+object.label+(object.required ? ' *' : '')+'</label>' : '';
+				str += '</div>';
+				
+				return str;
+			},
+			/**
 			 * Returns the bloodhound twitter typeahead element
 			 * @param {string} source - bloodhound prefetch url
 			 * @returns {object}

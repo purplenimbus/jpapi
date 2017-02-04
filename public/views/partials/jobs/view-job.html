@@ -16,6 +16,9 @@
 							<a href="#companies/{{ currentAsset.company.id }}" title="{{ currentAsset.company.name }}">{{ currentAsset.company.name }}</a>
 						</div>
 					</div>
+					<div class="location" ng-show="currentAsset.location">
+						<i class="material-icons">location_on</i> {{ currentAsset.location.name}}
+					</div>
 					<div class="info">
 						<ul class="collection">
 							<li ng-show="currentAsset.job_category.name">

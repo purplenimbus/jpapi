@@ -28,7 +28,7 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 $factory->define(App\Job::class, function (Faker\Generator $faker) {
     $job = [
 		'title' => $faker->jobTitle,
-		'description' => $faker->text($maxNbChars = 500) 
+		'description' => $faker->text($maxNbChars = 500)	
     ];
 	
 	echo $job['title']."\r\n";

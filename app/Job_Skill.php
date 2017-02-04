@@ -12,7 +12,7 @@ class Job_Skill extends Model
      * @var array
      */
     protected $fillable = [
-        'name','description'
+        'tag','description'
     ];
 	
 	/**
@@ -21,7 +21,7 @@ class Job_Skill extends Model
      * @var array
      */
 	protected $visible = [
-        'id','name','description'
+        'id','tag','description'
     ];
 	
 	/**

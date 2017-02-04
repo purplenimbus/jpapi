@@ -12,11 +12,11 @@ class Location extends Model
      * @var array
      */
     protected $fillable = [
-        'name','locality','city','city_code','state','state_code','country','country_code','zipcode','long','lat'
+        'id','name','locality','city','city_code','state','state_code','country','country_code','zip_code','lng','lat','ref_id','url'
     ];
 	//Get all Jobs from Location
 	public function jobs(){
-		return $this->hasMany('App\Job');
+		return $this->hasMany('App\Job','job_location_id');
 	}
 	//Get all Companies
 	public function companies(){

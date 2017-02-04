@@ -11,6 +11,7 @@ use	App\Job_Type;
 use	App\Job_Category;
 use	App\Job_Level;
 use	App\Job_Skill;
+use	App\Location;
 
 
 class JobController extends Controller
@@ -61,6 +62,8 @@ class JobController extends Controller
 		
 		foreach($jobs as $job){
 			$job['company'] = $job->company->name;
+			$job['location'] = isset($job->location->name) ? $job->location->name : '';
+			$job['job_type'] = $job->job_type->name;
 		}
 
 		return $jobs->toJson();
@@ -91,6 +94,8 @@ class JobController extends Controller
 		$job['job_category'] 	= $job->job_category->name;
 		$job['job_type'] 		= $job->job_type->name;
 		$job['job_level'] 		= $job->job_level->name;
+		$job['job_salary'] 		= $job->job_salary->name;
+		$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
 		
 		//unset($job['company']['']);
 		
@@ -110,9 +115,43 @@ class JobController extends Controller
 		
 		$requests	=	$request->all();
 		
+		//var_dump($requests);
+		
 		foreach($requests as $key => $req){
 			if($request->has($key)){
-				$job[$key]	=  $request->input($key);
+				if($key == 'location'){
+					//var_dump($request->input($key));
+					$location = Location::where('ref_id', $request->input($key.'.ref_id'))->first();
+										
+					if(isset($location->id)){
+						$job->job_location_id = $location->id;
+						//update location 
+					}else{
+						//create new location
+						$new_location = new Location;
+						
+						$new_location->name = $request->input($key.'.name');
+						$new_location->locality = $request->input($key.'.locality');
+						$new_location->city = $request->input($key.'.city');
+						$new_location->city_code = $request->input($key.'.city_code');
+						$new_location->state = $request->input($key.'.state');
+						$new_location->state_code = $request->input($key.'.state_code');
+						$new_location->country = $request->input($key.'.country');
+						$new_location->country_code = $request->input($key.'.country_code');
+						$new_location->zip_code = $request->input($key.'.zip_code');
+						$new_location->lng = $request->input($key.'.lat');
+						$new_location->lat = $request->input($key.'.lng');
+						$new_location->ref_id = $request->input($key.'.ref_id');
+						$new_location->url = $request->input($key.'.url');
+						
+						$new_location->save();
+						//set job location id
+						$job->job_location_id = $new_location->id;
+					}
+				}else{
+					$job[$key]	=  $request->input($key);
+				}
+				
 				//echo $request->input($key);
 			}
 		}
@@ -120,7 +159,7 @@ class JobController extends Controller
 		$job->save();
 		
 		$payload = json_encode($requests);
-		
+				
 		return json_encode((object)['id'	=>	$job->id , 'payload'	=>	$payload ]);		
     }
 

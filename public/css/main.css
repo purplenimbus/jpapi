@@ -131,6 +131,13 @@ body aside.toolbar {
       padding: 15px 0;
       margin: 0px;
       position: relative; }
+      body aside.toolbar .row .title img.circle {
+        width: 100px; }
+      body aside.toolbar .row .title .location {
+        font-size: 13px;
+        margin-top: 15px; }
+        body aside.toolbar .row .title .location i {
+          font-size: inherit; }
       body aside.toolbar .row .title h1 {
         margin: 0px;
         font-size: 30px; }

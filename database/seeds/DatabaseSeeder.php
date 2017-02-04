@@ -9,6 +9,7 @@ use App\Job_Level;
 use App\Job_Skill;
 use App\Job;
 use App\Salary;
+use App\Location;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 //use database\seeds\JobSeeder;
@@ -161,7 +162,7 @@ class DatabaseSeeder extends Seeder
 		//Populate Job Skills
 		foreach($this->job_skills as $skill){
 			$job_skills		=	new Job_Skill;
-			$job_skills->name	=	strtolower($skill);
+			$job_skills->tag	=	strtolower($skill);
 			$job_skills->save();
 		}
 		

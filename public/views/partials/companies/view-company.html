@@ -10,6 +10,7 @@
 		<div class="row">
 			<div class="container">
 				<div class="title center grey-text text-lighten-5">
+					<img class="responsive-img circle" ng-show="currentAsset.logo" src="{{ currentAsset.logo }}">
 					<h1>{{ currentAsset.name }} </h1>
 					<div class="chips">
 						<div class="chip grey-text text-lighten-5">
@@ -45,7 +46,9 @@
 		<div class="container">
 			<h6 class="center teal-text text-lighten-2">Job Openings</h6>
 			<div class="collection">
-				<a href="#jobs/{{ job.id }}" ng-repeat="job in currentAsset.jobs" class="collection-item">{{ job.title }}</a>
+				<a href="#jobs/{{ job.id }}" ng-repeat="job in currentAsset.jobs" class="collection-item">
+					{{ job.title }} <span class="grey-text text-lighten-1">{{ job.job_type.name }}</span>
+				</a>
 			</div>
 		</div>
 	</section>

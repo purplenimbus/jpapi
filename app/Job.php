@@ -16,7 +16,7 @@ class Job extends Model
 		'description',
 		'job_company_id',
 		'job_salary_id',
-		'location_id',
+		'job_location_id',
 		'job_type_id',
 		'job_category_id',
 		'job_level_id',
@@ -37,6 +37,7 @@ class Job extends Model
 		'description',
 		'company',
 		'salary',
+		'job_salary_id',
 		'job_category',
 		'job_type',
 		'job_level',
@@ -45,9 +46,13 @@ class Job extends Model
 		'min_qualification',
 		'skills',
 		'salary',
+		'salary_type',
 		'status',
 		'ref_id',
-		'ref_url'
+		'ref_url',
+		'location',
+		'job_location_id',
+		'updated_at'
     ];
 	
 	//Bind Job to Company
@@ -56,7 +61,7 @@ class Job extends Model
 	}
 	//Bind Job to Location
 	public function location(){
-		return $this->belongsTo('App\Location');
+		return $this->belongsTo('App\Location','job_location_id');
 	}
 	//Bind Job to Job Category
 	public function job_category(){
@@ -66,13 +71,12 @@ class Job extends Model
 	public function job_type(){
 		return $this->belongsTo('App\Job_Type');
 	}
-	
 	//Bind Job to Job Level
 	public function job_level(){
 		return $this->belongsTo('App\Job_Level');
 	}
 	//Bind Job to Salary
-	public function salary(){
-		return $this->belongsTo('App\Salary');
+	public function job_salary(){
+		return $this->belongsTo('App\Salary','job_salary_id','id');
 	}
 }

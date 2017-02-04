@@ -12,6 +12,16 @@ use	App\Company_Category;
 
 class CompanyController extends Controller
 {
+	var $company_cats;
+	
+	function __construct(){
+		/**
+		 *
+		 * @constructor
+		 */
+		
+		$this->company_cats = Company_Category::all();
+	}
     /**
      * Display a listing of the resource.
      *
@@ -33,13 +43,9 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function companyoptions()
-    {
-		$company_types = [
-			"company_cats" => Company_Category::all()->sortBy('name')
-		];
-		
-		return json_encode($company_types);
+    public function company_categories()
+    {	
+		return $this->company_cats;
 	}
 	
 	/**
@@ -57,7 +63,7 @@ class CompanyController extends Controller
 		
 		//echo $company['jobs'][0];
 				
-		return json_encode($company);
+		return $company->toJson();
     }
 	
 	/**

@@ -8,13 +8,8 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope)
+	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form)
 	{
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
 		
 		$rootScope.$location.title = '';
 		
@@ -67,13 +62,13 @@ angular.module('jpApp')
 			}
 			
 			console.log('Data',this.data);
-			/*
-			company.sendData('companies',$route.current.params.companyId,this.data).then(function(result){
+			
+			companies.sendData('companies',$route.current.params.companyId,this.data).then(function(result){
 				console.log('Got a Response',result);
 				$scope.cancel();
 				////$scope.currentAsset = result.data;
 			});
-			*/
+			
 		}
 		
 		$scope.cancel = function(){
@@ -150,6 +145,48 @@ angular.module('jpApp')
 				
 				var slider = angular.element('#employees').get(0);
 				
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+					
+					console.log('Company Cats Bloodhound',elements.form.bloodhound('/company/categories'));
+					
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/company/categories').ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						limit: 10,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						$scope.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + $scope.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + $scope.currentAsset[asset].name);
+						//$scope.currentAsset
+					});
+				});
 			});
 		}
 		

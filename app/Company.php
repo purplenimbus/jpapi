@@ -16,7 +16,7 @@ class Company extends Model
     ];
 	
 	protected $visible = [
-        'id','name','description','address','zipcode','location','email','phone','logo','company_category','jobs'
+        'id','name','description','address','zipcode','location_id','email','phone','logo','company_category','jobs'
     ];
 	
 	//Get all jobs from this company
