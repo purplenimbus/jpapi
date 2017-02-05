@@ -45,4 +45,6 @@ Route::resource('companies', 'CompanyController', [
 	'names' => ['companytypes' => 'companies.companytypes']
 ]);
 
+Route::get('locations/{location_id}/jobs', 'JobController@get_jobs');
+
 

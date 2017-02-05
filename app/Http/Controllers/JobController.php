@@ -233,47 +233,18 @@ class JobController extends Controller
     {
 		return json_encode($this->min_qualifications);
 	}
-	
 	/**
-     * Return a list of job options i.e job types , job category and job levels
+     * Return a list of jobs based on location id
      *
-     * @return \Illuminate\Http\Response
+     * @return object 
      */
-	/*
-    public function joboptions()
-    {
-		
-		$job_options = [
-			"job_levels" => $this->job_levels,
-			"job_cats" => $this->job_cats,
-			"job_skills" => $this->job_skills,
-			"job_types" => $this->job_types,
-			"salary_types" => $this->salary_types,
-			"job_min_qualifications" 		=> [
-				[
-					'id' => 0,
-					'name' => 'None'
-				],[
-					'id' => 1,
-					'name' => 'Highschool Diploma'
-				],[
-					'id' => 2,
-					'name' => 'University Diploma'
-				],[
-					'id' => 3,
-					'name' => 'Univerisity Degree (Bsc)'
-				],[
-					'id' => 4,
-					'name' => 'Masters Degree (Msc)'
-				],[
-					'id' => 5,
-					'name' => 'Doctorate (Phd)'
-				]
-			]
-
-		];
-		
-		return json_encode($job_options);
-    }
-	*/
+	public function get_jobs($location_id){
+		$location = Location::find($location_id);
+		if($location){
+			$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
+			return $location->toJson();
+		}else{
+			return 'No Jobs Found';
+		}
+	}
 }
