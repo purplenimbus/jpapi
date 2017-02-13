@@ -111,11 +111,7 @@ angular
 			});
 
 		//$locationProvider.html5Mode(true);
-	}).run(function(editableOptions,editableThemes) {
+	}).run(function() {
 		angular.element('.progress').show();
-		
-		editableThemes.bs3.inputClass = 'input-sm';
-		editableThemes.bs3.buttonsClass = 'btn-sm';
-		editableOptions.theme = 'bs3';
 	});
   

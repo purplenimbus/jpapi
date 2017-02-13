@@ -111,12 +111,8 @@ angular
 			});
 
 		//$locationProvider.html5Mode(true);
-	}).run(function(editableOptions,editableThemes) {
+	}).run(function() {
 		angular.element('.progress').show();
-		
-		editableThemes.bs3.inputClass = 'input-sm';
-		editableThemes.bs3.buttonsClass = 'btn-sm';
-		editableOptions.theme = 'bs3';
 	});
   
 
@@ -530,7 +526,7 @@ angular.module('jpApp')
 				min_qualification : JobCtrl.currentAsset.min_qualification.name,
 			}
 			
-			if(JobCtrl.currentAsset.location){
+			if(JobCtrl.currentAsset.location.searched){
 				JobCtrl.data.location = {
 					name : JobCtrl.currentAsset.location.name,
 					locality : JobCtrl.currentAsset.location.neighborhood ? JobCtrl.currentAsset.location.neighborhood.long_name : JobCtrl.currentAsset.location.vicinity,
@@ -628,7 +624,7 @@ angular.module('jpApp')
 					console.log('Place',place);
 					//console.log('Place Long',place.geometry.location.lng());
 					
-					JobCtrl.currentAsset.location = {};
+					JobCtrl.currentAsset.location = { searched : true };
 					
 					JobCtrl.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
 					
