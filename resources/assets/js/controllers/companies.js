@@ -8,29 +8,15 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompaniesCtrl', function ($scope,jobs,companies,$routeParams,$route,$location,$compile,$rootScope)
+	.controller('CompaniesCtrl', function ($scope,jobs,companies,$routeParams,$route,$location,$compile,$rootScope,companiesData)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
-				
-		$rootScope.$location.title = $rootScope.$location.base;
 		
-		angular.element('.progress').show();
+		$scope.companies = this.companies = companiesData;
 		
-		$scope.init	=	function(){
-			var str = '';
-			companies.getData('companies').then(function(result){
-				Materialize.toast('Got some companies '+result.data.length, 3000);
-				$scope.companies = result.data;
-				str	=	'<li class="col m12" ng-repeat="company in companies" ng-include="\'views/partials/companies/company.html\'"></li>';
-				angular.element('ul.companies').append($compile(str)($scope));
-				angular.element('.progress').hide();
-			});
-		};
-		
-		$scope.init();
-		
+		console.log('Companies ',this.companies);
 	});

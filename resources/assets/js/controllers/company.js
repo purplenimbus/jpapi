@@ -8,39 +8,22 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form)
+	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData)
 	{
 		
-		$rootScope.$location.title = '';
-		
-		angular.element('.progress').show();
-		
-		var autocomplete,self = this;
+		var autocomplete,CompanyCtrl = this;
 		
 		this.data = {};
 		
 		console.log($route);
 		
-		$scope.init = function(){
-			companies.getData('companies',$route.current.params.companyId).then(function(result){
-				$scope.currentAsset = result.data;
-				//$scope.currentAsset.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
-				$scope.cache = $scope.currentAsset;
-				console.log('Got a Company',$scope.currentAsset);
-				$rootScope.$location.title = $scope.currentAsset.title;
-				angular.element('.progress').hide();
-			});
-		};
-		
-		if(!$scope.currentAsset){
-			$scope.init();
-		}
+		$scope.currentAsset = CompanyCtrl.currentAsset = companyData;
 		
 		$scope.companyOptions = function(options) {
 			switch(options){
 				case 'company_status' :  return function(){
-					var selected = $filter('filter')($rootScope.company.options.company_status, {value: $scope.currentAsset.status});
-					return ($scope.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
+					var selected = $filter('filter')($rootScope.company.options.company_status, {value: CompanyCtrl.currentAsset.status});
+					return (CompanyCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
 				}
 				break;
 			}
@@ -49,16 +32,16 @@ angular.module('jpApp')
 		$scope.updateCompany = function(){			
 			
 			this.data	=	{
-				id : $scope.currentAsset.id,
-				name : $scope.currentAsset.name,
-				description : $scope.currentAsset.description,
-				company_category_id : $scope.currentAsset.company_category.id,
-				email : $scope.currentAsset.email,
-				address : $scope.currentAsset.address,
-				zipcode	: $scope.currentAsset.zipcode,
-				phone : $scope.currentAsset.phone,
-				logo : $scope.currentAsset.logo,
-				status : $scope.currentAsset.status
+				id : CompanyCtrl.currentAsset.id,
+				name : CompanyCtrl.currentAsset.name,
+				description : CompanyCtrl.currentAsset.description,
+				company_category_id : CompanyCtrl.currentAsset.company_category.id,
+				email : CompanyCtrl.currentAsset.email,
+				address : CompanyCtrl.currentAsset.address,
+				zipcode	: CompanyCtrl.currentAsset.zipcode,
+				phone : CompanyCtrl.currentAsset.phone,
+				logo : CompanyCtrl.currentAsset.logo,
+				status : CompanyCtrl.currentAsset.status
 			}
 			
 			console.log('Data',this.data);
@@ -78,7 +61,6 @@ angular.module('jpApp')
 			//angular.element('#modal form').get(0).reset();
 			//$scope.currentAsset = $scope.cache;
 			$route.reload();
-			$scope.init();
 		}
 		
 		$scope.edit = function(){
@@ -106,17 +88,17 @@ angular.module('jpApp')
 				};
 				
 				CKEDITOR.replace( 'company_description' ).on( 'change', function( evt ) {
-					$scope.currentAsset.description = evt.editor.getData();
+					CompanyCtrl.currentAsset.description = evt.editor.getData();
 				});
 				
 				/*
 				angular.element('.chips-initial').on('chip.add', function(e, chip){
-					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
+					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
-					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
+					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).material_chip({
 					placeholder: 'Skills',
-					data: $scope.currentAsset.required_skills
+					data: CompanyCtrl.currentAsset.required_skills
 				});
 				*/
 				
@@ -133,13 +115,13 @@ angular.module('jpApp')
 					
 					//console.log('Place',place);
 					
-					$scope.currentAsset.location.name = place.name ? place.name : '';
+					CompanyCtrl.currentAsset.location.name = place.name ? place.name : '';
 					
 					place.address_components.map(function(value,key){
 						//console.log('Value',value);
-						$scope.currentAsset.location[value.types[0]] = {};
-						$scope.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						$scope.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+						CompanyCtrl.currentAsset.location[value.types[0]] = {};
+						CompanyCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						CompanyCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
 					});
 				});
 				
@@ -179,11 +161,11 @@ angular.module('jpApp')
 						//console.log('Selection(name): ' + suggestion.name);
 						//console.log('Selection(id): ' + suggestion.id);
 						//console.log('event: ' + asset);
-						$scope.currentAsset[asset] = suggestion;
+						CompanyCtrl.currentAsset[asset] = suggestion;
 						//$scope.currentAsset[asset].name = suggestion.name;
 						
-						console.log('Scope asset(id): ' + $scope.currentAsset[asset].id);
-						console.log('Scope asset(name): ' + $scope.currentAsset[asset].name);
+						console.log('Scope asset(id): ' + CompanyCtrl.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + CompanyCtrl.currentAsset[asset].name);
 						//$scope.currentAsset
 					});
 				});

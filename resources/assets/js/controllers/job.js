@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData)
 	{
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
@@ -16,41 +16,30 @@ angular.module('jpApp')
 		  'Karma'
 		];
 		
+		var JobCtrl = this;
 		$rootScope.$location.title = '';
 		
-		angular.element('.progress').show();
+		var autocomplete;
 		
-		var autocomplete,self = this;
+		JobCtrl.data = {};
 		
-		this.data = {};
+		console.log('jobData',jobData);
 		
-		console.log($route);
+		$scope.currentAsset = JobCtrl.currentAsset = jobData;
 		
-		$scope.init = function(){
-			jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-				$scope.currentAsset = result.data;
-				//$scope.currentAsset.application_deadline = result.data.application_deadline ? new Date(result.data.application_deadline) : result.data.application_deadline;
-				console.log('Date',result.data.application_deadline);
-				$scope.cache = $scope.currentAsset;
-				$scope.currentAsset.pay = {};
-				console.log('Got a job',$scope.currentAsset);
-				$scope.currentAsset.application_deadline ? 
-					$scope.currentAsset.application_deadline = new Date($scope.currentAsset.application_deadline)
-					: null;
-				$rootScope.$location.title = $scope.currentAsset.title;
-				angular.element('.progress').hide();
-			});
-		};
+		JobCtrl.cache = JobCtrl.currentAsset;
+		JobCtrl.currentAsset.pay = {};
+		console.log('Got a job',JobCtrl.currentAsset);
+		JobCtrl.currentAsset.application_deadline ? 
+			JobCtrl.currentAsset.application_deadline = new Date(JobCtrl.currentAsset.application_deadline)
+			: null;
+		$rootScope.$location.title = JobCtrl.currentAsset.title;
 		
-		if(!$scope.currentAsset){
-			$scope.init();
-		}
-		
-		$scope.jobOptions = function(options) {
+		JobCtrl.jobOptions = function(options) {
 			switch(options){
 				case 'job_status' :  return function(){
-					var selected = $filter('filter')($rootScope.job.options.job_status, {value: $scope.currentAsset.status});
-					return ($scope.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
+					var selected = $filter('filter')($rootScope.job.options.job_status, {value: JobCtrl.currentAsset.status});
+					return (JobCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
 				}
 				break;
 			}
@@ -58,60 +47,59 @@ angular.module('jpApp')
 		
 		$scope.updateJob = function(){			
 			
-			console.log('Scope Data',$scope.currentAsset);
+			console.log('Scope Data',JobCtrl.currentAsset);
 			
-			this.data	=	{
-				id : $scope.currentAsset.id,
-				title : $scope.currentAsset.title,
-				description : $scope.currentAsset.description,
-				company_id : $scope.currentAsset.company.id,
-				job_category_id : $scope.currentAsset.job_category.id,
-				job_type_id : $scope.currentAsset.job_type.id,
-				job_level_id : $scope.currentAsset.job_level.id,
+			JobCtrl.data	=	{
+				id : JobCtrl.currentAsset.id,
+				title : JobCtrl.currentAsset.title,
+				description : JobCtrl.currentAsset.description,
+				company_id : JobCtrl.currentAsset.company.id,
+				job_category_id : JobCtrl.currentAsset.job_category.id,
+				job_type_id : JobCtrl.currentAsset.job_type.id,
+				job_level_id : JobCtrl.currentAsset.job_level.id,
 				//job_salary_id : $scope.currentAsset.salary_type.id,
-				application_deadline : $scope.currentAsset.application_deadline,
-				salary : $scope.currentAsset.salary,
-				status : $scope.currentAsset.status,
-				min_experience : $scope.currentAsset.min_experience,
-				min_qualification : $scope.currentAsset.min_qualification.name,
+				application_deadline : JobCtrl.currentAsset.application_deadline,
+				salary : JobCtrl.currentAsset.salary,
+				status : JobCtrl.currentAsset.status,
+				min_experience : JobCtrl.currentAsset.min_experience,
+				min_qualification : JobCtrl.currentAsset.min_qualification.name,
 			}
 			
-			if($scope.currentAsset.location){
-				this.data.location = {
-					name : $scope.currentAsset.location.name,
-					locality : $scope.currentAsset.location.neighborhood ? $scope.currentAsset.location.neighborhood.long_name : $scope.currentAsset.location.vicinity,
-					city	:	$scope.currentAsset.location.locality.long_name,
-					city_code	:	$scope.currentAsset.location.locality.long_name,
-					state	:	$scope.currentAsset.location.administrative_area_level_1.long_name ? $scope.currentAsset.location.administrative_area_level_1.long_name : '',
-					state_code	:	$scope.currentAsset.location.administrative_area_level_1.short_name ? $scope.currentAsset.location.administrative_area_level_1.short_name : '',
-					country	:	$scope.currentAsset.location.country.long_name ? $scope.currentAsset.location.country.long_name : '',
-					country_code	: $scope.currentAsset.location.country.short_name ? $scope.currentAsset.location.country.short_name : '',
-					lng	:	$scope.currentAsset.location.geo.lng,
-					lat	:	$scope.currentAsset.location.geo.lat,
-					ref_id	:	$scope.currentAsset.location.place_id,
-					url	:	$scope.currentAsset.location.geo.url,
-					zip_code : $scope.currentAsset.location.zipcode ? $scope.currentAsset.location.zipcode : ''
+			if(JobCtrl.currentAsset.location){
+				JobCtrl.data.location = {
+					name : JobCtrl.currentAsset.location.name,
+					locality : JobCtrl.currentAsset.location.neighborhood ? JobCtrl.currentAsset.location.neighborhood.long_name : JobCtrl.currentAsset.location.vicinity,
+					city	:	JobCtrl.currentAsset.location.locality.long_name,
+					city_code	:	JobCtrl.currentAsset.location.locality.long_name,
+					state	:	JobCtrl.currentAsset.location.administrative_area_level_1.long_name ? JobCtrl.currentAsset.location.administrative_area_level_1.long_name : '',
+					state_code	:	JobCtrl.currentAsset.location.administrative_area_level_1.short_name ? JobCtrl.currentAsset.location.administrative_area_level_1.short_name : '',
+					country	:	JobCtrl.currentAsset.location.country.long_name ? JobCtrl.currentAsset.location.country.long_name : '',
+					country_code	: JobCtrl.currentAsset.location.country.short_name ? JobCtrl.currentAsset.location.country.short_name : '',
+					lng	:	JobCtrl.currentAsset.location.geo.lng,
+					lat	:	JobCtrl.currentAsset.location.geo.lat,
+					ref_id	:	JobCtrl.currentAsset.location.place_id,
+					url	:	JobCtrl.currentAsset.location.geo.url,
+					zip_code : JobCtrl.currentAsset.location.zipcode ? JobCtrl.currentAsset.location.zipcode : ''
 				}
 			}
 			
-			console.log('Data',this.data);
+			console.log('Data',JobCtrl.data);
 			
-			jobs.sendData('jobs',$route.current.params.jobId,this.data).then(function(result){
+			jobs.sendData('jobs',$route.current.params.jobId,JobCtrl.data).then(function(result){
 				console.log('Got a Response',result);
-				$scope.cancel();
+				JobCtrl.reset();
 				////$scope.currentAsset = result.data;
 			});
 			
 		}
 		
-		$scope.cancel = function(){
+		JobCtrl.reset = function(){
 			console.log('Edit Cancelled');
 			angular.element('#modal').modal('close');
 			//angular.element('#job_location').val('');
 			//angular.element('#modal form').get(0).reset();
 			//$scope.currentAsset = $scope.cache;
 			$route.reload();
-			$scope.init();
 		}
 		
 		$scope.edit = function(){
@@ -123,7 +111,7 @@ angular.module('jpApp')
 			modalTitle	+=	'<h4 class="left">Edit Job</h4>';
 			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'status' , model:'currentAsset.status',colSize: 12,label1:'draft',label2:'published'})+'</div>';
 			
-			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
+			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'reset()'	, label : 'Cancel'});
 			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
 			
 			modalBody	=	form.editJob();
@@ -139,7 +127,7 @@ angular.module('jpApp')
 				};
 				
 				CKEDITOR.replace( 'job_description' ).on( 'change', function( evt ) {
-					$scope.currentAsset.description = evt.editor.getData();
+					JobCtrl.currentAsset.description = evt.editor.getData();
 				});
 				
 				angular.element('.chips-autocomplete').material_chip();
@@ -154,9 +142,9 @@ angular.module('jpApp')
 				});
 				
 				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
-					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
-					$scope.currentAsset.required_skills = angular.element(this).material_chip('data');
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				});
 					
 				console.log(elements.form.bloodhound('/job_skills').index.datums);
@@ -175,27 +163,27 @@ angular.module('jpApp')
 					console.log('Place',place);
 					//console.log('Place Long',place.geometry.location.lng());
 					
-					$scope.currentAsset.location = {};
+					JobCtrl.currentAsset.location = {};
 					
-					$scope.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
+					JobCtrl.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
 					
 					place.address_components.map(function(value,key){
 						console.log('Value',value);
-						$scope.currentAsset.location[value.types[0]] = {};
-						$scope.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						$scope.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+						JobCtrl.currentAsset.location[value.types[0]] = {};
+						JobCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						JobCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
 					});
-					$scope.currentAsset.location.place_id = place.place_id ? place.place_id : '';
-					$scope.currentAsset.location.vicinity = place.vicinity ? place.vicinity : '';
+					JobCtrl.currentAsset.location.place_id = place.place_id ? place.place_id : '';
+					JobCtrl.currentAsset.location.vicinity = place.vicinity ? place.vicinity : '';
 						
 					//Set location long lat
-					$scope.currentAsset.location.geo = { 
+					JobCtrl.currentAsset.location.geo = { 
 															lng : place.geometry.location.lng(), 
 															lat	: place.geometry.location.lat(),
 															url : place.url
 														};
 					//Set url
-					console.log('Location Asset',$scope.currentAsset.location);
+					console.log('Location Asset',JobCtrl.currentAsset.location);
 				});
 				
 				var slider = angular.element('#pay').get(0);
@@ -203,8 +191,8 @@ angular.module('jpApp')
 				//console.log('Salary Scope',$scope);				
 				
 				noUiSlider.create(slider, {
-					start: $scope.currentAsset.salary ? [parseInt($scope.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')), 
-							parseInt($scope.currentAsset.salary.split(',')[1].toString().replace(/$$|.000/g,''))] : [0,100],
+					start: JobCtrl.currentAsset.salary ? [parseInt(JobCtrl.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')), 
+							parseInt(JobCtrl.currentAsset.salary.split(',')[1].toString().replace(/$$|.000/g,''))] : [0,100],
 					connect: true,
 					step: 5,
 					range: {
@@ -215,17 +203,17 @@ angular.module('jpApp')
 						decimals: 0,
 						thousand: '.',
 						//prefix: '$',
-						postfix: '.000',
+						postfix: '.000'
 					})
 				});
 				
 				slider.noUiSlider.on('update', function(value,handle){
 					console.log('Slider Changed',value.toString());
-					$scope.currentAsset.pay.value  = value;
-					$scope.currentAsset.salary  = value.toString();
-					$scope.currentAsset.pay.min = value[0];
+					JobCtrl.currentAsset.pay.value  = value;
+					JobCtrl.currentAsset.salary  = value.toString();
+					JobCtrl.currentAsset.pay.min = value[0];
 					angular.element('.range-field span.min').html(value[0]);
-					$scope.currentAsset.pay.max  = value[1];
+					JobCtrl.currentAsset.pay.max  = value[1];
 					angular.element('.range-field span.max').html(value[1]);
 				});
 				
@@ -233,7 +221,7 @@ angular.module('jpApp')
 				angular.element('.datepicker').pickadate({
 					selectMonths: true, // Creates a dropdown to control month
 				}).on('change',function(e){
-					$scope.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
+					JobCtrl.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
 				});
 				
 				//Initalize Typeahead
@@ -268,18 +256,18 @@ angular.module('jpApp')
 						//console.log('Selection(name): ' + suggestion.name);
 						//console.log('Selection(id): ' + suggestion.id);
 						//console.log('event: ' + asset);
-						$scope.currentAsset[asset] = suggestion;
+						JobCtrl.currentAsset[asset] = suggestion;
 						//$scope.currentAsset[asset].name = suggestion.name;
 						
-						console.log('Scope asset(id): ' + $scope.currentAsset[asset].id);
-						console.log('Scope asset(name): ' + $scope.currentAsset[asset].name);
+						console.log('Scope asset(id): ' + JobCtrl.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + JobCtrl.currentAsset[asset].name);
 						//$scope.currentAsset
 					});
 				});
 				
-				console.log('Check current asset',$scope.currentAsset.status === 1);
+				console.log('Check current asset',JobCtrl.currentAsset.status === 1);
 				
-				$scope.currentAsset.status === 1 ? angular.element('#status').get(0).checked = true : null;
+				JobCtrl.currentAsset.status === 1 ? angular.element('#status').get(0).checked = true : null;
 				
 			});
 		}
