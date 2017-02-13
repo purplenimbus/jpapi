@@ -8,7 +8,6 @@
     <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
-	<link rel="stylesheet" href="/bower_components/angular-xeditable/dist/css/xeditable.css" />
 	<link rel="stylesheet" href="/bower_components/materialize/bin/materialize.css" />
 	<!-- endbower -->
 	<link rel="stylesheet" href="/bower_components/materialize/extras/noUiSlider/nouislider.css" />
@@ -49,7 +48,6 @@
 	<script src="/bower_components/angular-touch/angular-touch.js"></script>
 	<script src="/bower_components/satellizer/dist/satellizer.js"></script>
 	<script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<script src="/bower_components/angular-xeditable/dist/js/xeditable.js"></script>
 	<script src="/bower_components/moment/moment.js"></script>
 	<script src="/bower_components/ckeditor/ckeditor.js"></script>
 	<script src="/bower_components/materialize/bin/materialize.js"></script>

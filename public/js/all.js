@@ -15,8 +15,7 @@ angular
 		'ngResource',
 		'ngRoute',
 		'ngSanitize',
-		'ngTouch',
-		'xeditable'
+		'ngTouch'
 	])
 	.config(function ($routeProvider,$locationProvider) {
 		console.log('Route Provider',$routeProvider);
