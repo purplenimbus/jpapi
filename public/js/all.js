@@ -26,8 +26,37 @@ angular
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
-					init : function($rootScope){
+					init : function($rootScope,location){
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						angular.element('.progress').hide();
+						
+						if(!$rootScope.user){
+							$rootScope.user = {};
+						}
+						
+						//Get Home location of the current user
+						if(navigator.geolocation && !$rootScope.user.location) {
+							console.log('Location Needed');
+							
+							$rootScope.user.location =	{};
+							
+							return location.getLocation().then(function(result){
+								
+								console.log('Location Result',result);
+								
+								$rootScope.user.location.location = result[1].formatted_address;
+									
+								$rootScope.user.location.place_id = result[1].place_id;
+								
+								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
+								
+								Materialize.updateTextFields();
+								
+								return result;
+							});
+
+						}
 					}
 				}
 			})
@@ -110,7 +139,6 @@ angular
 				templateUrl : 	'Not Found'
 			});
 
-		//$locationProvider.html5Mode(true);
 	}).run(function() {
 		angular.element('.progress').show();
 	});
@@ -471,11 +499,6 @@ angular.module('jpApp')
 angular.module('jpApp')
 	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData)
 	{
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
 		
 		var JobCtrl = this;
 		$rootScope.$location.title = '';
@@ -579,7 +602,7 @@ angular.module('jpApp')
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
-				
+				//Input elements need to converted to directives
 				CKEDITOR.editorConfig	=	function( config ){
 					config.toolbar	=	[
 						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
@@ -762,8 +785,93 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('MainCtrl', function () {
-		angular.element('.loading').hide();
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init) {
+		
+		console.log('init',init);	
+			
+		$scope.search = {
+			title : init[1].formatted_address
+		};
+		
+		$scope.data = init;
+		
+		var autocomplete;
+		
+		console.log('Search',$scope.search);
+		
+		var home_loc;
+		
+		$scope.findjobs = function(search){
+			console.log('Search',search);
+			/*
+			jobs.findJobs($scope.search.place_id,$scope.search.job_id).then(function(result){
+				console.log('Result',result);
+			});
+			*/
+		}
+		
+		console.log('rootScope',$rootScope);
+		
+		$scope.search = $rootScope.user.location;
+		
+		//google.maps.event.addDomListener(window, 'load',function(){
+
+			angular.element('#job_title').typeahead(null, {
+				name: 'job_title',
+				display: 'title',
+				source: elements.form.bloodhound('/job_titles'),
+				hint: true,
+				highlight: true,
+				minLength: 0,
+				limit: 10,
+				templates: {
+					empty: [
+						'<div class="tt-suggestion tt-empty-message collection">',
+						'No results were found ...',
+						'</div>'
+					].join('\n'),
+					//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+					//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+				},
+				classNames: {
+					selectable: 'collection-item',
+					dataset : 'collection'
+				},
+				//identify: function(obj) { return obj.name; },
+			}).bind('typeahead:select', function(ev, suggestion) {
+				var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+				console.log('Selection(name): ' + suggestion.name);
+				console.log('Selection(id): ' + suggestion.id);
+				//console.log('event: ' + asset);
+				$scope.search.title = suggestion;
+				//$scope.currentAsset[asset].name = suggestion.name;
+
+				//$scope.currentAsset
+			});
+		//});
+		
+		console.log('Bloodhound',elements.form.bloodhound('/job_titles'));
+		
+		// Create the autocomplete object, restricting the search to geographical
+		// location types.
+		autocomplete = new google.maps.places.Autocomplete(
+			/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
+			{types: ['geocode']});
+			
+		autocomplete.addListener('place_changed', function(){
+			var place = this.getPlace();
+			
+			console.log('Place',place);
+			
+			$scope.search = {};
+			
+			$scope.search.location = place.formatted_address;
+			
+			$scope.search.place_id = place.place_id;
+			
+			console.log('Place Search',$scope.search);
+			
+		});
 	});
 
 'use strict';
@@ -1486,7 +1594,7 @@ angular.module('jpApp')
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
-			 * Returns a $http.get promise
+			 * Returns a $http.get promise to get a job based on the job id
 			 * @param {object} $data - The data for the GET request
 			 * @param {integer} $id - The id for the GET request
 			 * @returns {Promise}
@@ -1500,7 +1608,7 @@ angular.module('jpApp')
 				}
 			},
 			/**
-			 * Returns a $http.put or post promise
+			 * Returns a $http.put or post promise to store a job based on job id and its data
 			 * @param {String} $name - The name of the PUT/POST endpoint
 			 * @param {object} $data - The data for the PUT/POST request
 			 * @param {integer} $id - The id for the PUT/POST enpoint
@@ -1514,6 +1622,77 @@ angular.module('jpApp')
 					return	$http.post($name,$data);
 				}
 			},
+			/**
+			 * Returns a $http.put or post promise to store a job based on job id and its data
+			 * @param {String} $name - The name of the PUT/POST endpoint
+			 * @param {object} $data - The data for the PUT/POST request
+			 * @param {integer} $id - The id for the PUT/POST enpoint
+			 * @returns {Promise}
+			 */
+			findJobs : function(location_id,job_id){
+				return $http.get('/locations/'+location_id+'/jobs/'+job_id);
+			}
+		};
+	});
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name jpApp.location
+ * @description
+ * # location
+ * Service in the jpApp.
+ */
+angular.module('jpApp')
+	.service('location', function ($q) {
+		// AngularJS will instantiate a singleton by calling "new" on this function
+		return{
+			/**
+			 * Returns a $http.get promise to get the current users location
+			 * @param {object} $data - The data for the GET request
+			 * @param {integer} $id - The id for the GET request
+			 * @returns {Promise}
+			 */
+			getLocation	:	function(){
+				var deferred = $q.defer(),
+					self = this;
+				
+				navigator.geolocation.getCurrentPosition(function(pos){
+					console.log('App Pos',pos);
+					//$rootScope.user.location.geo = {lat: , lng: };
+					self.geoCoder(pos.coords.latitude,pos.coords.longitude).then(function(result){
+						deferred.resolve(result)
+					}).catch(function(error){
+						//To Do Logging Service 
+						console.error(error);
+						deferred.reject(error);
+					});
+				});
+				
+				return deferred.promise;
+			},
+			/**
+			 * Returns a $http.get promise to get the curent users location
+			 * @param {object} $data - The data for the GET request
+			 * @param {integer} $id - The id for the GET request
+			 * @returns {Promise}
+			 */
+			geoCoder : function(lat,lng){
+				var geo = new google.maps.Geocoder,
+					deferred = $q.defer();
+		
+				geo.geocode({'location': {lat: lat, lng: lng}}, function(result, status) {
+					console.log('Geo Coder Result',result,status);
+					if(result.length >= 1){
+						deferred.resolve(result);
+					}else{
+						deferred.reject(result);
+					}
+				});
+				
+				return deferred.promise;
+			}
 		};
 	});
 

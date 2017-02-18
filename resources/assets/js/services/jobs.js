@@ -12,7 +12,7 @@ angular.module('jpApp')
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
-			 * Returns a $http.get promise
+			 * Returns a $http.get promise to get a job based on the job id
 			 * @param {object} $data - The data for the GET request
 			 * @param {integer} $id - The id for the GET request
 			 * @returns {Promise}
@@ -26,7 +26,7 @@ angular.module('jpApp')
 				}
 			},
 			/**
-			 * Returns a $http.put or post promise
+			 * Returns a $http.put or post promise to store a job based on job id and its data
 			 * @param {String} $name - The name of the PUT/POST endpoint
 			 * @param {object} $data - The data for the PUT/POST request
 			 * @param {integer} $id - The id for the PUT/POST enpoint
@@ -40,5 +40,15 @@ angular.module('jpApp')
 					return	$http.post($name,$data);
 				}
 			},
+			/**
+			 * Returns a $http.put or post promise to store a job based on job id and its data
+			 * @param {String} $name - The name of the PUT/POST endpoint
+			 * @param {object} $data - The data for the PUT/POST request
+			 * @param {integer} $id - The id for the PUT/POST enpoint
+			 * @returns {Promise}
+			 */
+			findJobs : function(location_id,job_id){
+				return $http.get('/locations/'+location_id+'/jobs/'+job_id);
+			}
 		};
 	});

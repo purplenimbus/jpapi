@@ -10,11 +10,6 @@
 angular.module('jpApp')
 	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData)
 	{
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
 		
 		var JobCtrl = this;
 		$rootScope.$location.title = '';
@@ -118,7 +113,7 @@ angular.module('jpApp')
 			
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
 				angular.element('select').material_select();
-				
+				//Input elements need to converted to directives
 				CKEDITOR.editorConfig	=	function( config ){
 					config.toolbar	=	[
 						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},

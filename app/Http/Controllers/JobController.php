@@ -12,6 +12,7 @@ use	App\Job_Category;
 use	App\Job_Level;
 use	App\Job_Skill;
 use	App\Location;
+use Illuminate\Support\Facades\DB;
 
 
 class JobController extends Controller
@@ -238,13 +239,23 @@ class JobController extends Controller
      *
      * @return object 
      */
-	public function get_jobs($location_id){
-		$location = Location::find($location_id);
-		if($location){
-			$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
-			return $location->toJson();
+	public function get_jobs($location_id,$job_id = null){
+		if($job_id){
+			return 'Found Jobs!!!';
 		}else{
-			return 'No Jobs Found';
+			$location = Location::find($location_id);
+			if($location){
+				$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
+				return $location->toJson();
+			}else{
+				return 'No Jobs Found';
+			}
 		}
+	}
+	
+	public function job_titles(){
+		$job = Job::get(['title','id']);
+		
+		return $job;
 	}
 }

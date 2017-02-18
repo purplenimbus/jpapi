@@ -26,8 +26,37 @@ angular
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
-					init : function($rootScope){
+					init : function($rootScope,location){
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						angular.element('.progress').hide();
+						
+						if(!$rootScope.user){
+							$rootScope.user = {};
+						}
+						
+						//Get Home location of the current user
+						if(navigator.geolocation && !$rootScope.user.location) {
+							console.log('Location Needed');
+							
+							$rootScope.user.location =	{};
+							
+							return location.getLocation().then(function(result){
+								
+								console.log('Location Result',result);
+								
+								$rootScope.user.location.location = result[1].formatted_address;
+									
+								$rootScope.user.location.place_id = result[1].place_id;
+								
+								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
+								
+								Materialize.updateTextFields();
+								
+								return result;
+							});
+
+						}
 					}
 				}
 			})
@@ -110,7 +139,6 @@ angular
 				templateUrl : 	'Not Found'
 			});
 
-		//$locationProvider.html5Mode(true);
 	}).run(function() {
 		angular.element('.progress').show();
 	});
