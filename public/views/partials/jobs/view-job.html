@@ -62,5 +62,8 @@
 			<h6 class="center">About {{ currentAsset.company.name }}</h6>
 			{{ currentAsset.company.description }}
 		</div>
-	</section>		
+	</section>	
+	<section class="row company thick" ng-if="currentAsset.location.url">
+		<div id="map"></div>
+	</section>
 </div>

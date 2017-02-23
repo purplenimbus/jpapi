@@ -20,9 +20,9 @@ angular.module('jpApp')
 			getData	:	function($data,$id){
 				console.log($data+' id',$id);
 				if($id){
-					return $http.get($data+'/'+$id);
+					return $http.get('api/'+$data+'/'+$id);
 				}else{
-					return	$http.get($data);
+					return	$http.get('api/'+$data);
 				}
 			},
 			/**
@@ -35,9 +35,9 @@ angular.module('jpApp')
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
 				if($id){
-					return $http.put($name+'/'+$id,$data);
+					return $http.put('api/'+$name+'/'+$id,$data);
 				}else{
-					return	$http.post($name,$data);
+					return	$http.post('api/'+$name,$data);
 				}
 			},
 			/**
@@ -48,7 +48,7 @@ angular.module('jpApp')
 			 * @returns {Promise}
 			 */
 			findJobs : function(location_id,job_id){
-				return $http.get('/locations/'+location_id+'/jobs/'+job_id);
+				return $http.get('api/locations/'+location_id+'/jobs/'+job_id);
 			}
 		};
 	});

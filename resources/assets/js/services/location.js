@@ -12,9 +12,7 @@ angular.module('jpApp')
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
-			 * Returns a $http.get promise to get the current users location
-			 * @param {object} $data - The data for the GET request
-			 * @param {integer} $id - The id for the GET request
+			 * Returns the current location of the user
 			 * @returns {Promise}
 			 */
 			getLocation	:	function(){
@@ -36,9 +34,9 @@ angular.module('jpApp')
 				return deferred.promise;
 			},
 			/**
-			 * Returns a $http.get promise to get the curent users location
-			 * @param {object} $data - The data for the GET request
-			 * @param {integer} $id - The id for the GET request
+			 * Returns a location based on longitude and latitude
+			 * @param {int} lat - Latitude
+			 * @param {int} lng - Longitude
 			 * @returns {Promise}
 			 */
 			geoCoder : function(lat,lng){

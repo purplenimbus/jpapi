@@ -37,7 +37,7 @@ angular
 						
 						//Get Home location of the current user
 						if(navigator.geolocation && !$rootScope.user.location) {
-							console.log('Location Needed');
+							//console.log('Location Needed');
 							
 							$rootScope.user.location =	{};
 							
@@ -53,7 +53,10 @@ angular
 								
 								Materialize.updateTextFields();
 								
+								angular.element('.progress').hide();
+								
 								return result;
+								
 							});
 
 						}
@@ -71,7 +74,7 @@ angular
 						angular.element('.progress').show();
 						
 						return jobs.getData('jobs').then(function(result){
-							Materialize.toast('Got some jobs'+result.data.length, 3000);
+							Materialize.toast('Got '+result.data.length+' Jobs', 3000);
 							console.log('Got some jobs',result);
 							angular.element('.progress').hide();
 							return result.data;
@@ -120,7 +123,7 @@ angular
 				templateUrl	:	'/views/partials/companies/view-company.html',
 				controller	:	'CompanyCtrl',
 				controllerAs: 	'Company',
-				resolve : {
+				resolve 	: {
 					
 					companyData : function(companies,$route,$rootScope){
 						
@@ -133,6 +136,7 @@ angular
 							return result.data;
 						});
 					}
+					
 				}
 			})
 			.otherwise({
@@ -141,5 +145,9 @@ angular
 
 	}).run(function() {
 		angular.element('.progress').show();
+	}).filter('trusted', function ($sce) {
+		return function(url) {
+			return $sce.trustAsResourceUrl(url);
+		};
 	});
   

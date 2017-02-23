@@ -8,13 +8,35 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init) {
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location) {
 		
 		console.log('init',init);	
+		console.log('init rootScope',$rootScope);	
 			
 		$scope.search = {
-			title : init[1].formatted_address
+			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
 		};
+		
+		/*
+		$scope.getLocaton = function(){
+			var self = this;
+			console.log('Get Location');
+			if($rootScope.user.location){
+				console.log('Root Location Found',$rootScope.user.location);
+				$scope.search = {
+					title : $rootScope.user.location.location
+				};
+			}else{
+				location.getLocation().then(function(result){
+					console.log('Get Location Found',result);
+					$scope.search = {
+						title : result[1].formatted_address
+					};
+				});
+			}
+			
+		};
+		*/
 		
 		$scope.data = init;
 		

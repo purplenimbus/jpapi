@@ -13,6 +13,8 @@ use	App\Job_Level;
 use	App\Job_Skill;
 use	App\Location;
 use Illuminate\Support\Facades\DB;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 
 class JobController extends Controller
@@ -51,13 +53,15 @@ class JobController extends Controller
 					'name' => 'Doctorate (Phd)'
 				]
 			];
+			
+		//$this->middleware('jwt.auth');
 	}
 	/**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {		
 		$jobs	=	Job::all();
 		

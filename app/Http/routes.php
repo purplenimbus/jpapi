@@ -16,37 +16,39 @@ Route::get('/', function () {
 });
 
 
-/*Route::group(['prefix'	=>	'api'],function(){
+Route::group(['prefix'	=>	'api'],function(){
+	/*
 	Route::resource('authenticate',	'AuthenticateController',	['only'	=>	['index']]);
 	
 	Route::post('authenticate',	'AuthenticateController@authenticate');
-});*/
+	*/
+	
+	Route::get('joboptions', 'JobController@joboptions');
+	//Job Categories
+	Route::get('job_categories', 'JobController@job_categories');
+	Route::get('job_levels', 'JobController@job_levels');
+	Route::get('job_types', 'JobController@job_types');
+	Route::get('job_skills', 'JobController@job_skills');
+	Route::get('salary_types', 'JobController@salary_types');
+	Route::get('min_qualifications', 'JobController@min_qualifications');
+	
+	Route::resource('jobs', 'JobController', [
+		'only' 	=> ['index','show','update','store','jobtypes'],
+		'names' => ['jobtypes' => 'jobs.jobtypes']
+	]);
+	
+	Route::get('locations/{location_id}/jobs/', 'JobController@get_jobs');
+	Route::get('locations/{location_id}/jobs/{job_id}', 'JobController@get_jobs');
+	Route::get('job_titles', 'JobController@job_titles');
+	
+	Route::get('company/categories', 'CompanyController@company_categories');
 
-//Job Routes
+	Route::resource('companies', 'CompanyController', [
+		'only' 	=> ['index','show','update','store','companytypes'],
+		'names' => ['companytypes' => 'companies.companytypes']
+	]);
+});
 
-Route::get('joboptions', 'JobController@joboptions');
-//Job Categories
-Route::get('job_categories', 'JobController@job_categories');
-Route::get('job_levels', 'JobController@job_levels');
-Route::get('job_types', 'JobController@job_types');
-Route::get('job_skills', 'JobController@job_skills');
-Route::get('salary_types', 'JobController@salary_types');
-Route::get('min_qualifications', 'JobController@min_qualifications');
 
-Route::resource('jobs', 'JobController', [
-	'only' 	=> ['index','show','update','store','jobtypes'],
-	'names' => ['jobtypes' => 'jobs.jobtypes']
-]);
-
-Route::get('company/categories', 'CompanyController@company_categories');
-
-Route::resource('companies', 'CompanyController', [
-	'only' 	=> ['index','show','update','store','companytypes'],
-	'names' => ['companytypes' => 'companies.companytypes']
-]);
-
-Route::get('locations/{location_id}/jobs/', 'JobController@get_jobs');
-Route::get('locations/{location_id}/jobs/{job_id}', 'JobController@get_jobs');
-Route::get('job_titles', 'JobController@job_titles');
 
 

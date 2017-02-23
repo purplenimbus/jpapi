@@ -37,7 +37,7 @@ angular
 						
 						//Get Home location of the current user
 						if(navigator.geolocation && !$rootScope.user.location) {
-							console.log('Location Needed');
+							//console.log('Location Needed');
 							
 							$rootScope.user.location =	{};
 							
@@ -53,7 +53,10 @@ angular
 								
 								Materialize.updateTextFields();
 								
+								angular.element('.progress').hide();
+								
 								return result;
+								
 							});
 
 						}
@@ -71,7 +74,7 @@ angular
 						angular.element('.progress').show();
 						
 						return jobs.getData('jobs').then(function(result){
-							Materialize.toast('Got some jobs'+result.data.length, 3000);
+							Materialize.toast('Got '+result.data.length+' Jobs', 3000);
 							console.log('Got some jobs',result);
 							angular.element('.progress').hide();
 							return result.data;
@@ -120,7 +123,7 @@ angular
 				templateUrl	:	'/views/partials/companies/view-company.html',
 				controller	:	'CompanyCtrl',
 				controllerAs: 	'Company',
-				resolve : {
+				resolve 	: {
 					
 					companyData : function(companies,$route,$rootScope){
 						
@@ -133,6 +136,7 @@ angular
 							return result.data;
 						});
 					}
+					
 				}
 			})
 			.otherwise({
@@ -141,6 +145,10 @@ angular
 
 	}).run(function() {
 		angular.element('.progress').show();
+	}).filter('trusted', function ($sce) {
+		return function(url) {
+			return $sce.trustAsResourceUrl(url);
+		};
 	});
   
 
@@ -785,13 +793,35 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init) {
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location) {
 		
 		console.log('init',init);	
+		console.log('init rootScope',$rootScope);	
 			
 		$scope.search = {
-			title : init[1].formatted_address
+			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
 		};
+		
+		/*
+		$scope.getLocaton = function(){
+			var self = this;
+			console.log('Get Location');
+			if($rootScope.user.location){
+				console.log('Root Location Found',$rootScope.user.location);
+				$scope.search = {
+					title : $rootScope.user.location.location
+				};
+			}else{
+				location.getLocation().then(function(result){
+					console.log('Get Location Found',result);
+					$scope.search = {
+						title : result[1].formatted_address
+					};
+				});
+			}
+			
+		};
+		*/
 		
 		$scope.data = init;
 		
@@ -1011,9 +1041,9 @@ angular.module('jpApp')
 			getData	:	function($data,$id){
 				console.log($data+' id',$id);
 				if($id){
-					return $http.get($data+'/'+$id);
+					return $http.get('api/'+$data+'/'+$id);
 				}else{
-					return	$http.get($data);
+					return	$http.get('api/'+$data);
 				}
 			},
 			/**
@@ -1025,9 +1055,9 @@ angular.module('jpApp')
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
 				if($id){
-					return $http.put($name+'/'+$id,$data);
+					return $http.put('api/'+$name+'/'+$id,$data);
 				}else{
-					return	$http.post($name,$data);
+					return	$http.post('api/'+$name,$data);
 				}
 			},
 		};
@@ -1602,9 +1632,9 @@ angular.module('jpApp')
 			getData	:	function($data,$id){
 				console.log($data+' id',$id);
 				if($id){
-					return $http.get($data+'/'+$id);
+					return $http.get('api/'+$data+'/'+$id);
 				}else{
-					return	$http.get($data);
+					return	$http.get('api/'+$data);
 				}
 			},
 			/**
@@ -1617,9 +1647,9 @@ angular.module('jpApp')
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
 				if($id){
-					return $http.put($name+'/'+$id,$data);
+					return $http.put('api/'+$name+'/'+$id,$data);
 				}else{
-					return	$http.post($name,$data);
+					return	$http.post('api/'+$name,$data);
 				}
 			},
 			/**
@@ -1630,7 +1660,7 @@ angular.module('jpApp')
 			 * @returns {Promise}
 			 */
 			findJobs : function(location_id,job_id){
-				return $http.get('/locations/'+location_id+'/jobs/'+job_id);
+				return $http.get('api/locations/'+location_id+'/jobs/'+job_id);
 			}
 		};
 	});
@@ -1649,9 +1679,7 @@ angular.module('jpApp')
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
-			 * Returns a $http.get promise to get the current users location
-			 * @param {object} $data - The data for the GET request
-			 * @param {integer} $id - The id for the GET request
+			 * Returns the current location of the user
 			 * @returns {Promise}
 			 */
 			getLocation	:	function(){
@@ -1673,9 +1701,9 @@ angular.module('jpApp')
 				return deferred.promise;
 			},
 			/**
-			 * Returns a $http.get promise to get the curent users location
-			 * @param {object} $data - The data for the GET request
-			 * @param {integer} $id - The id for the GET request
+			 * Returns a location based on longitude and latitude
+			 * @param {int} lat - Latitude
+			 * @param {int} lng - Longitude
 			 * @returns {Promise}
 			 */
 			geoCoder : function(lat,lng){
