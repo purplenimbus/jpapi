@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_HOST', 'ec2-23-23-93-255.compute-1.amazonaws.com'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'daeo5smf6hvlda'),
+            'username' => env('DB_USERNAME', 'ddvpbmxamfjpsq'),
+            'password' => env('DB_PASSWORD', '2eea2dcedb321e6f6caca524d20fed630a86e782e16ee0b17f0ea9d57b88a2f2'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
