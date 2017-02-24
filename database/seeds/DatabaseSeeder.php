@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 	var	$company_cats;
 	var	$salary_types;
 	var $currencies;
+	var $users;
 	
 	
 	function __construct(){
@@ -104,23 +105,51 @@ class DatabaseSeeder extends Seeder
 									'CSS','Angular JS','React JS','Microsoft Office',
 									'Microsoft Word','Microsoft Excel','Microsoft Access',
 									'ASP.Net','Java','PHP','Ruby','Django','Python'];
+		$this->users		=	[
+			[
+				"fname"	=>	"Anthony",
+				"lname"	=>	"Akpan",
+				"email"	=>	"anthony.akpan@hotmail.com",
+				"sex"	=>	"M",
+				"dob"	=>	"2016-03-09",
+				"password"	=>	bcrypt("easier"),
+				"remember_token"	=>	str_random(10),
+				"access_level"	=>	'admin'
+			],[
+				"fname"	=>	"Andem",
+				"lname"	=>	"Emmanuel",
+				"email"	=>	"andem.emmanuel@hotmail.com",
+				"sex"	=>	"M",
+				"dob"	=>	"2016-03-09",
+				"password"	=>	bcrypt("aemma"),
+				"remember_token"	=>	str_random(10),
+				"access_level"	=>	'admin'
+			]
+		];
 	}
 	
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
 		
-		$user					=	new User;
-		$user->fname			=	'Anthony';
-		$user->lname			=	'Akpan';
-		$user->email			=	'anthony.akpan@hotmail.com';
-		$user->sex				=	'M';
-		$user->dob				=	'2016-03-09';
-		$user->password			=	bcrypt('easier');
-		$user->remember_token	=	str_random(10);
-		$user->access_level		=	'admin';
-		
-		$user->save();
+		/*
+			$user					=	new User;
+			$user->fname			=	'Anthony';
+			$user->lname			=	'Akpan';
+			$user->email			=	'anthony.akpan@hotmail.com';
+			$user->sex				=	'M';
+			$user->dob				=	'2016-03-09';
+			$user->password			=	bcrypt('easier');
+			$user->remember_token	=	str_random(10);
+			$user->access_level		=	'admin';
+		*/
+		foreach($this->users as $user){
+			$new_user		=	new User;
+			foreach($user as $key => $user_info){
+				$new_user[$key]	=	$user_info;
+			}
+			$new_user->save();
+		}
 		
 		//Populate Company Categories
 		foreach($this->company_cats as $cat){

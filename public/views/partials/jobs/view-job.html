@@ -1,5 +1,5 @@
 <div class="view-asset">
-	<div class="fixed-action-btn">
+	<div ng-if="$root.$auth.isAuthenticated() && $root.user.info.admin_level === 'admin'" class="fixed-action-btn">
 		<div class="container">
 			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
 				<i class="large material-icons">mode_edit</i>

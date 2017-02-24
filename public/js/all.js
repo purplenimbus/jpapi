@@ -272,6 +272,7 @@ angular.module('jpApp')
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
 						console.log('Data',result);
+						$rootScope.user = {};
 						console.log('Logged in Rootscope',$rootScope);
 						console.log('Logged in Auth',$auth.isAuthenticated());
 						console.log('Logged in token',$auth.getToken());

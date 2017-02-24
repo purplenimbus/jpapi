@@ -55,7 +55,7 @@ class JobController extends Controller
 				]
 			];
 			
-		$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth',['only' => ['store','update']]);
 	}
 	/**
      * Display a listing of the resource.
