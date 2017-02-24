@@ -672,7 +672,7 @@ angular.module('jpApp')
 					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				});
 					
-				console.log(elements.form.bloodhound('/job_skills').index.datums);
+				console.log(elements.form.bloodhound('/api/job_skills').index.datums);
 				
 				// Create the autocomplete object, restricting the search to geographical
 				// location types.
