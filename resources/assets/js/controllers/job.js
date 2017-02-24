@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc function
- * @name jpApp.controller:JobsCtrl
+ * @name jpApp.controller:JobCtrl
  * @description
- * # JobsCtrl
+ * # JobCtrl
  * Controller of the jpApp
  */
 angular.module('jpApp')
@@ -142,7 +142,7 @@ angular.module('jpApp')
 					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				});
 					
-				console.log(elements.form.bloodhound('/job_skills').index.datums);
+				console.log(elements.form.bloodhound('/api/job_skills').index.datums);
 				
 				// Create the autocomplete object, restricting the search to geographical
 				// location types.
@@ -227,7 +227,7 @@ angular.module('jpApp')
 					angular.element('#'+name).typeahead(null, {
 						name: name,
 						display: 'name',
-						source: elements.form.bloodhound('/'+name).ttAdapter(),
+						source: elements.form.bloodhound('/api/'+name).ttAdapter(),
 						hint: true,
 						highlight: true,
 						minLength: 0,

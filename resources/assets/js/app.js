@@ -15,21 +15,39 @@ angular
 		'ngResource',
 		'ngRoute',
 		'ngSanitize',
-		'ngTouch'
+		'ngTouch',
+		'ui.router', 
+		'satellizer'
 	])
-	.config(function ($routeProvider,$locationProvider) {
+	.config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
-
+		
+		$authProvider.loginUrl = '/api/login';
+		
+		$authProvider.linkedin({
+			clientId: '75835cv03xc5be'
+		});
+		
+		//$urlRouterProvider.otherwise('/');
+		
 		$routeProvider
+		//$stateProvider
 			.when('/',{
 				templateUrl	:	'/views/main.html',
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
 					init : function($rootScope,location){
+						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
 						angular.element('.progress').hide();
+						
+						$rootScope.logged_in = false;
+		
+						angular.element(".dropdown-button").dropdown();
+						angular.element(".account-collapse").sideNav();
+					
 						
 						if(!$rootScope.user){
 							$rootScope.user = {};
@@ -54,7 +72,7 @@ angular
 								Materialize.updateTextFields();
 								
 								angular.element('.progress').hide();
-								
+																
 								return result;
 								
 							});
@@ -139,12 +157,58 @@ angular
 					
 				}
 			})
+			.when('/myaccount',{
+				templateUrl	:	'/views/partials/account/view-account.html',
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					accountData : function(accountDataService){
+						return accountDataService.then(function(result){
+							console.log('Result',result);
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			})
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
+			
+			$stateProvider
+			.state('/myaccount',{
+				templateUrl	:	'/views/partials/account/account.html',
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					accountData : function(accountDataService){
+						return accountDataService.then(function(result){
+							console.log('Result',result);
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			});
 
-	}).run(function() {
+	}).run(function($rootScope,$state,$stateParams,$location,$auth) {
+			
+		$rootScope.$location = {};
+	
+		$rootScope.$location.base = $location.path().split('\/')[1];
+		
 		angular.element('.progress').show();
+		
+		//console.log('Runtime State',$state);
+		//Bind when to rootScope
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$auth = $auth;
+		
+		console.log('Runtime RootScope',$rootScope);
+	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);

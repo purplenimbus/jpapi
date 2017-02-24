@@ -19,12 +19,15 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form>';
+				str += 	'<div class="row">';
+				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'hide btn-large col s12' }));
+				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
 														type		:	'email',	
-														cls			:	'input-lg'	,	
+														cls			:	'input-lg validate'	,	
 														placeholder	:	'Email'	,	
-														model		:	'',
+														model		:	'email',
 														name		:	'email',
 														required	:	true
 													}));
@@ -32,15 +35,15 @@ angular.module('jpApp')
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('lock',{ 	
 														type		:	'password',	
-														cls			:	'input-lg'	,	
+														cls			:	'input-lg validate'	,	
 														placeholder	:	'Password'	,	
-														model		:	'',
+														model		:	'password',
 														name		:	'password',
 														required	:	true
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.button({ ngClick : 'login',label:'login' , cls : 'btn-large col s12' }));
+				str	+=	elements.column(12,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col s12' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				

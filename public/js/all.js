@@ -15,21 +15,39 @@ angular
 		'ngResource',
 		'ngRoute',
 		'ngSanitize',
-		'ngTouch'
+		'ngTouch',
+		'ui.router', 
+		'satellizer'
 	])
-	.config(function ($routeProvider,$locationProvider) {
+	.config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
-
+		
+		$authProvider.loginUrl = '/api/login';
+		
+		$authProvider.linkedin({
+			clientId: '75835cv03xc5be'
+		});
+		
+		//$urlRouterProvider.otherwise('/');
+		
 		$routeProvider
+		//$stateProvider
 			.when('/',{
 				templateUrl	:	'/views/main.html',
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
 					init : function($rootScope,location){
+						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
 						angular.element('.progress').hide();
+						
+						$rootScope.logged_in = false;
+		
+						angular.element(".dropdown-button").dropdown();
+						angular.element(".account-collapse").sideNav();
+					
 						
 						if(!$rootScope.user){
 							$rootScope.user = {};
@@ -54,7 +72,7 @@ angular
 								Materialize.updateTextFields();
 								
 								angular.element('.progress').hide();
-								
+																
 								return result;
 								
 							});
@@ -139,12 +157,58 @@ angular
 					
 				}
 			})
+			.when('/myaccount',{
+				templateUrl	:	'/views/partials/account/view-account.html',
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					accountData : function(accountDataService){
+						return accountDataService.then(function(result){
+							console.log('Result',result);
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			})
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
+			
+			$stateProvider
+			.state('/myaccount',{
+				templateUrl	:	'/views/partials/account/account.html',
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					accountData : function(accountDataService){
+						return accountDataService.then(function(result){
+							console.log('Result',result);
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			});
 
-	}).run(function() {
+	}).run(function($rootScope,$state,$stateParams,$location,$auth) {
+			
+		$rootScope.$location = {};
+	
+		$rootScope.$location.base = $location.path().split('\/')[1];
+		
 		angular.element('.progress').show();
+		
+		//console.log('Runtime State',$state);
+		//Bind when to rootScope
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$auth = $auth;
+		
+		console.log('Runtime RootScope',$rootScope);
+	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);
@@ -156,71 +220,72 @@ angular
 
 /**
  * @ngdoc function
+ * @name jpApp.controller:AccountCtrl
+ * @description
+ * # AccountCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,accountData)
+	{
+		
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
  * @name jpApp.controller:AuthCtrl
  * @description
  * # AuthCtrl
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
+	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
 		
-		$rootScope.logged_in = false;
-		
-		angular.element(".dropdown-button").dropdown();
-        angular.element(".account-collapse").sideNav();
-		
-		if(!$rootScope.job){
-			$rootScope.job = {};
-			$rootScope.$location = {};
-		
-			$rootScope.$location.base = $location.path().split('\/')[1];
-		}
-		
-		if(!$rootScope.company){
-			$rootScope.company = {};
-			
-			$rootScope.$location = {};
-		
-			$rootScope.$location.base = $location.path().split('\/')[1];
-		}
-		
 		
 		//var vm = this;
 		
         $scope.login = function($event) {
 			
-			$event.preventDefault();
-
-			console.log($rootScope);
+			//$event.preventDefault();
 			
 			var modalContent	=	angular.element($event.currentTarget).parents()[1],
-				form			=	angular.element(modalContent).find('form').serializeArray();
-				/*
+				form			=	angular.element(modalContent).find('form').serializeArray(),
 				credentials		=	{
-					email		:	form[0].value,
-					password	: 	form[1].value
+					email		:	$scope.email,
+					password	: 	$scope.password
 				};
-				*/
+			
+			console.log('Login Details',credentials);
 				
 			validation.validate(form).then(function(result){
-				//remove spinner
-				angular.element('.spinner').remove();
+				
+				console.log(result);
 				
 				if(result.valid){											
-					/* Use Satellizer's $auth service to login
-					$auth.login(credentials).then(function(data) {
-						console.log('Data',data);
-						// If login is successful, redirect to the users state
-						//$state.go('users', {});
+					//Use Satellizer's $auth service to login
+					$auth.login(credentials).then(function(result) {
+						console.log('Data',result);
+						console.log('Logged in Rootscope',$rootScope);
+						console.log('Logged in Auth',$auth.isAuthenticated());
+						console.log('Logged in token',$auth.getToken());
+						console.log('Logged in payload',$auth.getPayload());
+						$rootScope.user.info = result.data.user;
+						$scope.closeModal();
+					}).catch(function(error){
+						console.log('Login Error',error);
+						//TO DO Add Error Message to login modal
 					});
-					*/
+					
 				}else{
 					console.log(result);
+					//TO DO Add Validation Error Message to login modal
 				}	
 				
 			});
@@ -235,66 +300,34 @@ angular.module('jpApp')
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
 				
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				console.log(result);
+				//console.log(result);
+				console.log('Auth Details',$rootScope);
 				
 			});
 		};
 		
-		$scope.view_account = function(){
-			var modalType	=	'bottom-sheet',
-				modalTitle	=	'Login',
-				modalBody	=	$rootScope.logged_in ? 'View account' : form.login(),
-				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
-				
-				modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-					console.log(result);
-					
-				});
+		$scope.authenticate = function(provider) {
+			$auth.authenticate(provider);
+		};
+		
+		$scope.logout = function() {
+			$auth.logout();
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('hide').remove();
+			angular.element('#modal').modal('close');
 		};
 		
-		/*
-		if(!$rootScope.job.options){
-			jobs.getData('joboptions',false).then(function(result){
-				console.log('Got a job options',result);
-				$rootScope.job.options = result.data;
-				$rootScope.job.options.job_status = [{
-					id 		: 	1,
-					name	:	'Draft',	
-				},{
-					id 		: 	2,
-					name	:	'Published',	
-				}];
-				var job_cookie = JSON.stringify($rootScope.job.options);
-				console.log('Job Cookie',job_cookie);
-				auth.setCookie('job_options',job_cookie,1);
-			});
-		}else{
-			console.log('Job Options',auth.getCookie('job_options'));
-		}
-		
-		if(!$rootScope.company.options){		
-			companies.getData('companyoptions',false).then(function(result){
-				console.log('Got company options',result);
-				$rootScope.company.options = result.data;
-				$rootScope.company.options.company_status = [{
-					id 		: 	1,
-					name	:	'Draft',	
-				},{
-					id 		: 	2,
-					name	:	'Published',	
-				}];
-				var company_cookie = JSON.stringify($rootScope.job.options);
-				console.log('Company Cookie',company_cookie);
-				auth.setCookie('company_options',company_cookie,1);
-			});
-		}else{
-			console.log('Company Options',auth.getCookie('company_options'));
-		}
-		*/
+		angular.element('.dropdown-button').dropdown({
+		  inDuration: 300,
+		  outDuration: 225,
+		  constrainWidth: false, // Does not change width of dropdown to that of the activator
+		  hover: true, // Activate on hover
+		  gutter: 0, // Spacing from edge
+		  belowOrigin: true, // Displays dropdown below the button
+		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
+		  stopPropagation: false // Stops event propagation
+		});
 	});
 
 'use strict';
@@ -499,9 +532,9 @@ angular.module('jpApp')
 
 /**
  * @ngdoc function
- * @name jpApp.controller:JobsCtrl
+ * @name jpApp.controller:JobCtrl
  * @description
- * # JobsCtrl
+ * # JobCtrl
  * Controller of the jpApp
  */
 angular.module('jpApp')
@@ -724,7 +757,7 @@ angular.module('jpApp')
 					angular.element('#'+name).typeahead(null, {
 						name: name,
 						display: 'name',
-						source: elements.form.bloodhound('/'+name).ttAdapter(),
+						source: elements.form.bloodhound('/api/'+name).ttAdapter(),
 						hint: true,
 						highlight: true,
 						minLength: 0,
@@ -793,11 +826,11 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location) {
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location/*,$state,$auth*/) {
 		
 		console.log('init',init);	
 		console.log('init rootScope',$rootScope);	
-			
+				
 		$scope.search = {
 			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
 		};
@@ -849,7 +882,7 @@ angular.module('jpApp')
 			angular.element('#job_title').typeahead(null, {
 				name: 'job_title',
 				display: 'title',
-				source: elements.form.bloodhound('/job_titles'),
+				source: elements.form.bloodhound('/api/job_titles'),
 				hint: true,
 				highlight: true,
 				minLength: 0,
@@ -880,7 +913,7 @@ angular.module('jpApp')
 			});
 		//});
 		
-		console.log('Bloodhound',elements.form.bloodhound('/job_titles'));
+		console.log('Bloodhound',elements.form.bloodhound('/api/job_titles'));
 		
 		// Create the autocomplete object, restricting the search to geographical
 		// location types.
@@ -962,6 +995,31 @@ angular.module('jpApp')
 		
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('hide');
+		};
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:accountDataService
+ * @description
+ * # JobsCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('accountDataService', function ($q,$http)
+	{
+		return {
+			accountData : function(){
+			
+			},
+			saveData 	:	function(){
+			
+			},
+			getJobs		:	function(){
+				
+			}
 		};
 	});
 
@@ -1491,12 +1549,15 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form>';
+				str += 	'<div class="row">';
+				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'hide btn-large col s12' }));
+				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
 														type		:	'email',	
-														cls			:	'input-lg'	,	
+														cls			:	'input-lg validate'	,	
 														placeholder	:	'Email'	,	
-														model		:	'',
+														model		:	'email',
 														name		:	'email',
 														required	:	true
 													}));
@@ -1504,15 +1565,15 @@ angular.module('jpApp')
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('lock',{ 	
 														type		:	'password',	
-														cls			:	'input-lg'	,	
+														cls			:	'input-lg validate'	,	
 														placeholder	:	'Password'	,	
-														model		:	'',
+														model		:	'password',
 														name		:	'password',
 														required	:	true
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.button({ ngClick : 'login',label:'login' , cls : 'btn-large col s12' }));
+				str	+=	elements.column(12,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col s12' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				

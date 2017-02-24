@@ -8,65 +8,51 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function (/*$auth,$state,*/$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
+	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		this.awesomeThings = [
 		  'HTML5 Boilerplate',
 		  'AngularJS',
 		  'Karma'
 		];
 		
-		$rootScope.logged_in = false;
-		
-		angular.element(".dropdown-button").dropdown();
-        angular.element(".account-collapse").sideNav();
-		
-		if(!$rootScope.job){
-			$rootScope.job = {};
-			$rootScope.$location = {};
-		
-			$rootScope.$location.base = $location.path().split('\/')[1];
-		}
-		
-		if(!$rootScope.company){
-			$rootScope.company = {};
-			
-			$rootScope.$location = {};
-		
-			$rootScope.$location.base = $location.path().split('\/')[1];
-		}
-		
 		
 		//var vm = this;
 		
         $scope.login = function($event) {
 			
-			$event.preventDefault();
-
-			console.log($rootScope);
+			//$event.preventDefault();
 			
 			var modalContent	=	angular.element($event.currentTarget).parents()[1],
-				form			=	angular.element(modalContent).find('form').serializeArray();
-				/*
+				form			=	angular.element(modalContent).find('form').serializeArray(),
 				credentials		=	{
-					email		:	form[0].value,
-					password	: 	form[1].value
+					email		:	$scope.email,
+					password	: 	$scope.password
 				};
-				*/
+			
+			console.log('Login Details',credentials);
 				
 			validation.validate(form).then(function(result){
-				//remove spinner
-				angular.element('.spinner').remove();
+				
+				console.log(result);
 				
 				if(result.valid){											
-					/* Use Satellizer's $auth service to login
-					$auth.login(credentials).then(function(data) {
-						console.log('Data',data);
-						// If login is successful, redirect to the users state
-						//$state.go('users', {});
+					//Use Satellizer's $auth service to login
+					$auth.login(credentials).then(function(result) {
+						console.log('Data',result);
+						console.log('Logged in Rootscope',$rootScope);
+						console.log('Logged in Auth',$auth.isAuthenticated());
+						console.log('Logged in token',$auth.getToken());
+						console.log('Logged in payload',$auth.getPayload());
+						$rootScope.user.info = result.data.user;
+						$scope.closeModal();
+					}).catch(function(error){
+						console.log('Login Error',error);
+						//TO DO Add Error Message to login modal
 					});
-					*/
+					
 				}else{
 					console.log(result);
+					//TO DO Add Validation Error Message to login modal
 				}	
 				
 			});
@@ -81,64 +67,32 @@ angular.module('jpApp')
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
 				
 			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				console.log(result);
+				//console.log(result);
+				console.log('Auth Details',$rootScope);
 				
 			});
 		};
 		
-		$scope.view_account = function(){
-			var modalType	=	'bottom-sheet',
-				modalTitle	=	'Login',
-				modalBody	=	$rootScope.logged_in ? 'View account' : form.login(),
-				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
-				
-				modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-					console.log(result);
-					
-				});
+		$scope.authenticate = function(provider) {
+			$auth.authenticate(provider);
+		};
+		
+		$scope.logout = function() {
+			$auth.logout();
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('hide').remove();
+			angular.element('#modal').modal('close');
 		};
 		
-		/*
-		if(!$rootScope.job.options){
-			jobs.getData('joboptions',false).then(function(result){
-				console.log('Got a job options',result);
-				$rootScope.job.options = result.data;
-				$rootScope.job.options.job_status = [{
-					id 		: 	1,
-					name	:	'Draft',	
-				},{
-					id 		: 	2,
-					name	:	'Published',	
-				}];
-				var job_cookie = JSON.stringify($rootScope.job.options);
-				console.log('Job Cookie',job_cookie);
-				auth.setCookie('job_options',job_cookie,1);
-			});
-		}else{
-			console.log('Job Options',auth.getCookie('job_options'));
-		}
-		
-		if(!$rootScope.company.options){		
-			companies.getData('companyoptions',false).then(function(result){
-				console.log('Got company options',result);
-				$rootScope.company.options = result.data;
-				$rootScope.company.options.company_status = [{
-					id 		: 	1,
-					name	:	'Draft',	
-				},{
-					id 		: 	2,
-					name	:	'Published',	
-				}];
-				var company_cookie = JSON.stringify($rootScope.job.options);
-				console.log('Company Cookie',company_cookie);
-				auth.setCookie('company_options',company_cookie,1);
-			});
-		}else{
-			console.log('Company Options',auth.getCookie('company_options'));
-		}
-		*/
+		angular.element('.dropdown-button').dropdown({
+		  inDuration: 300,
+		  outDuration: 225,
+		  constrainWidth: false, // Does not change width of dropdown to that of the activator
+		  hover: true, // Activate on hover
+		  gutter: 0, // Spacing from edge
+		  belowOrigin: true, // Displays dropdown below the button
+		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
+		  stopPropagation: false // Stops event propagation
+		});
 	});

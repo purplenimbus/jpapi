@@ -8,11 +8,11 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location) {
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location/*,$state,$auth*/) {
 		
 		console.log('init',init);	
 		console.log('init rootScope',$rootScope);	
-			
+				
 		$scope.search = {
 			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
 		};
@@ -64,7 +64,7 @@ angular.module('jpApp')
 			angular.element('#job_title').typeahead(null, {
 				name: 'job_title',
 				display: 'title',
-				source: elements.form.bloodhound('/job_titles'),
+				source: elements.form.bloodhound('/api/job_titles'),
 				hint: true,
 				highlight: true,
 				minLength: 0,
@@ -95,7 +95,7 @@ angular.module('jpApp')
 			});
 		//});
 		
-		console.log('Bloodhound',elements.form.bloodhound('/job_titles'));
+		console.log('Bloodhound',elements.form.bloodhound('/api/job_titles'));
 		
 		// Create the autocomplete object, restricting the search to geographical
 		// location types.

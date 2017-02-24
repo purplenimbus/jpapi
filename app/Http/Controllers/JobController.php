@@ -14,6 +14,7 @@ use	App\Job_Skill;
 use	App\Location;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
+use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
@@ -54,7 +55,7 @@ class JobController extends Controller
 				]
 			];
 			
-		//$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth');
 	}
 	/**
      * Display a listing of the resource.
