@@ -12,7 +12,7 @@
 	<!-- endbower -->
 	<link rel="stylesheet" href="/bower_components/materialize/extras/noUiSlider/nouislider.css" />
 	
-	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
+	<link rel="stylesheet" href="{{ URL::secureAsset('css/main.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class=" @{{ $location.base }}">
