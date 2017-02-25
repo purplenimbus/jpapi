@@ -15,7 +15,7 @@ class CreateJobLevelsTable extends Migration
         Schema::create('job__levels', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('name');
-			$table->longText('description');
+			$table->longText('description')->nullable();
             $table->timestamps();
         });
     }
