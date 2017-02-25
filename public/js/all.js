@@ -25,7 +25,8 @@ angular
 		$authProvider.loginUrl = '/api/login';
 		
 		$authProvider.linkedin({
-			clientId: '75835cv03xc5be'
+			clientId: '75835cv03xc5be',
+			url: '/api/auth/linkedin',
 		});
 		
 		//$urlRouterProvider.otherwise('/');

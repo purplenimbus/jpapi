@@ -9,7 +9,9 @@ use App\Http\Requests;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Auth;
-
+use GuzzleHttp;
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
+use Config;
 
 class AuthenticateController extends Controller
 {
@@ -19,7 +21,7 @@ class AuthenticateController extends Controller
 	   // Apply the jwt.auth middleware to all methods in this controller
 	   // except for the authenticate method. We don't want to prevent
 	   // the user from retrieving their token if they don't already have it
-	   $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin']]);
 	}
 	
 	public function authenticate(Request $request)
@@ -40,5 +42,63 @@ class AuthenticateController extends Controller
 		$user = Auth::user();
         // if no errors are encountered we can return a JWT
         return response()->json(compact(['token','user']));
+    }
+	
+	/**
+     * Login with LinkedIn.
+     */
+    public function linkedin(Request $request)
+    {
+        $client = new GuzzleHttp\Client();
+        $params = [
+            'code' => $request->input('code'),
+            'client_id' => $request->input('clientId'),
+            'client_secret' => Config::get('app.linkedin_secret'),
+            'redirect_uri' => $request->input('redirectUri'),
+            'grant_type' => 'authorization_code',
+        ];
+        // Step 1. Exchange authorization code for access token.
+        $accessTokenResponse = $client->request('POST', 'https://www.linkedin.com/uas/oauth2/accessToken', [
+            'form_params' => $params
+        ]);
+        $accessToken = json_decode($accessTokenResponse->getBody(), true);
+        // Step 2. Retrieve profile information about the current user.
+        $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)', [
+            'query' => [
+                'oauth2_access_token' => $accessToken['access_token'],
+                'format' => 'json'
+            ]
+        ]);
+        $profile = json_decode($profileResponse->getBody(), true);
+        // Step 3a. If user is already signed in then link accounts.
+        if ($request->header('Authorization'))
+        {
+            $user = User::where('linkedin', '=', $profile['id']);
+            if ($user->first())
+            {
+                return response()->json(['message' => 'There is already a LinkedIn account that belongs to you'], 409);
+            }
+            $token = explode(' ', $request->header('Authorization'))[1];
+            $payload = (array) JWT::decode($token, Config::get('app.token_secret'), array('HS256'));
+            $user = User::find($payload['sub']);
+            $user->linkedin = $profile['id'];
+            $user->displayName = $user->displayName ?: $profile['firstName'] . ' ' . $profile['lastName'];
+            $user->save();
+            return response()->json(['token' => $this->createToken($user)]);
+        }
+        // Step 3b. Create a new user account or return an existing one.
+        else
+        {
+            $user = User::where('linkedin', '=', $profile['id']);
+            if ($user->first())
+            {
+                return response()->json(['token' => $this->createToken($user->first())]);
+            }
+            $user = new User;
+            $user->linkedin = $profile['id'];
+            $user->displayName =  $profile['firstName'] . ' ' . $profile['lastName'];
+            $user->save();
+            return response()->json(['token' => $this->createToken($user)]);
+        }
     }
 }
