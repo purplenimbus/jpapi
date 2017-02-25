@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
 			$table->string('access_level')->default('user');
-			$table->integer('location_id');
+			$table->integer('location_id')->nullable();
 			$table->string('skills_id')->nullable();
 			$table->integer('company_id')->nullable();
             $table->rememberToken();
