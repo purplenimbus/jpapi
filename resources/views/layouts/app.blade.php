@@ -55,7 +55,7 @@
 	<script src="/bower_components/angular-typeahead/dist/angular-typeahead.js"></script>
 	<!-- endbower -->
 	
-	<script src="{{ URL::asset('js/all.js') }}"></script>
+	<script src="{{ URL::secureAsset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
 	<script src="/bower_components/materialize/extras/noUiSlider/nouislider.min.js"></script>	
 </body>
