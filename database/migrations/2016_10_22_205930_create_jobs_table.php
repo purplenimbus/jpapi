@@ -23,8 +23,8 @@ class CreateJobsTable extends Migration
 			$table->integer('job_salary_id')->default(1);
 			$table->integer('job_location_id')->default(0);
 			$table->integer('job_class')->default(1); //Between Level 1 - 5 , level 5 being the best jobs
-			$table->string('salary');
-			$table->integer('job_currency_id');
+			$table->string('salary')->nullable();
+			$table->integer('job_currency_id')->nullable();
 			$table->date('application_deadline')->nullable();
 			$table->integer('min_experience')->default(1);
 			$table->string('min_qualification')->default('none');
