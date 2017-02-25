@@ -208,6 +208,18 @@ angular
 		$rootScope.$auth = $auth;
 		
 		console.log('Runtime RootScope',$rootScope);
+		
+		//Activate account dropdown
+		angular.element('.dropdown-button').dropdown({
+		  inDuration: 300,
+		  outDuration: 225,
+		  constrainWidth: false, // Does not change width of dropdown to that of the activator
+		  hover: true, // Activate on hover
+		  gutter: 0, // Spacing from edge
+		  belowOrigin: true, // Displays dropdown below the button
+		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
+		  stopPropagation: false // Stops event propagation
+		});
 	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
@@ -318,17 +330,7 @@ angular.module('jpApp')
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('close');
 		};
-		
-		angular.element('.dropdown-button').dropdown({
-		  inDuration: 300,
-		  outDuration: 225,
-		  constrainWidth: false, // Does not change width of dropdown to that of the activator
-		  hover: true, // Activate on hover
-		  gutter: 0, // Spacing from edge
-		  belowOrigin: true, // Displays dropdown below the button
-		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
-		  stopPropagation: false // Stops event propagation
-		});
+	
 	});
 
 'use strict';
@@ -798,6 +800,14 @@ angular.module('jpApp')
 			});
 		}
 		
+		$scope.apply	=	function(id){
+			console.log('Job Id',id);
+			jobs.sendData('jobs',id+'/apply').then(function(result){
+				console.log('Application Result',result);
+			}).catch(function(error){
+				console.log('Application Error',error);
+			});
+		}
 	});
 
 'use strict';
@@ -1009,7 +1019,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('accountDataService', function ($q,$http)
+	.controller('accountDataService', function ($q,$http,jobs)
 	{
 		return {
 			accountData : function(){
@@ -1551,7 +1561,7 @@ angular.module('jpApp')
 				
 				str	+=	'<form>';
 				str += 	'<div class="row">';
-				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'hide btn-large col s12' }));
+				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col s12' }));
 				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
@@ -1668,7 +1678,16 @@ angular.module('jpApp')
 					str	+=	'</form>';
 					
 				return str;
-			}
+			},
+			/**
+			 * Returns the edit user profile form
+			 * @returns {string}
+			 */
+			editProfile	:	function(){
+				var str	=	'';
+				
+				return str;
+			},
 		};
 	});
 

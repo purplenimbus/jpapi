@@ -20,7 +20,7 @@ angular.module('jpApp')
 				
 				str	+=	'<form>';
 				str += 	'<div class="row">';
-				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'hide btn-large col s12' }));
+				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col s12' }));
 				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
 				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
@@ -137,6 +137,15 @@ angular.module('jpApp')
 					str	+=	'</form>';
 					
 				return str;
-			}
+			},
+			/**
+			 * Returns the edit user profile form
+			 * @returns {string}
+			 */
+			editProfile	:	function(){
+				var str	=	'';
+				
+				return str;
+			},
 		};
 	});
