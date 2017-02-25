@@ -18,9 +18,9 @@ class CreateCompaniesTable extends Migration
 			$table->longText('description')->nullable();
 			$table->integer('employee_num')->default(1);
 			$table->integer('company_category_id')->default(1);
-			$table->integer('company_location_id')->unsigned();
-			$table->string('email');
-			$table->string('phone');
+			$table->integer('company_location_id')->unsigned()->nullable();
+			$table->string('email')->nullable();
+			$table->string('phone')->nullable();
 			$table->string('logo')->nullable();
 			$table->string('address')->nullable();
 			$table->string('zipcode',10)->nullable();
