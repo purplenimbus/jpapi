@@ -16,6 +16,7 @@ class CreateJobTypesTable extends Migration
             $table->increments('id');
 			$table->string('name');
 			$table->longText('description')->nullable();
+			$table->integer('wp_id')->unique()->nullable();
             $table->timestamps();
         });
     }

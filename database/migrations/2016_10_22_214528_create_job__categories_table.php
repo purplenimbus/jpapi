@@ -16,6 +16,7 @@ class CreateJobCategoriesTable extends Migration
             $table->increments('id');
 			$table->string('name',50);
 			$table->mediumText('description')->nullable();
+			$table->integer('wp_id')->unique()->nullable();
             $table->timestamps();
         });
     }

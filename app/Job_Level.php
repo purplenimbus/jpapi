@@ -13,7 +13,7 @@ class Job_Level extends Model
      * @var array
      */
     protected $fillable = [
-        'name','description'
+        'name','description','wp_id'
     ];
 	/**
      * The attributes that are visible to the client;

@@ -11,7 +11,7 @@ class Job_Type extends Model
      *
      * @var array
      */
-	protected  $fillable	=	['name','description'];
+	protected  $fillable	=	['name','description','wp_id'];
 	/**
      * The attributes that are visible to the client;
      *

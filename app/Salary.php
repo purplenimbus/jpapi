@@ -12,11 +12,12 @@ class Salary extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name','wp_id','description'
     ];
 	
 	protected $visible = [
 		'id',
-		'name'
+		'name',
+		'description'
     ];
 }

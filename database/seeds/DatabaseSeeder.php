@@ -150,7 +150,7 @@ class DatabaseSeeder extends Seeder
 							'exceptions ' =>  false
 						);
 				
-		$request = $this->guzzle->request($type,$url,$options)->send();
+		$request = $this->guzzle->request($type,$url,$options);
 				
 		return $request;
 	}
@@ -176,8 +176,13 @@ class DatabaseSeeder extends Seeder
 	
     public function import($type){
 		switch($type){
-			case 'users' : $this->loadUsers($this->users); break;
-			case 'skills' : $this->loadSkills($this->users); break;
+			case 'users' : $this->loadUsers(); break;
+			case 'skills' : $this->loadSkills(); break;
+			case 'job_categories' : $this->loadJobCategories(); break;
+			case 'job_types' : $this->loadJobTypes(); break;
+			case 'job_levels' : $this->loadJobLevels(); break;
+			case 'salary_types' : $this->loadSalaryTypes(); break;
+			default : $this->getJobs(); break;
 		}
 	}
 	
@@ -213,91 +218,167 @@ class DatabaseSeeder extends Seeder
 	}
 	
 	private function loadSkills(){
-		//get WP Tags
-		$wp_tags = $this->WP('GET','tags',false);
 		
-		var_dump($wp_tags->getBody());
-		/*
-		foreach($wp_tags as $skill){
-			$job_skills		=	new Job_Skill;
-			$job_skills->tag	=	strtolower($skill->);
-			
-			$data = array(
-				'name'	 => strtolower($skill),
-			);
+		echo 'Job Skills'."\r\n";
+		
+		$response = $this->WP('GET','tags',false);
+		
+		$wp_tags = json_decode((string)$response->getBody(),true);
 						
-			
-			
-			//bind WP user id to laravel
-			echo $user_id->getBody();
-			
-			if($user_id){
+		if($response->getStatusCode() == 200){
+			foreach($wp_tags as $skill){
+				$job_skills		=	new Job_Skill;
+				
+				$job_skills->tag	=	strtolower($skill['name']);
+				
+				$job_skills->description	=	$skill['description'];
+				
+				$job_skills->wp_id	=	$skill['id'];
+								
 				$job_skills->save();
+				
+				echo 'id: '.$skill['id'].', name : '.$skill['name']."\r\n";
 			}
-			
 		}
-		*/
+		
 	}
+	
+	private function loadJobCategories(){
+		
+		echo 'Job Categories'."\r\n";
+		
+		$response = $this->WP('GET','categories',false);
+		
+		$wp_cats = json_decode((string)$response->getBody(),true);
+						
+		if($response->getStatusCode() == 200){
+			foreach($wp_cats as $cat){
+				$job_category		=	new Job_Category;
+				$job_category->name	=	strtolower($cat['name']);
+				$job_category->description	=	$cat['description'];
+				$job_category->wp_id	=	$cat['id'];
+				$job_category->save();
+				
+				$company_category		=	new Company_Category;
+				$company_category->name	=	strtolower($cat['name']);
+				$company_category->description	=	$cat['description'];
+				$company_category->wp_id	=	$cat['id'];
+				$company_category->save();
+				
+				echo 'id: '.$cat['id'].', name : '.$cat['name']."\r\n";
+			}
+		}
+		
+	}
+	
+	private function loadJobTypes(){
+		
+		echo 'Job Types'."\r\n";
+		
+		$response = $this->WP('GET','job_types',false);
+		
+		$wp_cats = json_decode((string)$response->getBody(),true);
+						
+		if($response->getStatusCode() == 200){
+			foreach($wp_cats as $cat){
+				$job_type		=	new Job_Type;
+				$job_type->name	=	strtolower($cat['name']);
+				$job_type->description	=	$cat['description'];
+				$job_type->wp_id	=	$cat['id'];
+				$job_type->save();
+				
+				echo 'id: '.$cat['id'].', name : '.$cat['name']."\r\n";
+			}
+		}
+		
+	}
+	
+	private function loadJobLevels(){
+		
+		echo 'Job Levels'."\r\n";
+		
+		$response = $this->WP('GET','job_levels',false);
+		
+		$wp_cats = json_decode((string)$response->getBody(),true);
+						
+		if($response->getStatusCode() == 200){
+			foreach($wp_cats as $cat){
+				$job_type		=	new Job_Level;
+				$job_type->name	=	strtolower($cat['name']);
+				$job_type->description	=	$cat['description'];
+				$job_type->wp_id	=	$cat['id'];
+				$job_type->save();
+				
+				echo 'id: '.$cat['id'].', name : '.$cat['name']."\r\n";
+			}
+		}
+		
+	}
+	
+	private function loadSalaryTypes(){
+		echo 'Salary Types'."\r\n";
+		
+		$response = $this->WP('GET','salary_types',false);
+		
+		$wp_cats = json_decode((string)$response->getBody(),true);
+						
+		if($response->getStatusCode() == 200){
+			foreach($wp_cats as $cat){
+				$job_type		=	new Salary;
+				$job_type->name	=	strtolower($cat['name']);
+				$job_type->description	=	$cat['description'];
+				$job_type->wp_id	=	$cat['id'];
+				$job_type->save();
+				
+				echo 'id: '.$cat['id'].', name : '.$cat['name']."\r\n";
+			}
+		}
+		
+	}
+	
+	private function getJobs(){
+		echo 'Get Jobs'."\r\n";
+		
+		$response = $this->WP('GET','jobs',false);
+		
+		$wp_jobs = json_decode((string)$response->getBody());
+					
+		if($response->getStatusCode() == 200){
+			foreach($wp_jobs as $wp_job){
+								
+				$job = new Job;
+				$job->title = $wp_job->title ? $wp_job->title->rendered : null;
+				$job->description = $wp_job->content ? $wp_job->content->rendered : null;
+				$job->skills = $wp_job->tags ? implode(',',$wp_job->tags) : null;
+				$job->job_type_id = $wp_job->job_types ? implode(',',$wp_job->job_types) : null;
+				$job->job_level_id = $wp_job->job_levels ? implode(',',$wp_job->job_levels) : null;
+				$job->job_category_id = $wp_job->categories ? implode(',',$wp_job->categories) : null;
+				$job->job_salary_id = $wp_job->salary_types ? implode(',',$wp_job->salary_types) : null;
+				/*$job->application_deadline = $wp_job->application_deadline ? $wp_job->application_deadline : null;
+				$job->job_ref_id = $wp_job->job_ref_id ? $wp_job->job_ref_id : null;
+				$job->ref_url = $wp_job->ref_url ? $wp_job->ref_url : null;
+				$job->ref_date = $wp_job->ref_date ? $wp_job->ref_date : null;
+				$job->min_experience = $wp_job->min_experience ? $wp_job->min_experience : null;
+				$job->min_qualifications = $wp_job->min_qualifications ? $wp_job->min_qualifications : null;*/
+				$job->status = strtolower($wp_job->status) == 'publish' ? true : false;
+				$job->wp_id	=	$wp_job->id;
+				
+				$job->save();
+				
+				echo $wp_job->title->rendered."\r\n";;
+			}
+		}
+	}
+	
 	public function run()
     {
-        // $this->call(UsersTableSeeder::class);
 		//$this->import('users');
 		$this->import('skills');
-		
-		/*
-		//Populate Company Categories
-		foreach($this->company_cats as $cat){
-			$company_category		=	new Company_Category;
-			$company_category->name	=	$cat;
-			$company_category->save();
-		}
-		
-		//Populate Job Levels
-		foreach($this->job_levels as $level){
-			$job_level			=	new Job_Level;
-			$job_level->name	=	strtolower($level);
-			$job_level->save();
-		}
-		//Populate Job Categories
-		foreach($this->job_cats as $cat){
-			$job_category		=	new Job_Category;
-			$job_category->name	=	strtolower($cat);
-			$job_category->save();
-			
-			$company_category		=	new Company_Category;
-			$company_category->name	=	strtolower($cat);
-			$company_category->save();
-		}
-		//Populate Job Type
-		foreach($this->job_types as $type){
-			$job_type		=	new Job_Type;
-			$job_type->name	=	strtolower($type);
-			$job_type->save();
-		}
-		
-		//Populate Salary Type
-		foreach($this->salary_types as $type){
-			$salary_type		=	new Salary;
-			$salary_type->name	=	strtolower($type);
-			$salary_type->save();
-		}
-		
-		//Populate Job Skills
-		foreach($this->job_skills as $skill){
-			$job_skills		=	new Job_Skill;
-			$job_skills->tag	=	strtolower($skill);
-			$job_skills->save();
-		}
-		
-		//Create Some random Data
-		factory(App\Company::class, 5)
-			->create()
-			->each(function ($u) {
-                factory(App\Job::class,10)->create(['company_id' => $u->id]);
-            });
-		//Call Job Seeder
-		//$this->call(JobSeeder::class);
-		*/
+		$this->import('job_categories');
+		$this->import('job_types');
+		$this->import('job_levels');
+		$this->import('salary_types');
+		$this->import('jobs');
 
     }
 	

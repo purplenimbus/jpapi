@@ -32,6 +32,8 @@ class CreateJobsTable extends Migration
 			$table->string('ref_url')->nullable();
 			$table->date('ref_date')->nullable();
 			$table->boolean('status')->default(false);
+			$table->string('skills')->nullable();
+			$table->integer('wp_id')->unique()->nullable();
             $table->timestamps();
         });
     }

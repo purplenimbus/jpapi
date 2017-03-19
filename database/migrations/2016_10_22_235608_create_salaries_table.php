@@ -15,6 +15,8 @@ class CreateSalariesTable extends Migration
         Schema::create('salaries', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('name',10)->default('Annually');
+			$table->longText('description')->nullable();
+			$table->integer('wp_id')->unique()->nullable();
             $table->timestamps();
         });
     }

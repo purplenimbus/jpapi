@@ -12,7 +12,7 @@ class Job_Skill extends Model
      * @var array
      */
     protected $fillable = [
-        'tag','description'
+        'id','tag','description','wp_id'
     ];
 	
 	/**
