@@ -2,23 +2,23 @@
 
 /**
  * @ngdoc function
- * @name jpApp.controller:accountDataService
+ * @name jpApp.controller:accountData
  * @description
  * # JobsCtrl
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('accountDataService', function ($q,$http)
+	.service('accountData', function ($q,$http,jobs)
 	{
 		return {
-			accountData : function(){
-			
+			getUserData : function(){
+				return $http.get('/api/myaccount');
 			},
 			saveData 	:	function(){
-			
+				return $http.post('/api/myaccount');
 			},
-			getJobs		:	function(){
-				
+			getJobs		:	function(id){
+				return $http.get('/api/myaccount/{'+id+'}/jobs');
 			}
 		};
 	});

@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('fname');
 			$table->string('lname');
+			$table->string('displayName');
 			$table->date('dob');
 			$table->char('sex',1);
             $table->string('email')->unique();
@@ -24,6 +25,8 @@ class CreateUsersTable extends Migration
 			$table->integer('location_id')->nullable();
 			$table->string('skills_id')->nullable();
 			$table->integer('company_id')->nullable();
+			$table->integer('linkedin')->nullable();
+			$table->integer('wp_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

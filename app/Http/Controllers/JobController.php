@@ -12,11 +12,11 @@ use	App\Job_Category;
 use	App\Job_Level;
 use	App\Job_Skill;
 use	App\Location;
+use	App\Application;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-
 
 class JobController extends Controller
 {
@@ -54,8 +54,8 @@ class JobController extends Controller
 					'name' => 'Doctorate (Phd)'
 				]
 			];
-			
-		$this->middleware('jwt.auth',['only' => ['store','update']]);
+				
+		$this->middleware('jwt.auth',['only' => ['store','update','apply']]);
 	}
 	/**
      * Display a listing of the resource.
@@ -94,7 +94,15 @@ class JobController extends Controller
      */
     public function show($id)
     {
+		//var_dump($id);
+		
         $job	=	Job::findorfail($id);
+		
+		$application = Application::where('job_id',$id)->first();
+		
+		//$user = AuthenticateController->get_user();
+		
+		//var_dump(Auth);
 		
 		$job['company']			= $job->company->name;
 		$job['job_category'] 	= $job->job_category->name;
@@ -102,9 +110,8 @@ class JobController extends Controller
 		$job['job_level'] 		= $job->job_level->name;
 		$job['job_salary'] 		= $job->job_salary->name;
 		$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
-		
-		//unset($job['company']['']);
-		
+		$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
+				
 		return $job->toJson();
     }
 
@@ -257,10 +264,31 @@ class JobController extends Controller
 			}
 		}
 	}
-	
+	/**
+     * Return a list of jobs titles and their ids
+     *
+     * @return object 
+     */
 	public function job_titles(){
 		$job = Job::get(['title','id']);
 		
 		return $job;
+	}
+	/**
+     * Store applications
+     *
+     * @return object 
+     */
+	public function apply(Request $request){
+		//TO DO add checks if application exsists
+		$application = new Application;
+		
+		$application->job_id = $request->job_id;
+		
+		$application->user_id = Auth::user()->id;
+		
+		$application->save();
+		
+		return $application->id;
 	}
 }

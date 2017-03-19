@@ -1,5 +1,5 @@
 <div class="view-asset">
-	<div ng-if="$root.$auth.isAuthenticated() && $root.user.info.admin_level === 'admin'" class="fixed-action-btn">
+	<div ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="fixed-action-btn">
 		<div class="container">
 			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
 				<i class="large material-icons">mode_edit</i>
@@ -38,7 +38,8 @@
 							</li>
 						</ul>
 					</div>
-					<a ng-if="currentAsset.status" ng-click="apply()" class="btn">Apply</a>
+					<a ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id)" class="btn">Apply</a>
+					<a ng-if="currentAsset.status && currentAsset.user_applied" class="btn"><i class="material-icons right">done</i>Applied</a>
 				</div>
 			</div>
 		</div>

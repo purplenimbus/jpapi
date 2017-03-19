@@ -1,4 +1,56 @@
-<h1>Account View</h1>
-<div ui-view id="view">
-
+<div class="view-asset">
+	<div ng-if="$root.$auth.isAuthenticated()" class="fixed-action-btn">
+		<div class="container">
+			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
+				<i class="large material-icons">mode_edit</i>
+			</a>
+		</div>
+	</div>
+	<div id="view" class="row" ui-view>
+		<div class="container">
+			<aside class="col m3 s12">
+				<div class="row">
+					<div class="card center-align">
+						<div class="card-image">
+						  <img src="http://materializecss.com/images/sample-1.jpg">
+						</div>
+						<div class="card-content">
+							<h5 class="teal-text">{{ currentAsset.user.fname }} {{ currentAsset.user.lname }}</h5>
+							<p class="grey-text">Vancouver , Canada</p>
+							<ul class="menu">
+								<li><a href="#/myaccount/edit"><i class="material-icons tiny">edit</i> Edit Profile</a></li>
+								<li><a href="#"><i class="material-icons tiny">assignment</i> Job Applications</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</aside>
+			<main class="col m9 s12">
+				<section id="about" class="row" ng-if="currentAsset.highlights">
+					<p>{{ currentAsset.highlights }}</p>
+				</section>
+				<section id="skills" class="row" ng-if="currentAsset.skills">
+					<h5 class="teal-text">Skills</h5>
+					<div class="chip teal white-text" ng-repeat="skill in currentAsset.skills">Skill 1</div>
+				</section>
+				<section id="experience" class="row" ng-if="currentAsset.experience">
+					<h5 class="teal-text">Experience</h5>
+					<div class="info" ng-repeat="exp in currentAsset.experience">
+						<h6>{{ exp.company }} <span class="teal-text">{{ exp.job_title }}</span></h6>
+						<p>{{ exp.location }}</p>
+						<span>{{ exp.dates.start | date : "MMMM yy" | uppercase }}</span> - <span>{{ exp.dates.end | date : "MMMM yy" | uppercase }}</span>
+						<div>{{ exp.description }}</div>
+					</div>
+				</section>
+				<section id="education" class="row" ng-if="currentAsset.education">
+					<h5 class="teal-text">Education</h5>
+					<div class="info" ng-repeat="exp in currentAsset.education">
+						<h6>{{ exp.school }} <span class="teal-text">{{ exp.field }} ( {{ exp.degree }} )</span></h6>
+						<p>{{ exp.location }}<p>
+						<span>{{ exp.dates.start | date : "MMMM yy" | uppercase }}</span> - <span>{{ exp.dates.end | date : "MMMM yy" | uppercase }}</span>
+					</div>
+				</section>
+			</main>
+		</div>
+	</div>
 </div>

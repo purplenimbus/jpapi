@@ -52,7 +52,8 @@ class Job extends Model
 		'ref_url',
 		'location',
 		'job_location_id',
-		'updated_at'
+		'updated_at',
+		'user_applied'
     ];
 	
 	//Bind Job to Company

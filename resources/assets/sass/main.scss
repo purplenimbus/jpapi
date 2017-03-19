@@ -10,140 +10,141 @@ $primary-color : #1de9b6;
 @import 'utilities';
 
 body{
-	//margin-top: 50px;
-	//padding-top:70px;
-	.navbar{
-		margin:0px;
-		border-bottom: 1px solid lightgray;
-		.navbar-right{
-			margin:0px !important;
-		}
-	}
-	section{
-		&#home{
-			height: 87vh;
-			position: relative;
-			form{
-				width:100%;
+		//margin-top: 50px;
+		//padding-top:70px;
+		.navbar{
+			margin:0px;
+			border-bottom: 1px solid lightgray;
+			.navbar-right{
+				margin:0px !important;
 			}
 		}
-		&#jobs{
-		
+		section{
+			&#home{
+				height: 87vh;
+				position: relative;
+				form{
+					width:100%;
+				}
+			}
+			&#jobs{
+			
+			}
 		}
-	}
-	.sub-header{
-		h1{
-			margin:0px;
-		}
-		
-	}
-	aside{
-		&.toolbar{
-			background:url('/images/view-job-bg.jpg');
-			background-size:cover;
-			padding:0px;
-			background-position: center bottom;
-			.row{
-				background-color:rgba(black,0.7);
+		.sub-header{
+			h1{
 				margin:0px;
-				.title{
-					padding : 15px 0;
+			}
+			
+		}
+		aside{
+			&.toolbar{
+				background:url('/images/view-job-bg.jpg');
+				background-size:cover;
+				padding:0px;
+				background-position: center bottom;
+				.row{
+					background-color:rgba(black,0.7);
 					margin:0px;
-					position:relative;
-					img.circle{
-						width: 100px;
-					}
-					.location{
-						font-size:13px;
-						margin-top:15px;
-						i{
-							font-size:inherit;
+					.title{
+						padding : 15px 0;
+						margin:0px;
+						position:relative;
+						img.circle{
+							width: 100px;
 						}
-					}
-					h1{
-						margin: 0px;
-						font-size: 30px;
-					}
-					.chips{
-						margin-top: 15px;
-						border: none !important;
-						margin-bottom: 0px;
-						min-height: 0px;
-						.chip{
-							background: transparent;
-							border: 2px solid lightgray;
-							margin:0px;
-							line-height: 26px;
-							a{
-								color: lightgray;
+						.location{
+							font-size:13px;
+							margin-top:15px;
+							i{
+								font-size:inherit;
 							}
 						}
-					}
-					.info{
-						ul{
-							margin: 10px 0;
-							border:0px;
-							li{
-								text-transform:uppercase;
-								margin-right:10px;
-								display: inline-block;
-								background:transparent;
+						h1{
+							margin: 0px;
+							font-size: 30px;
+						}
+						.chips{
+							margin-top: 15px;
+							border: none !important;
+							margin-bottom: 0px;
+							min-height: 0px;
+							.chip{
+								background: transparent;
+								border: 2px solid lightgray;
+								margin:0px;
+								line-height: 26px;
+								a{
+									color: lightgray;
+								}
+							}
+						}
+						.info{
+							ul{
+								margin: 10px 0;
 								border:0px;
-								font-size:10px;
-								min-height:initial;
-								i{
-									font-size:inherit;
-									margin-right:5px;
-									vertical-align: middle;
+								li{
+									text-transform:uppercase;
+									margin-right:10px;
+									display: inline-block;
+									background:transparent;
+									border:0px;
+									font-size:10px;
+									min-height:initial;
+									i{
+										font-size:inherit;
+										margin-right:5px;
+										vertical-align: middle;
+									}
 								}
 							}
 						}
 					}
-				}
-				span{
-					line-height: 33px;
-					i{
-					
+					span{
+						line-height: 33px;
+						i{
+						
+						}
 					}
 				}
 			}
-		}
-		&.sidebar{
-			font-size: 12px;
-			.panel{
-				.panel-body{
-					.header{
-						padding-bottom: 10px;
-						margin-bottom: 10px;
-					}
-					h3{
-						line-height: 22px;
-						padding: 0px;
-						margin: 0px;
-						font-weight: bold;
-						font-size:inherit;
-						text-transform: uppercase;
-					}
-					dl{
-						&.row{
-							margin-bottom:0px;
-							text-transform: capitalize;
-							color:gray;
-							vertical-align:middle;
-							dt{
-								color : gray;
-								line-height:30px;
-							}
-							dd{
-								color : $primary-color;
-								line-height: 30px;
-								span{
-									color:gray;
-									font-style: italic;
-									select,input{
-										&.form-control{
-											margin-bottom: 10px;
-											text-transform: capitalize;
+			&.sidebar{
+				font-size: 12px;
+				.panel{
+					.panel-body{
+						.header{
+							padding-bottom: 10px;
+							margin-bottom: 10px;
+						}
+						h3{
+							line-height: 22px;
+							padding: 0px;
+							margin: 0px;
+							font-weight: bold;
+							font-size:inherit;
+							text-transform: uppercase;
+						}
+						dl{
+							&.row{
+								margin-bottom:0px;
+								text-transform: capitalize;
+								color:gray;
+								vertical-align:middle;
+								dt{
+									color : gray;
+									line-height:30px;
+								}
+								dd{
+									color : $primary-color;
+									line-height: 30px;
+									span{
+										color:gray;
+										font-style: italic;
+										select,input{
+											&.form-control{
+												margin-bottom: 10px;
+												text-transform: capitalize;
+											}
 										}
 									}
 								}
@@ -152,59 +153,105 @@ body{
 					}
 				}
 			}
+			&.inset{
+			
+			}
 		}
-		&.inset{
-		
-		}
-	}
-	main{
-		#content{
-			position:relative;
-			.jobs{
-				li{
-					padding-right: 10px;
-					padding-left: 10px;
-					.panel{
-						position:relative;
-						border: 1px solid lightgray;
-						.panel-body{
-							h4{
-								font-size:14px;
-								font-weight:bold;
+		main{
+			#content{
+				position:relative;
+				.jobs{
+					li{
+						padding-right: 10px;
+						padding-left: 10px;
+						.panel{
+							position:relative;
+							border: 1px solid lightgray;
+							.panel-body{
+								h4{
+									font-size:14px;
+									font-weight:bold;
+								}
+								small{
+									color:gray;
+								}
 							}
-							small{
-								color:gray;
+						}
+					}
+				}
+				.card{
+					.panel-heading{
+						h1{
+							font-weight:bold;
+							text-transform:uppercase;
+							margin-top:0px;
+						}
+					}
+					.card-content{
+						.job_details{
+							li{
+								h2{
+									font-size:12px;
+									font-weight:bold;
+									text-transform:uppercase;
+									margin-top:0px;
+								}
 							}
 						}
 					}
 				}
 			}
-			.card{
-				.panel-heading{
-					h1{
-						font-weight:bold;
-						text-transform:uppercase;
+			.view-asset{
+				h1,h6{
+					font-weight:300;
+				}
+			}
+		}
+		&.myaccount{
+			aside{
+				h5{
+					font-size: 16px;
+				}
+				ul.menu{
+					li{
+						a{
+							i{
+							
+							}
+						}
+					}
+				}
+			}
+			main{
+				section{
+					font-size:12px;
+					h5{
 						margin-top:0px;
+						font-size: 16px;
+						text-transform: uppercase;
+						font-weight: bold;
 					}
-				}
-				.card-content{
-					.job_details{
-						li{
-							h2{
-								font-size:12px;
-								font-weight:bold;
-								text-transform:uppercase;
-								margin-top:0px;
-							}
+					.info{
+						padding: 5px 0;
+						
+						h6{
+							font-weight:bold;
+							font-size: 14px;
+						}
+			
+						span{
+							color:gray;
+						}
+						
+						p{
+							text-transform:uppercase;
 						}
 					}
+					
+					&.skills{
+					
+					}
 				}
-			}
-		}
-		.view-asset{
-			h1,h6{
-				font-weight:300;
 			}
 		}
 	}
-}

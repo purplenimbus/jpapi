@@ -19,11 +19,8 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form>';
-				str += 	'<div class="row">';
-				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col s12' }));
-				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
+				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'email',	
 														cls			:	'input-lg validate'	,	
 														placeholder	:	'Email'	,	
@@ -33,7 +30,7 @@ angular.module('jpApp')
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup('lock',{ 	
+				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'password',	
 														cls			:	'input-lg validate'	,	
 														placeholder	:	'Password'	,	
@@ -43,7 +40,8 @@ angular.module('jpApp')
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col s12' }));
+				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col m12 s12' }));
+				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col m12 s12 grey lighten-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -144,6 +142,35 @@ angular.module('jpApp')
 			 */
 			editProfile	:	function(){
 				var str	=	'';
+				
+				str += '<div class="col m6 s12">';
+				str += '<div class="row">';
+				str += 		'<h4 class="left">Experience</h4>';
+				str += 		'<button ng-click="addExperience()" class="right btn-floating btn-small">'+elements.glyph('add','large')+'</button>';
+				str += '</div>';
+				str += '<div class="row card" ng-repeat="exp in currentAsset.experience">';
+				str += 		'<div class="row">';
+				str += 			'<button class="right btn-floating btn-small" ng-click="removeExperience($index)">'+elements.glyph('delete','large')+'</button>';
+				str += 		'</div>';
+				str += 		'<div class="card-content">';
+				str += 			elements.form.experience();
+				str += 		'</div>';
+				str += '</div>';
+				str += '</div>';
+				str += '<div class="col m6 s12">';
+				str += '<div class="row">';
+				str += 		'<h4 class="left">Education</h4>';
+				str += 		'<button ng-click="addEducation()" class="right btn-floating">'+elements.glyph('add','large')+'</button>';
+				str += '</div>';
+				str += '<div class="row card" ng-repeat="exp in currentAsset.education">';
+				str += 		'<div class="row">';
+				str += 			'<button class="right btn-floating btn-small" ng-click="removeEducation($index)">'+elements.glyph('delete','large')+'</button>';
+				str += 		'</div>';
+				str += 		'<div class="card-content">';
+				str += 			elements.form.education();
+				str += 		'</div>';
+				str += '</div>';
+				str += '</div>';
 				
 				return str;
 			},

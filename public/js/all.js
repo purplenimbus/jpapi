@@ -26,7 +26,7 @@ angular
 		
 		$authProvider.linkedin({
 			clientId: '75835cv03xc5be',
-			url: '/api/auth/linkedin',
+			url: '/api/auth/linkedin'
 		});
 		
 		//$urlRouterProvider.otherwise('/');
@@ -163,9 +163,39 @@ angular
 				controller	:	'AccountCtrl',
 				controllerAs: 	'Account',
 				resolve 	: {
-					accountData : function(accountDataService){
-						return accountDataService.then(function(result){
+					user : function(accountData,$rootScope){
+						
+						$rootScope.$location.title = $rootScope.$location.base;
+						
+						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
+						
+							angular.element('.progress').hide();
+						
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			})
+			.when('/myaccount/edit',{
+				template	:	function(d){
+					//console.log('Edit Profile',d);
+					return form.editProfile();
+				},
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					user : function(accountData,$rootScope){
+						
+						$rootScope.$location.title = $rootScope.$location.base;
+						
+						return accountData.getUserData().then(function(result){
+							console.log('Result',result);
+						
+							angular.element('.progress').hide();
+						
 							return result;
 						}).catch(function(error){
 							console.log('Error',error);
@@ -209,18 +239,6 @@ angular
 		$rootScope.$auth = $auth;
 		
 		console.log('Runtime RootScope',$rootScope);
-		
-		//Activate account dropdown
-		angular.element('.dropdown-button').dropdown({
-		  inDuration: 300,
-		  outDuration: 225,
-		  constrainWidth: false, // Does not change width of dropdown to that of the activator
-		  hover: true, // Activate on hover
-		  gutter: 0, // Spacing from edge
-		  belowOrigin: true, // Displays dropdown below the button
-		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
-		  stopPropagation: false // Stops event propagation
-		});
 	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
@@ -233,804 +251,23 @@ angular
 
 /**
  * @ngdoc function
- * @name jpApp.controller:AccountCtrl
- * @description
- * # AccountCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,accountData)
-	{
-		
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:AuthCtrl
- * @description
- * # AuthCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
-		
-		
-		//var vm = this;
-		
-        $scope.login = function($event) {
-			
-			//$event.preventDefault();
-			
-			var modalContent	=	angular.element($event.currentTarget).parents()[1],
-				form			=	angular.element(modalContent).find('form').serializeArray(),
-				credentials		=	{
-					email		:	$scope.email,
-					password	: 	$scope.password
-				};
-			
-			console.log('Login Details',credentials);
-				
-			validation.validate(form).then(function(result){
-				
-				console.log(result);
-				
-				if(result.valid){											
-					//Use Satellizer's $auth service to login
-					$auth.login(credentials).then(function(result) {
-						console.log('Data',result);
-						$rootScope.user = {};
-						console.log('Logged in Rootscope',$rootScope);
-						console.log('Logged in Auth',$auth.isAuthenticated());
-						console.log('Logged in token',$auth.getToken());
-						console.log('Logged in payload',$auth.getPayload());
-						$rootScope.user.info = result.data.user;
-						$scope.closeModal();
-					}).catch(function(error){
-						console.log('Login Error',error);
-						//TO DO Add Error Message to login modal
-					});
-					
-				}else{
-					console.log(result);
-					//TO DO Add Validation Error Message to login modal
-				}	
-				
-			});
-			
-            
-        };
-		
-		$scope.signIn	=	function(){
-			var modalType	=	'bottom-sheet',
-				modalTitle	=	'<h4 class="left">Login</h4>',
-				modalBody	=	form.login(),
-				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
-				
-			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				//console.log(result);
-				console.log('Auth Details',$rootScope);
-				
-			});
-		};
-		
-		$scope.authenticate = function(provider) {
-			$auth.authenticate(provider);
-		};
-		
-		$scope.logout = function() {
-			$auth.logout();
-		};
-		
-		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('close');
-		};
-	
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:JobsCtrl
+ * @name jpApp.controller:accountData
  * @description
  * # JobsCtrl
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompaniesCtrl', function ($scope,jobs,companies,$routeParams,$route,$location,$compile,$rootScope,companiesData)
-	{
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
-		
-		$scope.companies = this.companies = companiesData;
-		
-		console.log('Companies ',this.companies);
-	});
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:JobsCtrl
- * @description
- * # CompanysCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData)
-	{
-		
-		var autocomplete,CompanyCtrl = this;
-		
-		this.data = {};
-		
-		console.log($route);
-		
-		$scope.currentAsset = CompanyCtrl.currentAsset = companyData;
-		
-		$scope.companyOptions = function(options) {
-			switch(options){
-				case 'company_status' :  return function(){
-					var selected = $filter('filter')($rootScope.company.options.company_status, {value: CompanyCtrl.currentAsset.status});
-					return (CompanyCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
-				}
-				break;
-			}
-		};
-		
-		$scope.updateCompany = function(){			
-			
-			this.data	=	{
-				id : CompanyCtrl.currentAsset.id,
-				name : CompanyCtrl.currentAsset.name,
-				description : CompanyCtrl.currentAsset.description,
-				company_category_id : CompanyCtrl.currentAsset.company_category.id,
-				email : CompanyCtrl.currentAsset.email,
-				address : CompanyCtrl.currentAsset.address,
-				zipcode	: CompanyCtrl.currentAsset.zipcode,
-				phone : CompanyCtrl.currentAsset.phone,
-				logo : CompanyCtrl.currentAsset.logo,
-				status : CompanyCtrl.currentAsset.status
-			}
-			
-			console.log('Data',this.data);
-			
-			companies.sendData('companies',$route.current.params.companyId,this.data).then(function(result){
-				console.log('Got a Response',result);
-				$scope.cancel();
-				////$scope.currentAsset = result.data;
-			});
-			
-		}
-		
-		$scope.cancel = function(){
-			console.log('Edit Cancelled');
-			angular.element('#modal').modal('close');
-			//angular.element('#job_location').val('');
-			//angular.element('#modal form').get(0).reset();
-			//$scope.currentAsset = $scope.cache;
-			$route.reload();
-		}
-		
-		$scope.edit = function(){
-			var modalType	=	'bottom-sheet',
-				modalTitle	=	'',
-				modalBody	=	'',
-				modalFooter	=	'';
-			
-			modalTitle	+=	'<h4 class="left">Edit Company</h4>';
-			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'company_category' , model:'currentAsset.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
-			
-			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
-			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateCompany()'	, label : 'Save'});
-			
-			modalBody	=	form.editCompany();
-			
-			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				angular.element('select').material_select();
-				
-				CKEDITOR.editorConfig	=	function( config ){
-					config.toolbar	=	[
-						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
-						{name:'paragraph',items:['NumberedList','BulletedList']}
-					];
-				};
-				
-				CKEDITOR.replace( 'company_description' ).on( 'change', function( evt ) {
-					CompanyCtrl.currentAsset.description = evt.editor.getData();
-				});
-				
-				/*
-				angular.element('.chips-initial').on('chip.add', function(e, chip){
-					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
-				}).on('chip.delete', function(e, chip){
-					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
-				}).material_chip({
-					placeholder: 'Skills',
-					data: CompanyCtrl.currentAsset.required_skills
-				});
-				*/
-				
-				// Create the autocomplete object, restricting the search to geographical
-				// location types.
-				autocomplete = new google.maps.places.Autocomplete(
-					/** @type {!HTMLInputElement} */(angular.element('input#company_location').get(0)),
-					{types: ['geocode']});
-
-				// When the user selects an address from the dropdown, populate the address
-				// fields in the form.
-				autocomplete.addListener('place_changed', function(){
-					var place = this.getPlace();
-					
-					//console.log('Place',place);
-					
-					CompanyCtrl.currentAsset.location.name = place.name ? place.name : '';
-					
-					place.address_components.map(function(value,key){
-						//console.log('Value',value);
-						CompanyCtrl.currentAsset.location[value.types[0]] = {};
-						CompanyCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						CompanyCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
-					});
-				});
-				
-				var slider = angular.element('#employees').get(0);
-				
-				//Initalize Typeahead
-				angular.element('.typeahead').each(function(key,value){
-					
-					var name = angular.element(value).get(0).name;
-					
-					console.log('Company Cats Bloodhound',elements.form.bloodhound('/company/categories'));
-					
-					angular.element('#'+name).typeahead(null, {
-						name: name,
-						display: 'name',
-						source: elements.form.bloodhound('/company/categories').ttAdapter(),
-						hint: true,
-						highlight: true,
-						minLength: 0,
-						limit: 10,
-						templates: {
-							empty: [
-								'<div class="tt-suggestion tt-empty-message collection">',
-								'No results were found ...',
-								'</div>'
-							].join('\n'),
-							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
-							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
-						},
-						classNames: {
-							selectable: 'collection-item',
-							dataset : 'collection'
-						},
-						//identify: function(obj) { return obj.name; },
-					}).bind('typeahead:select', function(ev, suggestion) {
-						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
-						//console.log('Selection(name): ' + suggestion.name);
-						//console.log('Selection(id): ' + suggestion.id);
-						//console.log('event: ' + asset);
-						CompanyCtrl.currentAsset[asset] = suggestion;
-						//$scope.currentAsset[asset].name = suggestion.name;
-						
-						console.log('Scope asset(id): ' + CompanyCtrl.currentAsset[asset].id);
-						console.log('Scope asset(name): ' + CompanyCtrl.currentAsset[asset].name);
-						//$scope.currentAsset
-					});
-				});
-			});
-		}
-		
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:JobCtrl
- * @description
- * # JobCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData)
-	{
-		
-		var JobCtrl = this;
-		$rootScope.$location.title = '';
-		
-		var autocomplete;
-		
-		JobCtrl.data = {};
-		
-		console.log('jobData',jobData);
-		
-		$scope.currentAsset = JobCtrl.currentAsset = jobData;
-		
-		JobCtrl.cache = JobCtrl.currentAsset;
-		JobCtrl.currentAsset.pay = {};
-		console.log('Got a job',JobCtrl.currentAsset);
-		JobCtrl.currentAsset.application_deadline ? 
-			JobCtrl.currentAsset.application_deadline = new Date(JobCtrl.currentAsset.application_deadline)
-			: null;
-		$rootScope.$location.title = JobCtrl.currentAsset.title;
-		
-		JobCtrl.jobOptions = function(options) {
-			switch(options){
-				case 'job_status' :  return function(){
-					var selected = $filter('filter')($rootScope.job.options.job_status, {value: JobCtrl.currentAsset.status});
-					return (JobCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
-				}
-				break;
-			}
-		};
-		
-		$scope.updateJob = function(){			
-			
-			console.log('Scope Data',JobCtrl.currentAsset);
-			
-			JobCtrl.data	=	{
-				id : JobCtrl.currentAsset.id,
-				title : JobCtrl.currentAsset.title,
-				description : JobCtrl.currentAsset.description,
-				company_id : JobCtrl.currentAsset.company.id,
-				job_category_id : JobCtrl.currentAsset.job_category.id,
-				job_type_id : JobCtrl.currentAsset.job_type.id,
-				job_level_id : JobCtrl.currentAsset.job_level.id,
-				//job_salary_id : $scope.currentAsset.salary_type.id,
-				application_deadline : JobCtrl.currentAsset.application_deadline,
-				salary : JobCtrl.currentAsset.salary,
-				status : JobCtrl.currentAsset.status,
-				min_experience : JobCtrl.currentAsset.min_experience,
-				min_qualification : JobCtrl.currentAsset.min_qualification.name,
-			}
-			
-			if(JobCtrl.currentAsset.location.searched){
-				JobCtrl.data.location = {
-					name : JobCtrl.currentAsset.location.name,
-					locality : JobCtrl.currentAsset.location.neighborhood ? JobCtrl.currentAsset.location.neighborhood.long_name : JobCtrl.currentAsset.location.vicinity,
-					city	:	JobCtrl.currentAsset.location.locality.long_name,
-					city_code	:	JobCtrl.currentAsset.location.locality.long_name,
-					state	:	JobCtrl.currentAsset.location.administrative_area_level_1.long_name ? JobCtrl.currentAsset.location.administrative_area_level_1.long_name : '',
-					state_code	:	JobCtrl.currentAsset.location.administrative_area_level_1.short_name ? JobCtrl.currentAsset.location.administrative_area_level_1.short_name : '',
-					country	:	JobCtrl.currentAsset.location.country.long_name ? JobCtrl.currentAsset.location.country.long_name : '',
-					country_code	: JobCtrl.currentAsset.location.country.short_name ? JobCtrl.currentAsset.location.country.short_name : '',
-					lng	:	JobCtrl.currentAsset.location.geo.lng,
-					lat	:	JobCtrl.currentAsset.location.geo.lat,
-					ref_id	:	JobCtrl.currentAsset.location.place_id,
-					url	:	JobCtrl.currentAsset.location.geo.url,
-					zip_code : JobCtrl.currentAsset.location.zipcode ? JobCtrl.currentAsset.location.zipcode : ''
-				}
-			}
-			
-			console.log('Data',JobCtrl.data);
-			
-			jobs.sendData('jobs',$route.current.params.jobId,JobCtrl.data).then(function(result){
-				console.log('Got a Response',result);
-				JobCtrl.reset();
-				////$scope.currentAsset = result.data;
-			});
-			
-		}
-		
-		JobCtrl.reset = function(){
-			console.log('Edit Cancelled');
-			angular.element('#modal').modal('close');
-			//angular.element('#job_location').val('');
-			//angular.element('#modal form').get(0).reset();
-			//$scope.currentAsset = $scope.cache;
-			$route.reload();
-		}
-		
-		$scope.edit = function(){
-			var modalType	=	'bottom-sheet',
-				modalTitle	=	'',
-				modalBody	=	'',
-				modalFooter	=	'';
-			
-			modalTitle	+=	'<h4 class="left">Edit Job</h4>';
-			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'status' , model:'currentAsset.status',colSize: 12,label1:'draft',label2:'published'})+'</div>';
-			
-			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'reset()'	, label : 'Cancel'});
-			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
-			
-			modalBody	=	form.editJob();
-			
-			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				angular.element('select').material_select();
-				//Input elements need to converted to directives
-				CKEDITOR.editorConfig	=	function( config ){
-					config.toolbar	=	[
-						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
-						{name:'paragraph',items:['NumberedList','BulletedList']}
-					];
-				};
-				
-				CKEDITOR.replace( 'job_description' ).on( 'change', function( evt ) {
-					JobCtrl.currentAsset.description = evt.editor.getData();
-				});
-				
-				angular.element('.chips-autocomplete').material_chip();
-				
-				angular.element('.chips-autocomplete').material_chip({
-					placeholder: 'Skills',
-					autocompleteData: {
-					  'Apple': null,
-					  'Microsoft': null,
-					  'Google': null
-					}
-				});
-				
-				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
-					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
-				}).on('chip.delete', function(e, chip){
-					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
-				});
-					
-				console.log(elements.form.bloodhound('/api/job_skills').index.datums);
-				
-				// Create the autocomplete object, restricting the search to geographical
-				// location types.
-				autocomplete = new google.maps.places.Autocomplete(
-					/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
-					{types: ['geocode']});
-
-				// When the user selects an address from the dropdown, populate the address
-				// fields in the form.
-				autocomplete.addListener('place_changed', function(){
-					var place = this.getPlace();
-					
-					console.log('Place',place);
-					//console.log('Place Long',place.geometry.location.lng());
-					
-					JobCtrl.currentAsset.location = { searched : true };
-					
-					JobCtrl.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
-					
-					place.address_components.map(function(value,key){
-						console.log('Value',value);
-						JobCtrl.currentAsset.location[value.types[0]] = {};
-						JobCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
-						JobCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
-					});
-					JobCtrl.currentAsset.location.place_id = place.place_id ? place.place_id : '';
-					JobCtrl.currentAsset.location.vicinity = place.vicinity ? place.vicinity : '';
-						
-					//Set location long lat
-					JobCtrl.currentAsset.location.geo = { 
-															lng : place.geometry.location.lng(), 
-															lat	: place.geometry.location.lat(),
-															url : place.url
-														};
-					//Set url
-					console.log('Location Asset',JobCtrl.currentAsset.location);
-				});
-				
-				var slider = angular.element('#pay').get(0);
-				//console.log('Salary',parseInt($scope.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')));				
-				//console.log('Salary Scope',$scope);				
-				
-				noUiSlider.create(slider, {
-					start: JobCtrl.currentAsset.salary ? [parseInt(JobCtrl.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')), 
-							parseInt(JobCtrl.currentAsset.salary.split(',')[1].toString().replace(/$$|.000/g,''))] : [0,100],
-					connect: true,
-					step: 5,
-					range: {
-						'min': 0,
-						'max': 1000
-					},
-					format: wNumb({
-						decimals: 0,
-						thousand: '.',
-						//prefix: '$',
-						postfix: '.000'
-					})
-				});
-				
-				slider.noUiSlider.on('update', function(value,handle){
-					console.log('Slider Changed',value.toString());
-					JobCtrl.currentAsset.pay.value  = value;
-					JobCtrl.currentAsset.salary  = value.toString();
-					JobCtrl.currentAsset.pay.min = value[0];
-					angular.element('.range-field span.min').html(value[0]);
-					JobCtrl.currentAsset.pay.max  = value[1];
-					angular.element('.range-field span.max').html(value[1]);
-				});
-				
-				
-				angular.element('.datepicker').pickadate({
-					selectMonths: true, // Creates a dropdown to control month
-				}).on('change',function(e){
-					JobCtrl.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
-				});
-				
-				//Initalize Typeahead
-				angular.element('.typeahead').each(function(key,value){
-					
-					var name = angular.element(value).get(0).name;
-										
-					angular.element('#'+name).typeahead(null, {
-						name: name,
-						display: 'name',
-						source: elements.form.bloodhound('/api/'+name).ttAdapter(),
-						hint: true,
-						highlight: true,
-						minLength: 0,
-						limit: 10,
-						templates: {
-							empty: [
-								'<div class="tt-suggestion tt-empty-message collection">',
-								'No results were found ...',
-								'</div>'
-							].join('\n'),
-							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
-							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
-						},
-						classNames: {
-							selectable: 'collection-item',
-							dataset : 'collection'
-						},
-						//identify: function(obj) { return obj.name; },
-					}).bind('typeahead:select', function(ev, suggestion) {
-						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
-						//console.log('Selection(name): ' + suggestion.name);
-						//console.log('Selection(id): ' + suggestion.id);
-						//console.log('event: ' + asset);
-						JobCtrl.currentAsset[asset] = suggestion;
-						//$scope.currentAsset[asset].name = suggestion.name;
-						
-						console.log('Scope asset(id): ' + JobCtrl.currentAsset[asset].id);
-						console.log('Scope asset(name): ' + JobCtrl.currentAsset[asset].name);
-						//$scope.currentAsset
-					});
-				});
-				
-				console.log('Check current asset',JobCtrl.currentAsset.status === 1);
-				
-				JobCtrl.currentAsset.status === 1 ? angular.element('#status').get(0).checked = true : null;
-				
-			});
-		}
-		
-		$scope.apply	=	function(id){
-			console.log('Job Id',id);
-			jobs.sendData('jobs',id+'/apply').then(function(result){
-				console.log('Application Result',result);
-			}).catch(function(error){
-				console.log('Application Error',error);
-			});
-		}
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:JobsCtrl
- * @description
- * # JobsCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile,$rootScope,jobsData)
-	{
-		var JobsCtrl = this;
-		
-		JobsCtrl.jobs = jobsData;
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location/*,$state,$auth*/) {
-		
-		console.log('init',init);	
-		console.log('init rootScope',$rootScope);	
-				
-		$scope.search = {
-			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
-		};
-		
-		/*
-		$scope.getLocaton = function(){
-			var self = this;
-			console.log('Get Location');
-			if($rootScope.user.location){
-				console.log('Root Location Found',$rootScope.user.location);
-				$scope.search = {
-					title : $rootScope.user.location.location
-				};
-			}else{
-				location.getLocation().then(function(result){
-					console.log('Get Location Found',result);
-					$scope.search = {
-						title : result[1].formatted_address
-					};
-				});
-			}
-			
-		};
-		*/
-		
-		$scope.data = init;
-		
-		var autocomplete;
-		
-		console.log('Search',$scope.search);
-		
-		var home_loc;
-		
-		$scope.findjobs = function(search){
-			console.log('Search',search);
-			/*
-			jobs.findJobs($scope.search.place_id,$scope.search.job_id).then(function(result){
-				console.log('Result',result);
-			});
-			*/
-		}
-		
-		console.log('rootScope',$rootScope);
-		
-		$scope.search = $rootScope.user.location;
-		
-		//google.maps.event.addDomListener(window, 'load',function(){
-
-			angular.element('#job_title').typeahead(null, {
-				name: 'job_title',
-				display: 'title',
-				source: elements.form.bloodhound('/api/job_titles'),
-				hint: true,
-				highlight: true,
-				minLength: 0,
-				limit: 10,
-				templates: {
-					empty: [
-						'<div class="tt-suggestion tt-empty-message collection">',
-						'No results were found ...',
-						'</div>'
-					].join('\n'),
-					//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
-					//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
-				},
-				classNames: {
-					selectable: 'collection-item',
-					dataset : 'collection'
-				},
-				//identify: function(obj) { return obj.name; },
-			}).bind('typeahead:select', function(ev, suggestion) {
-				var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
-				console.log('Selection(name): ' + suggestion.name);
-				console.log('Selection(id): ' + suggestion.id);
-				//console.log('event: ' + asset);
-				$scope.search.title = suggestion;
-				//$scope.currentAsset[asset].name = suggestion.name;
-
-				//$scope.currentAsset
-			});
-		//});
-		
-		console.log('Bloodhound',elements.form.bloodhound('/api/job_titles'));
-		
-		// Create the autocomplete object, restricting the search to geographical
-		// location types.
-		autocomplete = new google.maps.places.Autocomplete(
-			/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
-			{types: ['geocode']});
-			
-		autocomplete.addListener('place_changed', function(){
-			var place = this.getPlace();
-			
-			console.log('Place',place);
-			
-			$scope.search = {};
-			
-			$scope.search.location = place.formatted_address;
-			
-			$scope.search.place_id = place.place_id;
-			
-			console.log('Place Search',$scope.search);
-			
-		});
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:UserCtrl
- * @description
- * # UserCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('UserCtrl', function ($scope,$rootScope,modal,elements,validation,auth,form) {
-		
-    	$scope.signIn	=	function(){
-			var modalType	=	'small',
-				modalTitle	=	'Login',
-				modalBody	=	form.login(),
-				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn-primary btn-lg btn-block',	ngClick	:	'login($event)'	},'Login');
-				
-			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
-				console.log(result);
-				
-			});
-		};
-		
-		$scope.login	=	function($event){
-			//add Spinner
-			$event.preventDefault();
-			
-			console.log($rootScope);
-			
-			var modalContent	=	angular.element($event.currentTarget).parents()[1],
-				form			=	angular.element(modalContent).find('form').serializeArray(),
-				formData		=	{
-					email		:	form[0].value,
-					password	: 	form[1].value
-				};
-				
-				validation.validate(form).then(function(result){
-					//remove spinner
-					angular.element('.spinner').remove();
-					
-					if(result.valid){
-						
-						//console.log('Root',$root);
-												
-						auth.authenticate(formData).then(function(result){
-							console.log('Authentication Result',result);
-						});
-						
-					}else{
-						console.log(result);
-					}	
-					
-				});
-		};
-		
-		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('hide');
-		};
-	});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name jpApp.controller:accountDataService
- * @description
- * # JobsCtrl
- * Controller of the jpApp
- */
-angular.module('jpApp')
-	.controller('accountDataService', function ($q,$http,jobs)
+	.service('accountData', function ($q,$http,jobs)
 	{
 		return {
-			accountData : function(){
-			
+			getUserData : function(){
+				return $http.get('/api/myaccount');
 			},
 			saveData 	:	function(){
-			
+				return $http.post('/api/myaccount');
 			},
-			getJobs		:	function(){
-				
+			getJobs		:	function(id){
+				return $http.get('/api/myaccount/{'+id+'}/jobs');
 			}
 		};
 	});
@@ -1159,7 +396,7 @@ angular.module('jpApp')
 			icon : 'attach_file',
 			color : 'blue'
 		}
-	], self = this;
+	], elementsFactory = this;
     return {
 		/**
 		 * Returns a row HTML element
@@ -1523,6 +760,57 @@ angular.module('jpApp')
 				});
 				
 				return bloodhound;
+			},
+			experience : function(){
+				var str	=	'',self = this;
+								
+				str += 	'<div class="row">';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Job Title' , name:'job_title' , cls:'typeahead', model : 'exp.job_title' });
+				//str += 		'</div>';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Company' , name:'company' , cls:'typeahead', model : 'exp.company' });
+				//str += 		'</div>';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type:'text' ,colSize: 12, cls:'autocomplete', label : 'Location' , name : 'job_location', model : 'exp.location' });
+				//str += 		'</div>';
+				str += 	'</div>';
+				str += 	'<div class="row">';
+				str += 		self.textarea({ type:'text' ,colSize: 12, cls:'', label : 'Description' , name : 'description', model : 'exp.description' });
+				str += 	'</div>';
+				
+				return str;
+			},
+			education : function(){
+				var str	=	'',self = this;
+								
+				str += '<div class="row">';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'School' , name:'school' , cls:'typeahead', model : 'exp.school' });
+				str += 		'</div>';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Degree' , name:'degree' , cls:'typeahead', model : 'exp.degree' });
+				str += 		'</div>';
+				str += '</div>';
+				str += '<div class="row">';
+				str += 		'<div class="col s12 m6">';
+				str += 		self.input({ type: 'text' , colSize: 12 , label:'Field' , name:'field' , cls:'typeahead', model : 'exp.field' });
+				str += 		'</div>';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Location' , name:'location' , cls:'typeahead', model : 'exp.location' });
+				str += 		'</div>';
+				str += '</div>';
+				str += '<div class="row">';
+				str += 		'<div class="col m6 s12">';
+				str += 			self.date({	colSize: 12 , label:'Start Date' , name:'start' , cls:'', model : 'exp.dates.start' });
+				str += 		'</div>';
+				str += 		'<div class="col m6 s12">';
+				str += 			self.date({ colSize: 12 , label:'End Date' , name:'end' , cls:'', model : 'exp.dates.end' });
+				str += 		'</div>';
+				str += '</div>';
+				
+				
+				return str;
 			}
 		},
 		/**
@@ -1530,13 +818,18 @@ angular.module('jpApp')
 		 * @param {String} type - The type of icon based on https://material.io/icons/
 		 * @returns {String}
 		 */
-		glyph	:	function(type){
+		glyph	:	function(type,cls){
 			var str	=	'';
 			
-			str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+			//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+			str	+=	'<i class="material-icons ';
+			str	+=	cls ? cls+'">' : '">';
+			str	+=	type;
+			str	+=	'</i>';
 
 			return str;
-		}
+		},
+		
     };
   });
 
@@ -1561,11 +854,8 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form>';
-				str += 	'<div class="row">';
-				str	+=		elements.column(12,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col s12' }));
-				str += 	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup('info_outline',{ 	
+				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'email',	
 														cls			:	'input-lg validate'	,	
 														placeholder	:	'Email'	,	
@@ -1575,7 +865,7 @@ angular.module('jpApp')
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.form.inputGroup('lock',{ 	
+				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'password',	
 														cls			:	'input-lg validate'	,	
 														placeholder	:	'Password'	,	
@@ -1585,7 +875,8 @@ angular.module('jpApp')
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="row form-group">';
-				str	+=	elements.column(12,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col s12' }));
+				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col m12 s12' }));
+				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col m12 s12 grey lighten-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -1686,6 +977,31 @@ angular.module('jpApp')
 			 */
 			editProfile	:	function(){
 				var str	=	'';
+				
+				str += '<div class="row">';
+				str += 		'<h4 class="left">Experience</h4>';
+				str += 		'<button ng-click="addExperience()" class="right btn-floating btn-small">'+elements.glyph('add','large')+'</button>';
+				str += '</div>';
+				str += '<div class="row card" ng-repeat="exp in currentAsset.experience">';
+				str += 		'<div class="row">';
+				str += 			'<button class="right btn-floating btn-small" ng-click="removeExperience($index)">'+elements.glyph('delete','large')+'</button>';
+				str += 		'</div>';
+				str += 		'<div class="card-content">';
+				str += 			elements.form.experience();
+				str += 		'</div>';
+				str += '</div>';
+				str += '<div class="row">';
+				str += 		'<h4 class="left">Education</h4>';
+				str += 		'<button ng-click="addEducation()" class="right btn-floating">'+elements.glyph('add','large')+'</button>';
+				str += '</div>';
+				str += '<div class="row card" ng-repeat="exp in currentAsset.education">';
+				str += 		'<div class="row">';
+				str += 			'<button class="right btn-floating btn-small" ng-click="removeEducation($index)">'+elements.glyph('delete','large')+'</button>';
+				str += 		'</div>';
+				str += 		'<div class="card-content">';
+				str += 			elements.form.education();
+				str += 		'</div>';
+				str += '</div>';
 				
 				return str;
 			},
@@ -1923,6 +1239,1089 @@ angular.module('jpApp')
 				
 				return deferred.promise;
 			}
+		};
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:AccountCtrl
+ * @description
+ * # AccountCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user)
+	{
+		
+		$scope.currentAsset = { user:user.data };//Initialize User data
+		
+		var autocomplete;
+		
+		angular.element('ul.tabs').tabs(); //Initialize Tabs
+		
+		$scope.currentAsset.experience = [{
+			job_title 	: 	'Web Developer',
+			location 	: 	'Vancouver, BC',
+			company 	: 	'XYZ Co',
+			dates		:	{	start : new Date() , end : new Date() },
+			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
+		},{
+			job_title 	: 	'Web Manager',
+			location 	: 	'Burnaby, BC',
+			company 	: 	'ABC Co',
+			dates		:	{	start : new Date() , end : new Date() },
+			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
+		}];
+		
+		$scope.currentAsset.education = [{
+			school	 	: 	'University of the Fraser Valley',
+			location 	: 	'Abbotsford, BC',
+			field 		: 	'Computer Information Systems',
+			degree 		: 	'Bsc',
+			dates		:	{	start : new Date() , end : new Date() },
+			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
+		}];
+		
+		console.log('currentAsset',$scope.currentAsset);
+		
+		/**
+		 * Edit User Profile
+		 */
+		$scope.edit = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'',
+				modalBody	=	'',
+				modalFooter	=	'';
+			
+			modalTitle	+=	'<h4>Edit Profile</h4>';
+			//modalTitle	+=	'<div class="right">'+elements.form.check({name : 'status' , model:'currentAsset.status',colSize: 12,label1:'draft',label2:'published'})+'</div>';
+			
+			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'reset()'	, label : 'Cancel'});
+			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateProfile()'	, label : 'Save'});
+			
+			modalBody	=	form.editProfile();
+			
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				angular.element('select').material_select();
+				//Input elements need to converted to directives
+				CKEDITOR.editorConfig	=	function( config ){
+					config.toolbar	=	[
+						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
+						{name:'paragraph',items:['NumberedList','BulletedList']}
+					];
+				};
+				
+				CKEDITOR.replace( 'job_description' ).on( 'change', function( evt ) {
+					JobCtrl.currentAsset.description = evt.editor.getData();
+				});
+				
+				angular.element('.chips-autocomplete').material_chip();
+				
+				angular.element('.chips-autocomplete').material_chip({
+					placeholder: 'Skills',
+					autocompleteData: {
+					  'Apple': null,
+					  'Microsoft': null,
+					  'Google': null
+					}
+				});
+				
+				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				}).on('chip.delete', function(e, chip){
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				});
+					
+				console.log(elements.form.bloodhound('/api/job_skills').index.datums);
+				
+				// Create the autocomplete object, restricting the search to geographical
+				// location types.
+				autocomplete = new google.maps.places.Autocomplete(
+					/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
+					{types: ['geocode']});
+
+				// When the user selects an address from the dropdown, populate the address
+				// fields in the form.
+				autocomplete.addListener('place_changed', function(){
+					var place = this.getPlace();
+					
+					console.log('Place',place);
+					//console.log('Place Long',place.geometry.location.lng());
+					
+					JobCtrl.currentAsset.location = { searched : true };
+					
+					JobCtrl.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
+					
+					place.address_components.map(function(value,key){
+						console.log('Value',value);
+						JobCtrl.currentAsset.location[value.types[0]] = {};
+						JobCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						JobCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+					});
+					JobCtrl.currentAsset.location.place_id = place.place_id ? place.place_id : '';
+					JobCtrl.currentAsset.location.vicinity = place.vicinity ? place.vicinity : '';
+						
+					//Set location long lat
+					JobCtrl.currentAsset.location.geo = { 
+															lng : place.geometry.location.lng(), 
+															lat	: place.geometry.location.lat(),
+															url : place.url
+														};
+					//Set url
+					console.log('Location Asset',JobCtrl.currentAsset.location);
+				});
+				
+				var slider = angular.element('#pay').get(0);
+				//console.log('Salary',parseInt($scope.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')));				
+				//console.log('Salary Scope',$scope);				
+				
+				noUiSlider.create(slider, {
+					start: JobCtrl.currentAsset.salary ? [parseInt(JobCtrl.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')), 
+							parseInt(JobCtrl.currentAsset.salary.split(',')[1].toString().replace(/$$|.000/g,''))] : [0,100],
+					connect: true,
+					step: 5,
+					range: {
+						'min': 0,
+						'max': 1000
+					},
+					format: wNumb({
+						decimals: 0,
+						thousand: '.',
+						//prefix: '$',
+						postfix: '.000'
+					})
+				});
+				
+				slider.noUiSlider.on('update', function(value,handle){
+					console.log('Slider Changed',value.toString());
+					JobCtrl.currentAsset.pay.value  = value;
+					JobCtrl.currentAsset.salary  = value.toString();
+					JobCtrl.currentAsset.pay.min = value[0];
+					angular.element('.range-field span.min').html(value[0]);
+					JobCtrl.currentAsset.pay.max  = value[1];
+					angular.element('.range-field span.max').html(value[1]);
+				});
+				
+				//Initalize Datepicker
+				angular.element('.datepicker').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+					
+					angular.element('#'+name).pickadate({
+						selectMonths: true, // Creates a dropdown to control month
+					}).on('change',function(e){
+						$scope.currentAsset[name] = new Date(angular.element(e.currentTarget).val());
+					});
+				
+				});
+				
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+										
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/api/'+name).ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						limit: 10,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						JobCtrl.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + JobCtrl.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + JobCtrl.currentAsset[asset].name);
+						//$scope.currentAsset
+					});
+				});
+				
+				console.log('Check current asset',JobCtrl.currentAsset.status === 1);
+				
+				JobCtrl.currentAsset.status === 1 ? angular.element('#status').get(0).checked = true : null;
+				
+			});
+		}
+		
+		/**
+		 * Save User Profile
+		 */
+		$scope.save = function(){
+			
+		}
+		
+		/**
+		 * Reset Page
+		 */
+		$scope.reset = function(){
+			console.log('Edit Cancelled');
+			angular.element('#modal').modal('close');
+			//angular.element('#job_location').val('');
+			//angular.element('#modal form').get(0).reset();
+			//$scope.currentAsset = $scope.cache;
+			$route.reload();
+		}
+		/**
+		 * Add New Experience field when editing profile
+		 */
+		$scope.addExperience = function(){
+			$scope.currentAsset.experience.push({});
+		}
+		
+		/**
+		 * Delete Experience field when editing profile
+		 * 
+		 * @param {int} index - array index 
+		 * 
+		 */
+		$scope.removeExperience = function(index){
+			console.log('removeExperience',index);
+			$scope.currentAsset.experience.splice(index,1);
+		}
+		
+		/**
+		 * Add New Education field when editing profile
+		 */
+		$scope.addEducation = function(){
+			$scope.currentAsset.education.push({});
+		}
+		
+		/**
+		 * Delete Education field when editing profile
+		 * 
+		 * @param {int} index - array index 
+		 * 
+		 */
+		$scope.removeEducation = function(index){
+			console.log('removeEducation',index);
+			$scope.currentAsset.education.splice(index,1);
+		}
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:AuthCtrl
+ * @description
+ * # AuthCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
+		this.awesomeThings = [
+		  'HTML5 Boilerplate',
+		  'AngularJS',
+		  'Karma'
+		];
+		
+		
+		//var vm = this;
+		
+		angular.element('.button-collapse').sideNav({
+			  menuWidth: 300, // Default is 300
+			  edge: 'right', // Choose the horizontal origin
+			  closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+			  draggable: true // Choose whether you can drag to open on touch screens
+			}
+		);
+		
+        $scope.login = function($event) {
+			
+			//$event.preventDefault();
+			
+			var modalContent	=	angular.element($event.currentTarget).parents()[1],
+				form			=	angular.element(modalContent).find('form').serializeArray(),
+				credentials		=	{
+					email		:	$scope.email,
+					password	: 	$scope.password
+				};
+			
+			console.log('Login Details',credentials);
+				
+			validation.validate(form).then(function(result){
+				
+				console.log(result);
+				
+				if(result.valid){											
+					//Use Satellizer's $auth service to login
+					$auth.login(credentials).then(function(result) {
+						console.log('Data',result);
+						$rootScope.user = {};
+						console.log('Logged in Rootscope',$rootScope);
+						console.log('Logged in Auth',$auth.isAuthenticated());
+						console.log('Logged in token',$auth.getToken());
+						console.log('Logged in payload',$auth.getPayload());
+						$rootScope.user.info = result.data.user;
+						$scope.closeModal();
+					}).catch(function(error){
+						console.log('Login Error',error);
+						//TO DO Add Error Message to login modal
+					});
+					
+				}else{
+					console.log(result);
+					//TO DO Add Validation Error Message to login modal
+				}	
+				
+			});
+			
+            
+        };
+		
+		$scope.signIn	=	function(){
+			var modalType	=	'',
+				modalTitle	=	'<h4 class="left">Login</h4>',
+				modalBody	=	form.login(),
+				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
+				
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				//console.log(result);
+				console.log('Auth Details',$rootScope);
+				
+			});
+		};
+		
+		$scope.authenticate = function(provider) {
+			$auth.authenticate(provider);
+		};
+		
+		$scope.logout = function() {
+			$auth.logout();
+			
+			$location.path("/");
+		};
+		
+		$scope.closeModal	=	function(){
+			angular.element('#modal').modal('close');
+		};
+		
+		//Activate account dropdown
+		angular.element('.dropdown-button').dropdown({
+		  inDuration: 300,
+		  outDuration: 225,
+		  constrainWidth: false, // Does not change width of dropdown to that of the activator
+		  hover: true, // Activate on hover
+		  gutter: 0, // Spacing from edge
+		  belowOrigin: true, // Displays dropdown below the button
+		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
+		  stopPropagation: false // Stops event propagation
+		});
+	
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:JobsCtrl
+ * @description
+ * # JobsCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('CompaniesCtrl', function ($scope,jobs,companies,$routeParams,$route,$location,$compile,$rootScope,companiesData)
+	{
+		this.awesomeThings = [
+		  'HTML5 Boilerplate',
+		  'AngularJS',
+		  'Karma'
+		];
+		
+		$scope.companies = this.companies = companiesData;
+		
+		console.log('Companies ',this.companies);
+	});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:JobsCtrl
+ * @description
+ * # CompanysCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData)
+	{
+		
+		var autocomplete,CompanyCtrl = this;
+		
+		this.data = {};
+		
+		console.log($route);
+		
+		$scope.currentAsset = CompanyCtrl.currentAsset = companyData;
+		
+		$scope.companyOptions = function(options) {
+			switch(options){
+				case 'company_status' :  return function(){
+					var selected = $filter('filter')($rootScope.company.options.company_status, {value: CompanyCtrl.currentAsset.status});
+					return (CompanyCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
+				}
+				break;
+			}
+		};
+		
+		$scope.updateCompany = function(){			
+			
+			this.data	=	{
+				id : CompanyCtrl.currentAsset.id,
+				name : CompanyCtrl.currentAsset.name,
+				description : CompanyCtrl.currentAsset.description,
+				company_category_id : CompanyCtrl.currentAsset.company_category.id,
+				email : CompanyCtrl.currentAsset.email,
+				address : CompanyCtrl.currentAsset.address,
+				zipcode	: CompanyCtrl.currentAsset.zipcode,
+				phone : CompanyCtrl.currentAsset.phone,
+				logo : CompanyCtrl.currentAsset.logo,
+				status : CompanyCtrl.currentAsset.status
+			}
+			
+			console.log('Data',this.data);
+			
+			companies.sendData('companies',$route.current.params.companyId,this.data).then(function(result){
+				console.log('Got a Response',result);
+				$scope.cancel();
+				////$scope.currentAsset = result.data;
+			});
+			
+		}
+		
+		$scope.cancel = function(){
+			console.log('Edit Cancelled');
+			angular.element('#modal').modal('close');
+			//angular.element('#job_location').val('');
+			//angular.element('#modal form').get(0).reset();
+			//$scope.currentAsset = $scope.cache;
+			$route.reload();
+		}
+		
+		$scope.edit = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'',
+				modalBody	=	'',
+				modalFooter	=	'';
+			
+			modalTitle	+=	'<h4 class="left">Edit Company</h4>';
+			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'company_category' , model:'currentAsset.status',colSize: 12,label1:'Draft',label2:'Published'})+'</div>';
+			
+			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'cancel()'	, label : 'Cancel'});
+			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateCompany()'	, label : 'Save'});
+			
+			modalBody	=	form.editCompany();
+			
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				angular.element('select').material_select();
+				
+				CKEDITOR.editorConfig	=	function( config ){
+					config.toolbar	=	[
+						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
+						{name:'paragraph',items:['NumberedList','BulletedList']}
+					];
+				};
+				
+				CKEDITOR.replace( 'company_description' ).on( 'change', function( evt ) {
+					CompanyCtrl.currentAsset.description = evt.editor.getData();
+				});
+				
+				/*
+				angular.element('.chips-initial').on('chip.add', function(e, chip){
+					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				}).on('chip.delete', function(e, chip){
+					CompanyCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				}).material_chip({
+					placeholder: 'Skills',
+					data: CompanyCtrl.currentAsset.required_skills
+				});
+				*/
+				
+				// Create the autocomplete object, restricting the search to geographical
+				// location types.
+				autocomplete = new google.maps.places.Autocomplete(
+					/** @type {!HTMLInputElement} */(angular.element('input#company_location').get(0)),
+					{types: ['geocode']});
+
+				// When the user selects an address from the dropdown, populate the address
+				// fields in the form.
+				autocomplete.addListener('place_changed', function(){
+					var place = this.getPlace();
+					
+					//console.log('Place',place);
+					
+					CompanyCtrl.currentAsset.location.name = place.name ? place.name : '';
+					
+					place.address_components.map(function(value,key){
+						//console.log('Value',value);
+						CompanyCtrl.currentAsset.location[value.types[0]] = {};
+						CompanyCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						CompanyCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+					});
+				});
+				
+				var slider = angular.element('#employees').get(0);
+				
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+					
+					console.log('Company Cats Bloodhound',elements.form.bloodhound('/company/categories'));
+					
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/company/categories').ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						limit: 10,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						CompanyCtrl.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + CompanyCtrl.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + CompanyCtrl.currentAsset[asset].name);
+						//$scope.currentAsset
+					});
+				});
+			});
+		}
+		
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:JobCtrl
+ * @description
+ * # JobCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData)
+	{
+		
+		var JobCtrl = this;
+		
+		$rootScope.$location.title = '';
+		
+		var autocomplete;
+		
+		JobCtrl.data = {};
+		
+		console.log('jobData',jobData);
+		
+		$scope.currentAsset = JobCtrl.currentAsset = jobData;
+		
+		JobCtrl.cache = JobCtrl.currentAsset;//Make a copy of the currentAsset
+		
+		JobCtrl.currentAsset.pay = {}; //Initalize pay object
+		
+		console.log('Got a job',JobCtrl.currentAsset);
+		
+		//Parse Date for HTML 5 date element
+		JobCtrl.currentAsset.application_deadline ? 
+			JobCtrl.currentAsset.application_deadline = new Date(JobCtrl.currentAsset.application_deadline)
+			: null;
+			
+		$rootScope.$location.title = JobCtrl.currentAsset.title;
+		
+		JobCtrl.jobOptions = function(options) {
+			switch(options){
+				case 'job_status' :  return function(){
+					var selected = $filter('filter')($rootScope.job.options.job_status, {value: JobCtrl.currentAsset.status});
+					return (JobCtrl.currentAsset.status && selected.length) ? selected[0].text : 'Not set';
+				}
+				break;
+			}
+		};
+		/**
+		 * Update Job
+		 */
+		$scope.updateJob = function(){			
+			
+			console.log('Scope Data',JobCtrl.currentAsset);
+			
+			JobCtrl.data	=	{
+				id : JobCtrl.currentAsset.id,
+				title : JobCtrl.currentAsset.title,
+				description : JobCtrl.currentAsset.description,
+				company_id : JobCtrl.currentAsset.company.id,
+				job_category_id : JobCtrl.currentAsset.job_category.id,
+				job_type_id : JobCtrl.currentAsset.job_type.id,
+				job_level_id : JobCtrl.currentAsset.job_level.id,
+				//job_salary_id : $scope.currentAsset.salary_type.id,
+				application_deadline : JobCtrl.currentAsset.application_deadline,
+				salary : JobCtrl.currentAsset.salary,
+				status : JobCtrl.currentAsset.status,
+				min_experience : JobCtrl.currentAsset.min_experience,
+				min_qualification : JobCtrl.currentAsset.min_qualification.name,
+			}
+			
+			if(JobCtrl.currentAsset.location.searched){
+				JobCtrl.data.location = {
+					name : JobCtrl.currentAsset.location.name,
+					locality : JobCtrl.currentAsset.location.neighborhood ? JobCtrl.currentAsset.location.neighborhood.long_name : JobCtrl.currentAsset.location.vicinity,
+					city	:	JobCtrl.currentAsset.location.locality.long_name,
+					city_code	:	JobCtrl.currentAsset.location.locality.long_name,
+					state	:	JobCtrl.currentAsset.location.administrative_area_level_1.long_name ? JobCtrl.currentAsset.location.administrative_area_level_1.long_name : '',
+					state_code	:	JobCtrl.currentAsset.location.administrative_area_level_1.short_name ? JobCtrl.currentAsset.location.administrative_area_level_1.short_name : '',
+					country	:	JobCtrl.currentAsset.location.country.long_name ? JobCtrl.currentAsset.location.country.long_name : '',
+					country_code	: JobCtrl.currentAsset.location.country.short_name ? JobCtrl.currentAsset.location.country.short_name : '',
+					lng	:	JobCtrl.currentAsset.location.geo.lng,
+					lat	:	JobCtrl.currentAsset.location.geo.lat,
+					ref_id	:	JobCtrl.currentAsset.location.place_id,
+					url	:	JobCtrl.currentAsset.location.geo.url,
+					zip_code : JobCtrl.currentAsset.location.zipcode ? JobCtrl.currentAsset.location.zipcode : ''
+				}
+			}
+			
+			console.log('Data',JobCtrl.data);
+			
+			jobs.sendData('jobs',$route.current.params.jobId,JobCtrl.data).then(function(result){
+				console.log('Got a Response',result);
+				JobCtrl.reset();
+			});
+			
+		}
+		/**
+		 * Reset Page
+		 */
+		JobCtrl.reset = function(){
+			console.log('Edit Cancelled');
+			angular.element('#modal').modal('close');
+			//angular.element('#job_location').val('');
+			//angular.element('#modal form').get(0).reset();
+			//$scope.currentAsset = $scope.cache;
+			$route.reload();
+		}
+		
+		/**
+		 * Edit Job
+		 */
+		$scope.edit = function(){
+			var modalType	=	'bottom-sheet',
+				modalTitle	=	'',
+				modalBody	=	'',
+				modalFooter	=	'';
+			
+			modalTitle	+=	'<h4 class="left">Edit Job</h4>';
+			modalTitle	+=	'<div class="right">'+elements.form.check({name : 'status' , model:'currentAsset.status',colSize: 12,label1:'draft',label2:'published'})+'</div>';
+			
+			modalFooter	+=	elements.button({	type	:	'button',	cls:	'btn  red accent-4',	ngClick	:	'reset()'	, label : 'Cancel'});
+			modalFooter	+=	elements.button({	type	:	'submit',	cls:	'btn',	ngClick	:	'updateJob()'	, label : 'Save'});
+			
+			modalBody	=	form.editJob();
+			
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				angular.element('select').material_select();
+				//Input elements need to converted to directives
+				CKEDITOR.editorConfig	=	function( config ){
+					config.toolbar	=	[
+						{name:'clipboard',items:['Cut','Copy','Paste','PasteText','Undo','Redo']},
+						{name:'paragraph',items:['NumberedList','BulletedList']}
+					];
+				};
+				
+				CKEDITOR.replace( 'job_description' ).on( 'change', function( evt ) {
+					JobCtrl.currentAsset.description = evt.editor.getData();
+				});
+				
+				angular.element('.chips-autocomplete').material_chip();
+				
+				angular.element('.chips-autocomplete').material_chip({
+					placeholder: 'Skills',
+					autocompleteData: {
+					  'Apple': null,
+					  'Microsoft': null,
+					  'Google': null
+					}
+				});
+				
+				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				}).on('chip.delete', function(e, chip){
+					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
+				});
+					
+				console.log(elements.form.bloodhound('/api/job_skills').index.datums);
+				
+				// Create the autocomplete object, restricting the search to geographical
+				// location types.
+				autocomplete = new google.maps.places.Autocomplete(
+					/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
+					{types: ['geocode']});
+
+				// When the user selects an address from the dropdown, populate the address
+				// fields in the form.
+				autocomplete.addListener('place_changed', function(){
+					var place = this.getPlace();
+					
+					console.log('Place',place);
+					//console.log('Place Long',place.geometry.location.lng());
+					
+					JobCtrl.currentAsset.location = { searched : true };
+					
+					JobCtrl.currentAsset.location.name = place.formatted_address;//place.name ? place.name : '';
+					
+					place.address_components.map(function(value,key){
+						console.log('Value',value);
+						JobCtrl.currentAsset.location[value.types[0]] = {};
+						JobCtrl.currentAsset.location[value.types[0]].long_name = value.long_name ? value.long_name : '';
+						JobCtrl.currentAsset.location[value.types[0]].short_name = value.short_name ? value.short_name : '';
+					});
+					JobCtrl.currentAsset.location.place_id = place.place_id ? place.place_id : '';
+					JobCtrl.currentAsset.location.vicinity = place.vicinity ? place.vicinity : '';
+						
+					//Set location long lat
+					JobCtrl.currentAsset.location.geo = { 
+															lng : place.geometry.location.lng(), 
+															lat	: place.geometry.location.lat(),
+															url : place.url
+														};
+					//Set url
+					console.log('Location Asset',JobCtrl.currentAsset.location);
+				});
+				
+				var slider = angular.element('#pay').get(0);
+				//console.log('Salary',parseInt($scope.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')));				
+				//console.log('Salary Scope',$scope);				
+				
+				noUiSlider.create(slider, {
+					start: JobCtrl.currentAsset.salary ? [parseInt(JobCtrl.currentAsset.salary.split(',')[0].toString().replace(/$$|.000/g,'')), 
+							parseInt(JobCtrl.currentAsset.salary.split(',')[1].toString().replace(/$$|.000/g,''))] : [0,100],
+					connect: true,
+					step: 5,
+					range: {
+						'min': 0,
+						'max': 1000
+					},
+					format: wNumb({
+						decimals: 0,
+						thousand: '.',
+						//prefix: '$',
+						postfix: '.000'
+					})
+				});
+				
+				slider.noUiSlider.on('update', function(value,handle){
+					console.log('Slider Changed',value.toString());
+					JobCtrl.currentAsset.pay.value  = value;
+					JobCtrl.currentAsset.salary  = value.toString();
+					JobCtrl.currentAsset.pay.min = value[0];
+					angular.element('.range-field span.min').html(value[0]);
+					JobCtrl.currentAsset.pay.max  = value[1];
+					angular.element('.range-field span.max').html(value[1]);
+				});
+				
+				
+				angular.element('.datepicker').pickadate({
+					selectMonths: true, // Creates a dropdown to control month
+				}).on('change',function(e){
+					JobCtrl.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
+				});
+				
+				//Initalize Typeahead
+				angular.element('.typeahead').each(function(key,value){
+					
+					var name = angular.element(value).get(0).name;
+										
+					angular.element('#'+name).typeahead(null, {
+						name: name,
+						display: 'name',
+						source: elements.form.bloodhound('/api/'+name).ttAdapter(),
+						hint: true,
+						highlight: true,
+						minLength: 0,
+						limit: 10,
+						templates: {
+							empty: [
+								'<div class="tt-suggestion tt-empty-message collection">',
+								'No results were found ...',
+								'</div>'
+							].join('\n'),
+							//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+							//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+						},
+						classNames: {
+							selectable: 'collection-item',
+							dataset : 'collection'
+						},
+						//identify: function(obj) { return obj.name; },
+					}).bind('typeahead:select', function(ev, suggestion) {
+						var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+						//console.log('Selection(name): ' + suggestion.name);
+						//console.log('Selection(id): ' + suggestion.id);
+						//console.log('event: ' + asset);
+						JobCtrl.currentAsset[asset] = suggestion;
+						//$scope.currentAsset[asset].name = suggestion.name;
+						
+						console.log('Scope asset(id): ' + JobCtrl.currentAsset[asset].id);
+						console.log('Scope asset(name): ' + JobCtrl.currentAsset[asset].name);
+						//$scope.currentAsset
+					});
+				});
+				
+				console.log('Check current asset',JobCtrl.currentAsset.status === 1);
+				
+				JobCtrl.currentAsset.status === 1 ? angular.element('#status').get(0).checked = true : null;
+				
+			});
+		}
+		/**
+		 * Apply to Job
+		 * @param {integer} id  - The name of the PUT/POST endpoint
+		 */
+		$scope.apply	=	function(id){
+			console.log('Job Id',id);
+			jobs.sendData('jobs',id+'/apply').then(function(result){
+				console.log('Application Result',result);
+				JobCtrl.reset();
+			}).catch(function(error){
+				console.log('Application Error',error);
+				//TO DO  DO something
+			});
+		}
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:JobsCtrl
+ * @description
+ * # JobsCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('JobsCtrl', function ($scope,jobs,$routeParams,$route,$location,$compile,$rootScope,jobsData)
+	{
+		var JobsCtrl = this;
+		
+		JobsCtrl.jobs = jobsData;
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('MainCtrl', function ($scope,jobs,elements,$rootScope,init,location/*,$state,$auth*/) {
+		
+		console.log('init',init);	
+		console.log('init rootScope',$rootScope);	
+				
+		$scope.search = {
+			title : $rootScope.user.location.location ?  $rootScope.user.location.location : init[1].formatted_address
+		};
+		
+		/*
+		$scope.getLocaton = function(){
+			var self = this;
+			console.log('Get Location');
+			if($rootScope.user.location){
+				console.log('Root Location Found',$rootScope.user.location);
+				$scope.search = {
+					title : $rootScope.user.location.location
+				};
+			}else{
+				location.getLocation().then(function(result){
+					console.log('Get Location Found',result);
+					$scope.search = {
+						title : result[1].formatted_address
+					};
+				});
+			}
+			
+		};
+		*/
+		
+		$scope.data = init;
+		
+		var autocomplete;
+		
+		console.log('Search',$scope.search);
+		
+		var home_loc;
+		
+		$scope.findjobs = function(search){
+			console.log('Search',search);
+			/*
+			jobs.findJobs($scope.search.place_id,$scope.search.job_id).then(function(result){
+				console.log('Result',result);
+			});
+			*/
+		}
+		
+		console.log('rootScope',$rootScope);
+		
+		$scope.search = $rootScope.user.location;
+		
+		//google.maps.event.addDomListener(window, 'load',function(){
+
+			angular.element('#job_title').typeahead(null, {
+				name: 'job_title',
+				display: 'title',
+				source: elements.form.bloodhound('/api/job_titles'),
+				hint: true,
+				highlight: true,
+				minLength: 0,
+				limit: 10,
+				templates: {
+					empty: [
+						'<div class="tt-suggestion tt-empty-message collection">',
+						'No results were found ...',
+						'</div>'
+					].join('\n'),
+					//header: '<div class="collection-header"><h6>'+name+'</h6></div>'
+					//suggestion: Handlebars.compile('<div class="collection-item">{{value}}</div>')
+				},
+				classNames: {
+					selectable: 'collection-item',
+					dataset : 'collection'
+				},
+				//identify: function(obj) { return obj.name; },
+			}).bind('typeahead:select', function(ev, suggestion) {
+				var asset = angular.element(ev.currentTarget).get(0).dataset.asset;
+				console.log('Selection(name): ' + suggestion.name);
+				console.log('Selection(id): ' + suggestion.id);
+				//console.log('event: ' + asset);
+				$scope.search.title = suggestion;
+				//$scope.currentAsset[asset].name = suggestion.name;
+
+				//$scope.currentAsset
+			});
+		//});
+		
+		console.log('Bloodhound',elements.form.bloodhound('/api/job_titles'));
+		
+		// Create the autocomplete object, restricting the search to geographical
+		// location types.
+		autocomplete = new google.maps.places.Autocomplete(
+			/** @type {!HTMLInputElement} */(angular.element('input#job_location').get(0)),
+			{types: ['geocode']});
+			
+		autocomplete.addListener('place_changed', function(){
+			var place = this.getPlace();
+			
+			console.log('Place',place);
+			
+			$scope.search = {};
+			
+			$scope.search.location = place.formatted_address;
+			
+			$scope.search.place_id = place.place_id;
+			
+			console.log('Place Search',$scope.search);
+			
+		});
+	});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name jpApp.controller:UserCtrl
+ * @description
+ * # UserCtrl
+ * Controller of the jpApp
+ */
+angular.module('jpApp')
+	.controller('UserCtrl', function ($scope,$rootScope,modal,elements,validation,auth,form) {
+		
+    	$scope.signIn	=	function(){
+			var modalType	=	'small',
+				modalTitle	=	'Login',
+				modalBody	=	form.login(),
+				modalFooter	=	elements.button({	type	:	'submit',	cls:	'btn-primary btn-lg btn-block',	ngClick	:	'login($event)'	},'Login');
+				
+			modal.modal(modalType,modalTitle,modalBody,modalFooter,$scope).then(function(result){
+				console.log(result);
+				
+			});
+		};
+		
+		$scope.login	=	function($event){
+			//add Spinner
+			$event.preventDefault();
+			
+			console.log($rootScope);
+			
+			var modalContent	=	angular.element($event.currentTarget).parents()[1],
+				form			=	angular.element(modalContent).find('form').serializeArray(),
+				formData		=	{
+					email		:	form[0].value,
+					password	: 	form[1].value
+				};
+				
+				validation.validate(form).then(function(result){
+					//remove spinner
+					angular.element('.spinner').remove();
+					
+					if(result.valid){
+						
+						//console.log('Root',$root);
+												
+						auth.authenticate(formData).then(function(result){
+							console.log('Authentication Result',result);
+						});
+						
+					}else{
+						console.log(result);
+					}	
+					
+				});
+		};
+		
+		$scope.closeModal	=	function(){
+			angular.element('#modal').modal('hide');
 		};
 	});
 

@@ -25,7 +25,8 @@ angular
 		$authProvider.loginUrl = '/api/login';
 		
 		$authProvider.linkedin({
-			clientId: '75835cv03xc5be'
+			clientId: '75835cv03xc5be',
+			url: '/api/auth/linkedin'
 		});
 		
 		//$urlRouterProvider.otherwise('/');
@@ -162,9 +163,39 @@ angular
 				controller	:	'AccountCtrl',
 				controllerAs: 	'Account',
 				resolve 	: {
-					accountData : function(accountDataService){
-						return accountDataService.then(function(result){
+					user : function(accountData,$rootScope){
+						
+						$rootScope.$location.title = $rootScope.$location.base;
+						
+						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
+						
+							angular.element('.progress').hide();
+						
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			})
+			.when('/myaccount/edit',{
+				template	:	function(d){
+					//console.log('Edit Profile',d);
+					return form.editProfile();
+				},
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					user : function(accountData,$rootScope){
+						
+						$rootScope.$location.title = $rootScope.$location.base;
+						
+						return accountData.getUserData().then(function(result){
+							console.log('Result',result);
+						
+							angular.element('.progress').hide();
+						
 							return result;
 						}).catch(function(error){
 							console.log('Error',error);

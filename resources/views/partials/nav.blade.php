@@ -1,4 +1,3 @@
-
 <div class="navbar-fixed">
 	<nav class="teal accent-3" role="navigation" ng-controller="AuthCtrl">
 		<div class="nav-wrapper container">

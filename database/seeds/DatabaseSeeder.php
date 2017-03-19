@@ -12,6 +12,11 @@ use App\Salary;
 use App\Location;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Goutte\Client;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 //use database\seeds\JobSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +30,12 @@ class DatabaseSeeder extends Seeder
 	var	$salary_types;
 	var $currencies;
 	var $users;
-	
+	var $http;
+	var $wordpress_url;
 	
 	function __construct(){
+		$this->guzzle = new GuzzleHttp\Client();
+		$this->wordpress_url = 'http://purplenimbus.net/jp/wp-json/wp/v2/';
 		$this->currencies	=	[
 			[
 				"name"		=>	"Naira",
@@ -109,48 +117,134 @@ class DatabaseSeeder extends Seeder
 			[
 				"fname"	=>	"Anthony",
 				"lname"	=>	"Akpan",
-				"email"	=>	"anthony.akpan@hotmail.com",
+				"email"	=>	"info@biosart.com.ng",
 				"sex"	=>	"M",
 				"dob"	=>	"2016-03-09",
-				"password"	=>	bcrypt("easier"),
+				"password"	=>	"easier",
 				"remember_token"	=>	str_random(10),
-				"access_level"	=>	'admin'
+				"access_level"	=>	"admin",
+				"username"	=>	"anthonyakpan"
 			],[
 				"fname"	=>	"Andem",
 				"lname"	=>	"Emmanuel",
-				"email"	=>	"andem.emmanuel@hotmail.com",
+				"email"	=>	"andem.ewa@gmail.com",
 				"sex"	=>	"M",
 				"dob"	=>	"2016-03-09",
-				"password"	=>	bcrypt("aemma"),
+				"password"	=>	"aewa",
 				"remember_token"	=>	str_random(10),
-				"access_level"	=>	'admin'
+				"access_level"	=>	"admin",
+				"username" => "andemewa"
 			]
 		];
 	}
 	
-    public function run()
-    {
-        // $this->call(UsersTableSeeder::class);
+	private function WP($type,$endpoint,$payload){
+		$url = $this->wordpress_url.$endpoint;
 		
-		/*
-			$user					=	new User;
-			$user->fname			=	'Anthony';
-			$user->lname			=	'Akpan';
-			$user->email			=	'anthony.akpan@hotmail.com';
-			$user->sex				=	'M';
-			$user->dob				=	'2016-03-09';
-			$user->password			=	bcrypt('easier');
-			$user->remember_token	=	str_random(10);
-			$user->access_level		=	'admin';
-		*/
-		foreach($this->users as $user){
+		$stack = $this->handler(env('CLIENT_KEY'),env('CLIENT_SECRET'),env('TOKEN_SECRET'),env('TOKEN'));
+
+		$options = array( 	
+							'form_params' => $payload ? $payload : null , 
+							'handler' => $stack, 
+							'auth' => 'oauth',
+							'exceptions ' =>  false
+						);
+				
+		$request = $this->guzzle->request($type,$url,$options)->send();
+				
+		return $request;
+	}
+	
+	private function handler($consumer_key,$consumer_secret,$token_secret,$token){
+		$handler = new CurlHandler();
+		
+		$stack = HandlerStack::create($handler);
+
+		$middleware = new Oauth1([
+			'consumer_key'    => $consumer_key,
+			'consumer_secret' => $consumer_secret,
+			'token_secret'    => $token_secret,
+			'token'           => $token,
+			'request_method' => Oauth1::REQUEST_METHOD_QUERY,
+			'signature_method' => Oauth1::SIGNATURE_METHOD_HMAC
+		]);
+		
+		$stack->push($middleware);
+		
+		return $stack;
+	}
+	
+    public function import($type){
+		switch($type){
+			case 'users' : $this->loadUsers($this->users); break;
+			case 'skills' : $this->loadSkills($this->users); break;
+		}
+	}
+	
+	private function loadUsers($users){
+		foreach($users as $user){
 			$new_user		=	new User;
+			
 			foreach($user as $key => $user_info){
-				$new_user[$key]	=	$user_info;
+				switch($key){
+					case 'password' : $new_user['password'] = bcrypt($user_info); break;
+					case 'username' : break;
+					default : $new_user[$key]	=	strtolower($user_info);
+				}
 			}
+			
+			$data = array(
+				'username'	 => $user['username'],
+				'first_name' => $user['fname'],
+				'last_name'	 => $user['lname'],
+				'email'		 => $user['email'],
+				'password'	 => $user['password'],
+				'roles'		 => 'administrator'
+			);
+						
+			//create WP user
+			$user_id = $this->WP('post','users',$data);
+			
+			//bind WP user id to laravel
+			echo $user_id->getBody();
+			
 			$new_user->save();
 		}
+	}
+	
+	private function loadSkills(){
+		//get WP Tags
+		$wp_tags = $this->WP('GET','tags',false);
 		
+		var_dump($wp_tags->getBody());
+		/*
+		foreach($wp_tags as $skill){
+			$job_skills		=	new Job_Skill;
+			$job_skills->tag	=	strtolower($skill->);
+			
+			$data = array(
+				'name'	 => strtolower($skill),
+			);
+						
+			
+			
+			//bind WP user id to laravel
+			echo $user_id->getBody();
+			
+			if($user_id){
+				$job_skills->save();
+			}
+			
+		}
+		*/
+	}
+	public function run()
+    {
+        // $this->call(UsersTableSeeder::class);
+		//$this->import('users');
+		$this->import('skills');
+		
+		/*
 		//Populate Company Categories
 		foreach($this->company_cats as $cat){
 			$company_category		=	new Company_Category;
@@ -203,6 +297,7 @@ class DatabaseSeeder extends Seeder
             });
 		//Call Job Seeder
 		//$this->call(JobSeeder::class);
+		*/
 
     }
 	

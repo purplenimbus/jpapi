@@ -18,6 +18,14 @@ angular.module('jpApp')
 		
 		//var vm = this;
 		
+		angular.element('.button-collapse').sideNav({
+			  menuWidth: 300, // Default is 300
+			  edge: 'right', // Choose the horizontal origin
+			  closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+			  draggable: true // Choose whether you can drag to open on touch screens
+			}
+		);
+		
         $scope.login = function($event) {
 			
 			//$event.preventDefault();
@@ -62,7 +70,7 @@ angular.module('jpApp')
         };
 		
 		$scope.signIn	=	function(){
-			var modalType	=	'bottom-sheet',
+			var modalType	=	'',
 				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
@@ -80,12 +88,15 @@ angular.module('jpApp')
 		
 		$scope.logout = function() {
 			$auth.logout();
+			
+			$location.path("/");
 		};
 		
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('close');
 		};
 		
+		//Activate account dropdown
 		angular.element('.dropdown-button').dropdown({
 		  inDuration: 300,
 		  outDuration: 225,
@@ -96,4 +107,5 @@ angular.module('jpApp')
 		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
 		  stopPropagation: false // Stops event propagation
 		});
+	
 	});

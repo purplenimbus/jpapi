@@ -24,7 +24,7 @@ angular.module('jpApp')
 			icon : 'attach_file',
 			color : 'blue'
 		}
-	], self = this;
+	], elementsFactory = this;
     return {
 		/**
 		 * Returns a row HTML element
@@ -388,6 +388,57 @@ angular.module('jpApp')
 				});
 				
 				return bloodhound;
+			},
+			experience : function(){
+				var str	=	'',self = this;
+								
+				str += 	'<div class="row">';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Job Title' , name:'job_title' , cls:'typeahead', model : 'exp.job_title' });
+				//str += 		'</div>';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Company' , name:'company' , cls:'typeahead', model : 'exp.company' });
+				//str += 		'</div>';
+				//str += 		'<div class="col s12 m4">';
+				str += 			self.input({ type:'text' ,colSize: 12, cls:'autocomplete', label : 'Location' , name : 'job_location', model : 'exp.location' });
+				//str += 		'</div>';
+				str += 	'</div>';
+				str += 	'<div class="row">';
+				str += 		self.textarea({ type:'text' ,colSize: 12, cls:'', label : 'Description' , name : 'description', model : 'exp.description' });
+				str += 	'</div>';
+				
+				return str;
+			},
+			education : function(){
+				var str	=	'',self = this;
+								
+				str += '<div class="row">';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'School' , name:'school' , cls:'typeahead', model : 'exp.school' });
+				str += 		'</div>';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Degree' , name:'degree' , cls:'typeahead', model : 'exp.degree' });
+				str += 		'</div>';
+				str += '</div>';
+				str += '<div class="row">';
+				str += 		'<div class="col s12 m6">';
+				str += 		self.input({ type: 'text' , colSize: 12 , label:'Field' , name:'field' , cls:'typeahead', model : 'exp.field' });
+				str += 		'</div>';
+				str += 		'<div class="col s12 m6">';
+				str += 			self.input({ type: 'text' , colSize: 12 , label:'Location' , name:'location' , cls:'typeahead', model : 'exp.location' });
+				str += 		'</div>';
+				str += '</div>';
+				str += '<div class="row">';
+				str += 		'<div class="col m6 s12">';
+				str += 			self.date({	colSize: 12 , label:'Start Date' , name:'start' , cls:'', model : 'exp.dates.start' });
+				str += 		'</div>';
+				str += 		'<div class="col m6 s12">';
+				str += 			self.date({ colSize: 12 , label:'End Date' , name:'end' , cls:'', model : 'exp.dates.end' });
+				str += 		'</div>';
+				str += '</div>';
+				
+				
+				return str;
 			}
 		},
 		/**
@@ -395,12 +446,17 @@ angular.module('jpApp')
 		 * @param {String} type - The type of icon based on https://material.io/icons/
 		 * @returns {String}
 		 */
-		glyph	:	function(type){
+		glyph	:	function(type,cls){
 			var str	=	'';
 			
-			str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+			//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+			str	+=	'<i class="material-icons ';
+			str	+=	cls ? cls+'">' : '">';
+			str	+=	type;
+			str	+=	'</i>';
 
 			return str;
-		}
+		},
+		
     };
   });

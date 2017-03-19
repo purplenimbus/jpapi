@@ -46,6 +46,7 @@ class AuthenticateController extends Controller
 	
 	/**
      * Login with LinkedIn.
+     * @params Request
      */
     public function linkedin(Request $request)
     {
@@ -82,7 +83,8 @@ class AuthenticateController extends Controller
             $payload = (array) JWT::decode($token, Config::get('app.token_secret'), array('HS256'));
             $user = User::find($payload['sub']);
             $user->linkedin = $profile['id'];
-            $user->displayName = $user->displayName ?: $profile['firstName'] . ' ' . $profile['lastName'];
+            $user->fname = $user->fname ?: $profile['firstName'];
+            $user->lname = $user->lname ?: $profile['lastName'];
             $user->save();
             return response()->json(['token' => $this->createToken($user)]);
         }
@@ -96,9 +98,30 @@ class AuthenticateController extends Controller
             }
             $user = new User;
             $user->linkedin = $profile['id'];
-            $user->displayName =  $profile['firstName'] . ' ' . $profile['lastName'];
+            $user->fname =  $profile['firstName'];
+            $user->lname =  $profile['lastName'];
             $user->save();
             return response()->json(['token' => $this->createToken($user)]);
         }
     }
+	
+	/**
+     * Return Account Info
+     * @params Request
+     */
+	public function get_user(){
+		$user = Auth::user();
+		
+		if($user){
+			return $user;
+		}else{
+			return false;
+		}
+	}
+	/**
+     * Oauth1.0 Callback function for WP Rest Api
+     */
+	public function oauthcallback(){
+		return true;
+	}
 }

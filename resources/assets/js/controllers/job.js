@@ -12,6 +12,7 @@ angular.module('jpApp')
 	{
 		
 		var JobCtrl = this;
+		
 		$rootScope.$location.title = '';
 		
 		var autocomplete;
@@ -22,12 +23,17 @@ angular.module('jpApp')
 		
 		$scope.currentAsset = JobCtrl.currentAsset = jobData;
 		
-		JobCtrl.cache = JobCtrl.currentAsset;
-		JobCtrl.currentAsset.pay = {};
+		JobCtrl.cache = JobCtrl.currentAsset;//Make a copy of the currentAsset
+		
+		JobCtrl.currentAsset.pay = {}; //Initalize pay object
+		
 		console.log('Got a job',JobCtrl.currentAsset);
+		
+		//Parse Date for HTML 5 date element
 		JobCtrl.currentAsset.application_deadline ? 
 			JobCtrl.currentAsset.application_deadline = new Date(JobCtrl.currentAsset.application_deadline)
 			: null;
+			
 		$rootScope.$location.title = JobCtrl.currentAsset.title;
 		
 		JobCtrl.jobOptions = function(options) {
@@ -39,7 +45,9 @@ angular.module('jpApp')
 				break;
 			}
 		};
-		
+		/**
+		 * Update Job
+		 */
 		$scope.updateJob = function(){			
 			
 			console.log('Scope Data',JobCtrl.currentAsset);
@@ -83,11 +91,12 @@ angular.module('jpApp')
 			jobs.sendData('jobs',$route.current.params.jobId,JobCtrl.data).then(function(result){
 				console.log('Got a Response',result);
 				JobCtrl.reset();
-				////$scope.currentAsset = result.data;
 			});
 			
 		}
-		
+		/**
+		 * Reset Page
+		 */
 		JobCtrl.reset = function(){
 			console.log('Edit Cancelled');
 			angular.element('#modal').modal('close');
@@ -97,6 +106,9 @@ angular.module('jpApp')
 			$route.reload();
 		}
 		
+		/**
+		 * Edit Job
+		 */
 		$scope.edit = function(){
 			var modalType	=	'bottom-sheet',
 				modalTitle	=	'',
@@ -266,5 +278,18 @@ angular.module('jpApp')
 				
 			});
 		}
-		
+		/**
+		 * Apply to Job
+		 * @param {integer} id  - The name of the PUT/POST endpoint
+		 */
+		$scope.apply	=	function(id){
+			console.log('Job Id',id);
+			jobs.sendData('jobs',id+'/apply').then(function(result){
+				console.log('Application Result',result);
+				JobCtrl.reset();
+			}).catch(function(error){
+				console.log('Application Error',error);
+				//TO DO  DO something
+			});
+		}
 	});
