@@ -67,6 +67,7 @@ class DatabaseSeeder extends Seeder
 									'Miscellaneous','Consumer','Non-Durables','Public Utilities','Consumer Services',
 									'Technology','Energy','Transportation'
 								];
+								
 		$this->job_levels	=	['Entry','Junior','Intermediate','Senior','Management','Senior Management'];
 		
 		$this->job_cats		=	[	'Uncategorized','Accounting','General Business',
@@ -138,7 +139,7 @@ class DatabaseSeeder extends Seeder
 		];
 	}
 	
-	private function WP($type,$endpoint,$payload){
+	public function WP($type,$endpoint,$payload){
 		$url = $this->wordpress_url.$endpoint;
 		
 		$stack = $this->handler(env('CLIENT_KEY'),env('CLIENT_SECRET'),env('TOKEN_SECRET'),env('TOKEN'));
@@ -176,12 +177,13 @@ class DatabaseSeeder extends Seeder
 	
     public function import($type){
 		switch($type){
-			case 'users' : $this->loadUsers(); break;
+			case 'users' : $this->loadUsers($this->users); break;
 			case 'skills' : $this->loadSkills(); break;
 			case 'job_categories' : $this->loadJobCategories(); break;
 			case 'job_types' : $this->loadJobTypes(); break;
 			case 'job_levels' : $this->loadJobLevels(); break;
 			case 'salary_types' : $this->loadSalaryTypes(); break;
+			case 'companies' : $this->getCompanies(); break;
 			default : $this->getJobs(); break;
 		}
 	}
@@ -208,10 +210,7 @@ class DatabaseSeeder extends Seeder
 			);
 						
 			//create WP user
-			$user_id = $this->WP('post','users',$data);
-			
-			//bind WP user id to laravel
-			echo $user_id->getBody();
+			//$user_id = $this->WP('post','users',$data);
 			
 			$new_user->save();
 		}
@@ -345,41 +344,142 @@ class DatabaseSeeder extends Seeder
 					
 		if($response->getStatusCode() == 200){
 			foreach($wp_jobs as $wp_job){
-								
-				$job = new Job;
-				$job->title = $wp_job->title ? $wp_job->title->rendered : null;
-				$job->description = $wp_job->content ? $wp_job->content->rendered : null;
-				$job->skills = $wp_job->tags ? implode(',',$wp_job->tags) : null;
-				$job->job_type_id = $wp_job->job_types ? implode(',',$wp_job->job_types) : null;
-				$job->job_level_id = $wp_job->job_levels ? implode(',',$wp_job->job_levels) : null;
-				$job->job_category_id = $wp_job->categories ? implode(',',$wp_job->categories) : null;
-				$job->job_salary_id = $wp_job->salary_types ? implode(',',$wp_job->salary_types) : null;
-				/*$job->application_deadline = $wp_job->application_deadline ? $wp_job->application_deadline : null;
-				$job->job_ref_id = $wp_job->job_ref_id ? $wp_job->job_ref_id : null;
-				$job->ref_url = $wp_job->ref_url ? $wp_job->ref_url : null;
-				$job->ref_date = $wp_job->ref_date ? $wp_job->ref_date : null;
-				$job->min_experience = $wp_job->min_experience ? $wp_job->min_experience : null;
-				$job->min_qualifications = $wp_job->min_qualifications ? $wp_job->min_qualifications : null;*/
-				$job->status = strtolower($wp_job->status) == 'publish' ? true : false;
-				$job->wp_id	=	$wp_job->id;
 				
-				$job->save();
-				
-				echo $wp_job->title->rendered."\r\n";;
+				if(strtolower($wp_job->status) == 'publish'){
+					$job = new Job;
+					$job->title = $wp_job->title ? $wp_job->title->rendered : null;
+					$job->description = $wp_job->content ? $wp_job->content->rendered : null;
+					
+					isset($wp_job->tags) ?
+						$job->skills =  implode(',',$wp_job->tags) 
+					: null;
+					
+					isset($wp_job->job_types) ? 
+						$job->job_type_id = implode(',',$wp_job->job_types) 
+					: null;
+					
+					isset($wp_job->job_levels) ?
+						$job->job_level_id =  implode(',',$wp_job->job_levels) 
+					: null;
+					
+					$wp_job->categories ?
+						$job->job_category_id = implode(',',$wp_job->categories) 
+					: null;
+					
+					$wp_job->salary_types ?
+						$job->job_salary_id =  implode(',',$wp_job->salary_types) 
+					: null;
+					
+					isset($wp_job->meta->application_deadline[0]) ?
+						$job->application_deadline =  $wp_job->meta->application_deadline[0] 
+					: null;
+					
+					isset($wp_job->meta->job_ref_id[0]) ? 
+						$job->job_ref_id = $wp_job->meta->job_ref_id 
+					: null;
+					
+					isset($wp_job->meta->ref_url[0]) ?
+						$job->ref_url = $wp_job->meta->ref_url 
+					: null;
+					
+					isset($wp_job->meta->ref_date[0]) ?
+						$job->ref_date =  $wp_job->meta->ref_date 
+					: null;
+					
+					isset($wp_job->meta->min_experience[0]) ?
+						$job->min_experience =  $wp_job->meta->min_experience[0] 
+					: null;
+					
+					isset($wp_job->meta->min_qualification[0]) ? 
+						$job->min_qualification = $wp_job->meta->min_qualificationn 
+					: null;
+					
+					isset($wp_job->meta->salary[0]) ? 
+						$job->salary = $wp_job->meta->salary 
+					: null;
+					
+					isset($wp_job->meta->location_id[0]) ? 
+						$job->job_location_id = $wp_job->meta->location_id 
+					: null;
+					
+					$job->status = true;
+					
+					$job->wp_id	=	$wp_job->id;
+					
+					$job->save();
+					
+					echo $wp_job->title->rendered."\r\n";;
+				}
+			}
+		}
+	}
+	
+	private function getCompanies(){
+		echo 'Companies'."\r\n";
+		
+		$response = $this->WP('GET','companies',false);
+		
+		$wp_companies = json_decode((string)$response->getBody());
+						
+		if($response->getStatusCode() == 200){
+			foreach($wp_companies as $wp_company){
+				if(strtolower($wp_company->status) == 'publish'){
+					$company		=	new Company;
+					
+					isset($wp_company->title->rendered) ?
+						$company->name	=	strtolower($wp_company->title->rendered)
+					: null;
+					
+					isset($wp_company->content->rendered) ?
+						$company->description	=	$wp_company->content->rendered
+					: null;
+					
+					isset($wp_company->categories)?
+						$company->company_category_id	=	implode(',',$wp_company->categories)
+					: null;
+					
+					isset($wp_company->meta->address[0])?
+						$company->address	=	$wp_company->meta->address[0]
+					: null;
+					
+					isset($wp_company->meta->location_id[0])?
+						$company->company_location_id	=	$wp_company->meta->location_id[0]
+					: null;
+					
+					isset($wp_company->meta->email[0])?
+						$company->email	=	$wp_company->meta->email[0]
+					: null;
+					
+					isset($wp_company->meta->phone[0])?
+						$company->phone	=	$wp_company->meta->phone[0]
+					: null;
+					
+					isset($wp_company->meta->logo_url[0])?
+						$company->logo	=	$wp_company->meta->logo_url[0]
+					: null;
+					
+					$company->status	=	true;
+					
+					$company->wp_id	=	$wp_company->id;
+					
+					$company->save();
+					
+					echo 'id: '.$company->id.', name : '.$company->name."\r\n";
+				}
 			}
 		}
 	}
 	
 	public function run()
     {
-		//$this->import('users');
+		$this->import('users');
 		$this->import('skills');
 		$this->import('job_categories');
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
 		$this->import('jobs');
-
+		$this->import('companies');
     }
 	
 }

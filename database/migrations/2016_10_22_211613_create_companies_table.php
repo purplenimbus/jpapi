@@ -25,6 +25,7 @@ class CreateCompaniesTable extends Migration
 			$table->string('address')->nullable();
 			$table->string('zipcode',10)->nullable();
 			$table->boolean('status')->default(false);
+			$table->integer('wp_id')->unique()->nullable();
             $table->timestamps();
         });
     }

@@ -12,11 +12,11 @@ class Company extends Model
      * @var array
      */
     protected $fillable = [
-        'name','description','address','zipcode','location_id','email','phone','logo','company_category_id'
+        'name','description','address','zipcode','company_location_id','email','phone','logo','company_category_id','wp_id'
     ];
 	
 	protected $visible = [
-        'id','name','description','address','zipcode','location_id','email','phone','logo','company_category','jobs'
+        'id','name','description','address','zipcode','company_location_id','email','phone','logo','company_category','jobs','location'
     ];
 	
 	//Get all jobs from this company

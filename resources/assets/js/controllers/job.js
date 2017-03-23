@@ -56,17 +56,19 @@ angular.module('jpApp')
 				id : JobCtrl.currentAsset.id,
 				title : JobCtrl.currentAsset.title,
 				description : JobCtrl.currentAsset.description,
-				company_id : JobCtrl.currentAsset.company.id,
+				//company_id : JobCtrl.currentAsset.company ? JobCtrl.currentAsset.company.id : null,
 				job_category_id : JobCtrl.currentAsset.job_category.id,
 				job_type_id : JobCtrl.currentAsset.job_type.id,
 				job_level_id : JobCtrl.currentAsset.job_level.id,
-				//job_salary_id : $scope.currentAsset.salary_type.id,
-				application_deadline : JobCtrl.currentAsset.application_deadline,
+				job_salary_id : $scope.currentAsset.salary_type ? $scope.currentAsset.salary_type.id : null,
+				application_deadline : JobCtrl.currentAsset.application_deadline ? JobCtrl.currentAsset.application_deadline : null,
 				salary : JobCtrl.currentAsset.salary,
 				status : JobCtrl.currentAsset.status,
 				min_experience : JobCtrl.currentAsset.min_experience,
 				min_qualification : JobCtrl.currentAsset.min_qualification.name,
 			}
+			
+			JobCtrl.currentAsset.location = {}; //Temp work around for testing
 			
 			if(JobCtrl.currentAsset.location.searched){
 				JobCtrl.data.location = {

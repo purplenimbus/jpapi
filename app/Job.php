@@ -53,7 +53,8 @@ class Job extends Model
 		'location',
 		'job_location_id',
 		'updated_at',
-		'user_applied'
+		'user_applied',
+		'job_skills'
     ];
 	
 	//Bind Job to Company
@@ -66,18 +67,18 @@ class Job extends Model
 	}
 	//Bind Job to Job Category
 	public function job_category(){
-		return $this->belongsTo('App\Job_Category');
+		return $this->belongsTo('App\Job_Category','job_category_id','wp_id');
 	}
 	//Bind Job to Job Type
 	public function job_type(){
-		return $this->belongsTo('App\Job_Type');
+		return $this->belongsTo('App\Job_Type','job_type_id','wp_id');
 	}
 	//Bind Job to Job Level
 	public function job_level(){
-		return $this->belongsTo('App\Job_Level');
+		return $this->belongsTo('App\Job_Level','job_level_id','wp_id');
 	}
-	//Bind Job to Salary
-	public function job_salary(){
-		return $this->belongsTo('App\Salary','job_salary_id','id');
+	//Bind Job to SKills
+	public function job_skills(){
+		return $this->belongsTo('App\Job_Skill','job_salary_id','wp_id');
 	}
 }

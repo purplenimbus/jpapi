@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 
 use App\Http\Requests;
 use	App\Job;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use DatabaseSeeder as Seeder;
+use Illuminate\Http\Response;
 
 class JobController extends Controller
 {
@@ -26,8 +29,10 @@ class JobController extends Controller
 	var $job_skills;
 	var $salary_types;
 	var $min_qualifications;
+	var $seeder;
 	
     function __construct(){
+		$this->seeder = New Seeder;
 		$this->job_types = Job_Type::all();
 		$this->job_levels = Job_Level::all();
 		$this->job_cats = Job_Category::all();
@@ -66,13 +71,18 @@ class JobController extends Controller
     {		
 		$jobs	=	Job::all();
 		
-		foreach($jobs as $job){
-			$job['company'] = $job->company->name;
-			$job['location'] = isset($job->location->name) ? $job->location->name : '';
-			$job['job_type'] = $job->job_type->name;
-		}
+		if($jobs):
+			foreach($jobs as $job){
+				$job['company'] = isset($job->company->name) ? $job->company->name : '';
+				$job['location'] = isset($job->location->name) ? $job->location->name : '';
+				$job['job_type'] = isset($job->job_type->name) ? $job->job_type->name : '';
+			}
 
 		return $jobs->toJson();
+		
+		else:
+			return response()->json(['message' => 'no jobs found'],401);
+		endif;
     }
 
     /**
@@ -96,23 +106,28 @@ class JobController extends Controller
     {
 		//var_dump($id);
 		
-        $job	=	Job::findorfail($id);
+        $job	=	Job::find($id);
 		
 		$application = Application::where('job_id',$id)->first();
 		
 		//$user = AuthenticateController->get_user();
 		
 		//var_dump(Auth);
-		
-		$job['company']			= $job->company->name;
-		$job['job_category'] 	= $job->job_category->name;
-		$job['job_type'] 		= $job->job_type->name;
-		$job['job_level'] 		= $job->job_level->name;
-		$job['job_salary'] 		= $job->job_salary->name;
-		$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
-		$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
+		if($job):
+			$job['company']			= isset($job->company->name) ? $job->company->name : '';
+			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : '';
+			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : '';
+			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : '';
+			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : '';
+			$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
+			$job['job_skills'] 			= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+			$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
+			
 				
-		return $job->toJson();
+			return $job->toJson();
+		else:
+			return response()->json(['message' => 'no job found with the id '.$id],401);
+		endif;
     }
 
     /**
@@ -128,53 +143,95 @@ class JobController extends Controller
 		
 		$requests	=	$request->all();
 		
+		$data = array();
 		//var_dump($requests);
 		
-		foreach($requests as $key => $req){
-			if($request->has($key)){
-				if($key == 'location'){
-					//var_dump($request->input($key));
-					$location = Location::where('ref_id', $request->input($key.'.ref_id'))->first();
-										
-					if(isset($location->id)){
-						$job->job_location_id = $location->id;
-						//update location 
+		if($job):
+			foreach($requests as $key => $req){
+				if($request->has($key)){
+					if($key == 'location'){
+						//var_dump($request->input($key));
+						$location = Location::where('ref_id', $request->input($key.'.ref_id'))->first();
+											
+						if(isset($location->id)){
+							$job->job_location_id = $location->id;
+							//update location 
+						}else{
+							//create new location
+							$new_location = new Location;
+							
+							$new_location->name = $request->input($key.'.name');
+							$new_location->locality = $request->input($key.'.locality');
+							$new_location->city = $request->input($key.'.city');
+							$new_location->city_code = $request->input($key.'.city_code');
+							$new_location->state = $request->input($key.'.state');
+							$new_location->state_code = $request->input($key.'.state_code');
+							$new_location->country = $request->input($key.'.country');
+							$new_location->country_code = $request->input($key.'.country_code');
+							$new_location->zip_code = $request->input($key.'.zip_code');
+							$new_location->lng = $request->input($key.'.lat');
+							$new_location->lat = $request->input($key.'.lng');
+							$new_location->ref_id = $request->input($key.'.ref_id');
+							$new_location->url = $request->input($key.'.url');
+							
+							$new_location->save();
+							//set job location id
+							$job->job_location_id = $new_location->id;
+						}
 					}else{
-						//create new location
-						$new_location = new Location;
-						
-						$new_location->name = $request->input($key.'.name');
-						$new_location->locality = $request->input($key.'.locality');
-						$new_location->city = $request->input($key.'.city');
-						$new_location->city_code = $request->input($key.'.city_code');
-						$new_location->state = $request->input($key.'.state');
-						$new_location->state_code = $request->input($key.'.state_code');
-						$new_location->country = $request->input($key.'.country');
-						$new_location->country_code = $request->input($key.'.country_code');
-						$new_location->zip_code = $request->input($key.'.zip_code');
-						$new_location->lng = $request->input($key.'.lat');
-						$new_location->lat = $request->input($key.'.lng');
-						$new_location->ref_id = $request->input($key.'.ref_id');
-						$new_location->url = $request->input($key.'.url');
-						
-						$new_location->save();
-						//set job location id
-						$job->job_location_id = $new_location->id;
+						$job[$key]	=  $request->input($key);
+						$data[$this->api_mapping($key)] =  $request->input($key);
 					}
-				}else{
-					$job[$key]	=  $request->input($key);
+					
+					//echo $request->input($key);
 				}
-				
-				//echo $request->input($key);
 			}
-		}
+			
+			var_dump($data);
+			
+			//Save to Wordpress
+			$response = $this->seeder->WP('POST','jobs/'.$job->wp_id,$data);
 		
-		$job->save();
+			if($response->getStatusCode() == 200){
+				$job->save();
+			}
+			
+			$payload = json_encode($requests);
+			
+			return response()->json(['id'	=>	$job->id],200);
+		else:
+			response()->json([
+				'message' => 'no job found with id '.$id,
+			],404);
+		endif;
 		
-		$payload = json_encode($requests);
-				
-		return json_encode((object)['id'	=>	$job->id , 'payload'	=>	$payload ]);		
+		
+		//$data['']
+		/*
+		$data = array(
+			'title' => $request->input('title'),
+			'content' => $request->input('description'),
+			'categories' => array($request->input('job_category_id'))
+		);*/
+		
+		
     }
+	
+	/**
+     * Map Laravel columns to Wordpress
+     *
+     * @param  string  $key
+     * @return string $mapping
+     */
+	 
+	public function api_mapping($key){
+		switch($key){
+			case 'description' : return 'content'; break;
+			case 'job_salary_id' : return 'categories'; break;
+			case 'skills' : return 'tags'; break;
+			default : return $key;
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -289,6 +346,6 @@ class JobController extends Controller
 		
 		$application->save();
 		
-		return $application->id;
+		return response()->json(['id'	=>	$application->id ],200);
 	}
 }

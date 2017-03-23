@@ -21,9 +21,10 @@ class Job_Skill extends Model
      * @var array
      */
 	protected $visible = [
-        'id','tag','description'
+        'id','tag','description','wp_id'
     ];
 	
+	protected $primaryKey = 'wp_id';
 	/**
      * Get users that match a certain skill 
      *

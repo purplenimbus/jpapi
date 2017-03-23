@@ -118,10 +118,4 @@ class AuthenticateController extends Controller
 			return false;
 		}
 	}
-	/**
-     * Oauth1.0 Callback function for WP Rest Api
-     */
-	public function oauthcallback(){
-		return true;
-	}
 }
