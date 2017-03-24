@@ -190,9 +190,13 @@ class JobController extends Controller
 			var_dump($data);
 			
 			//Save to Wordpress
-			$response = $this->seeder->WP('POST','jobs/'.$job->wp_id,$data);
+			if($requests->has('wp_api') && $requests->input('wp_api')){
+				$response = $this->seeder->WP('POST','jobs/'.$job->wp_id,$data);
 		
-			if($response->getStatusCode() == 200){
+				if($response->getStatusCode() == 200){
+					$job->save();
+				}
+			}else{
 				$job->save();
 			}
 			
