@@ -352,7 +352,6 @@ class DatabaseSeeder extends Seeder
 					$job->title = $wp_job->title ? $wp_job->title->rendered : null;
 					$job->description = $wp_job->content ? $wp_job->content->rendered : null;
 					
-					/*
 					isset($wp_job->tags) ?
 						$job->skills =  implode(',',$wp_job->tags) 
 					: null;
@@ -372,7 +371,6 @@ class DatabaseSeeder extends Seeder
 					$wp_job->salary_types ?
 						$job->job_salary_id =  implode(',',$wp_job->salary_types) 
 					: null;
-					*/
 					
 					isset($wp_job->meta->application_deadline[0]) ?
 						$job->application_deadline =  $wp_job->meta->application_deadline[0] 
@@ -482,7 +480,7 @@ class DatabaseSeeder extends Seeder
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
-		$this->import('jobs');
+		//$this->import('jobs');
 		$this->import('companies');
     }
 	
