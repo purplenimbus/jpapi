@@ -484,7 +484,7 @@ class DatabaseSeeder extends Seeder
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
-		//$this->import('jobs');
+		$this->import('jobs');
 		$this->import('companies');
     }
 	
