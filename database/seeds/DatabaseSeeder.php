@@ -349,7 +349,7 @@ class DatabaseSeeder extends Seeder
 		if($response->getStatusCode() == 200){
 			foreach($wp_jobs as $wp_job){
 				
-				var_dump($wp_job);
+				//var_dump($wp_job);
 				
 				if(strtolower($wp_job->status) == 'publish'){
 					$job = new Job;
@@ -381,15 +381,15 @@ class DatabaseSeeder extends Seeder
 					: null;
 					
 					isset($wp_job->meta->job_ref_id[0]) ? 
-						$job->job_ref_id = $wp_job->meta->job_ref_id 
+						$job->job_ref_id = $wp_job->meta->job_ref_id[0] 
 					: null;
 					
 					isset($wp_job->meta->ref_url[0]) ?
-						$job->ref_url = $wp_job->meta->ref_url 
+						$job->ref_url = $wp_job->meta->ref_url[0] 
 					: null;
 					
 					isset($wp_job->meta->ref_date[0]) ?
-						$job->ref_date =  $wp_job->meta->ref_date 
+						$job->ref_date =  $wp_job->meta->ref_date[0] 
 					: null;
 					
 					isset($wp_job->meta->min_experience[0]) ?
@@ -397,15 +397,15 @@ class DatabaseSeeder extends Seeder
 					: null;
 					
 					isset($wp_job->meta->min_qualification[0]) ? 
-						$job->min_qualification = $wp_job->meta->min_qualificationn 
+						$job->min_qualification = $wp_job->meta->min_qualification[0] 
 					: null;
 					
 					isset($wp_job->meta->salary[0]) ? 
-						$job->salary = $wp_job->meta->salary 
+						$job->salary = $wp_job->meta->salary[0]
 					: null;
 					
 					isset($wp_job->meta->location_id[0]) ? 
-						$job->job_location_id = $wp_job->meta->location_id 
+						$job->job_location_id = $wp_job->meta->location_id[0]
 					: null;
 					
 					$job->status = true;
