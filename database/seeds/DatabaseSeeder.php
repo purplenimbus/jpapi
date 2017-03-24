@@ -341,16 +341,12 @@ class DatabaseSeeder extends Seeder
 		echo 'Get Jobs'."\r\n";
 		
 		$response = $this->WP('GET','jobs',false);
-		
-		echo 'Status '.$response->getStatusCode()."\r\n";
-		
+				
 		$wp_jobs = json_decode((string)$response->getBody());
 					
 		if($response->getStatusCode() == 200){
 			foreach($wp_jobs as $wp_job){
-				
-				//var_dump($wp_job);
-				
+								
 				if(strtolower($wp_job->status) == 'publish'){
 					$job = new Job;
 					$job->title = $wp_job->title ? $wp_job->title->rendered : null;
