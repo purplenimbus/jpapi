@@ -358,10 +358,10 @@ class JobController extends Controller
     public function get_jp_job_id($wp_id)
     {
         //
-		$job = Job::where('wp_id',$wp_id);
+		$job = Job::where('wp_id',$wp_id)->get(['id']);
 		
 		if($job){
-			return response()->json(['id'=>$job->id],200);
+			return response()->json($job,200);
 		}else{
 			return response()->json(['message'=>'job not found with wp id '.$wp_id],404);
 		}
