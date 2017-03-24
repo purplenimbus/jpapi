@@ -50,18 +50,18 @@
 			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 		</div>
 	</section>
-	<section class="row skills lighten-3 thick" ng-show="currentAsset.required_skills.length > 1">
+	<section class="row skills lighten-3 thick" ng-if="currentAsset.job_skills.length >= 1">
 		<div class="container">
 			<h6 class="center">Required Skills</h6>
 			<div class="skills">
-				<div class="chip" ng-repeat="skill in currentAsset.required_skills">{{ skill.tag }}</div>
+				<div class="chip" ng-repeat="skill in currentAsset.job_skills">{{ skill.tag }}</div>
 			</div>
 		</div>
 	</section>
 	<section class="row company thick">
 		<div class="container">
 			<h6 class="center">About {{ currentAsset.company.name }}</h6>
-			{{ currentAsset.company.description }}
+			<div ng-bind-html="currentAsset.company.description">{{ currentAsset.company.description }}</div>
 		</div>
 	</section>	
 	<section class="row company thick" ng-if="currentAsset.location.url">

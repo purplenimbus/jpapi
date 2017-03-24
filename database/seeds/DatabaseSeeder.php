@@ -454,8 +454,8 @@ class DatabaseSeeder extends Seeder
 						$company->phone	=	$wp_company->meta->phone[0]
 					: null;
 					
-					isset($wp_company->meta->logo_url[0])?
-						$company->logo	=	$wp_company->meta->logo_url[0]
+					isset($wp_company->meta->logo_url)?
+						$company->logo	=	$wp_company->meta->logo_url
 					: null;
 					
 					$company->status	=	true;

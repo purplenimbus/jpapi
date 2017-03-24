@@ -348,4 +348,22 @@ class JobController extends Controller
 		
 		return response()->json(['id'	=>	$application->id ],200);
 	}
+	
+	/**
+     * Store job updates from wordpress
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function get_jp_job_id($wp_id)
+    {
+        //
+		$job = Job::where('wp_id',$wp_id);
+		
+		if($job){
+			return response()->json(['id'=>$job->id],200);
+		}else{
+			return response()->json(['message'=>'job not found with wp id '.$wp_id],404);
+		}
+    }
 }

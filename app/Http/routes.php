@@ -34,6 +34,9 @@ Route::group(['prefix'	=>	'api'],function(){
 	Route::get('salary_types', 'JobController@salary_types');
 	Route::get('min_qualifications', 'JobController@min_qualifications');
 	
+	//Wordpress API
+	Route::post('jobs/wp/{wp_id}', 'JobController@get_jp_job_id');
+	
 	//TO DO Refactor or Remove
 	Route::resource('jobs', 'JobController', [
 		'only' 	=> ['index','show','update','store','job_types'],
