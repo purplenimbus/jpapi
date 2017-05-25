@@ -496,13 +496,13 @@ class DatabaseSeeder extends Seeder
 	public function run()
     {
 		$this->import('users');
-		/*$this->import('skills');
+		$this->import('skills');
 		$this->import('job_categories');
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
 		$this->import('jobs');
-		$this->import('companies');*/
+		$this->import('companies');
     }
 	
 }
