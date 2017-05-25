@@ -17,6 +17,8 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
+use MongoDB\Client as Mongo;
+use MongoDB\BSON\ObjectID as MongoID;
 //use database\seeds\JobSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,6 +34,7 @@ class DatabaseSeeder extends Seeder
 	var $users;
 	var $http;
 	var $wordpress_url;
+	var $mongo;
 	
 	function __construct(){
 		$this->guzzle = new GuzzleHttp\Client();
@@ -139,6 +142,8 @@ class DatabaseSeeder extends Seeder
 				"username" => "andemewa"
 			]
 		];
+		
+		$this->mongo = new Mongo();
 	}
 	
 	public function WP($type,$endpoint,$payload){
@@ -215,6 +220,21 @@ class DatabaseSeeder extends Seeder
 			//$user_id = $this->WP('post','users',$data);
 			
 			$new_user->save();
+			
+			$id = new MongoID();
+			
+			$data['_id'] 	 = $id;
+			
+			$data['user_id'] = $new_user->id;
+						
+			$db = $this->mongo->users->profiles;
+			
+			//Save User Details to mongo	
+			isset($db) ? $db->insertOne($data) : null;
+			
+			echo 'Mongo Saved!';
+			
+			echo 'ID: '.$id.( next($users) ? ' , ' : '' );
 		}
 	}
 	
@@ -475,13 +495,13 @@ class DatabaseSeeder extends Seeder
 	public function run()
     {
 		$this->import('users');
-		$this->import('skills');
+		/*$this->import('skills');
 		$this->import('job_categories');
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
 		$this->import('jobs');
-		$this->import('companies');
+		$this->import('companies');*/
     }
 	
 }

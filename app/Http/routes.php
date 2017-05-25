@@ -23,6 +23,8 @@ Route::group(['prefix'	=>	'api'],function(){
 	//Oauth
 	Route::post('auth/linkedin', 'AuthenticateController@linkedin');
 	Route::get('auth/callback',	'AuthenticateController@oauthcallback');
+	Route::get('profile/{id}',	'AuthenticateController@getProfile');
+	Route::post('profile/{id}',	'AuthenticateController@saveProfile');
 
 	
 	Route::get('joboptions', 'JobController@joboptions'); //Remove Possibly

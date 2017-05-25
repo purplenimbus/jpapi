@@ -77,7 +77,20 @@ return [
             'prefix' => '',
             'schema' => 'public',
         ],
-
+		
+		'mongodb' => [
+			'driver'   => 'mongodb',
+			'host'     => ['server1', 'server2'],
+			'port'     => env('DB_PORT', 27017),
+			'database' => env('MONGO_DB'),
+			'username' => env('MONGO_USERNAME'),
+			'password' => env('MONGO_PASSWORD'),
+			'options'  => [
+				'replicaSet' => 'cluster0-shard-00-00-am70o.mongodb.net:27017',
+				'replicaSet' => 'cluster0-shard-00-01-am70o.mongodb.net:27017',
+				'replicaSet' => 'cluster0-shard-00-02-am70o.mongodb.net:27017',
+			]
+		]
     ],
 
     /*

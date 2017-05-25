@@ -233,6 +233,7 @@ angular.module('jpApp')
 					JobCtrl.currentAsset.application_deadline = new Date(angular.element(e.currentTarget).val());
 				});
 				
+				
 				//Initalize Typeahead
 				angular.element('.typeahead').each(function(key,value){
 					

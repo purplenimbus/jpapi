@@ -12,16 +12,20 @@ use Auth;
 use GuzzleHttp;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Config;
+use MongoDB;
 
 class AuthenticateController extends Controller
 {
+	var $mongo;
 	
 	public function __construct()
 	{
 	   // Apply the jwt.auth middleware to all methods in this controller
 	   // except for the authenticate method. We don't want to prevent
 	   // the user from retrieving their token if they don't already have it
-	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin']]);
+	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin','getProfile']]);
+	   
+	   $this->mongo = new MongoDB\Client();
 	}
 	
 	public function authenticate(Request $request)
@@ -117,5 +121,31 @@ class AuthenticateController extends Controller
 		}else{
 			return false;
 		}
+	}
+	
+	/**
+     * get user profile details
+     * @params Request
+     */
+	public function getProfile($id){
+	
+		$db = $this->mongo->users;
+		
+		$db->users->find([ "user_id" => $id ]);
+		
+		if($db){
+			return $db;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+     * save user profile details
+     * @params Request
+     */
+	
+	public function saveProfile(Request $request){
+		
 	}
 }

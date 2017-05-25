@@ -10,7 +10,9 @@
 		"tymon/jwt-auth": "0.5.*",
         "fabpot/goutte": "^3.1",
 		"fzaninotto/faker": "~1.4",
-		"guzzlehttp/oauth-subscriber": "0.3.*"
+		"guzzlehttp/oauth-subscriber": "0.3.*",
+        "mongodb/mongodb": "^1.1",
+        "jenssegers/mongodb": "^3.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

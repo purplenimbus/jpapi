@@ -187,15 +187,18 @@ class JobController extends Controller
 				}
 			}
 			
-			var_dump($data);
+			var_dump($requests);
+			
+			//$requests = (object)$requests;
 			
 			//Save to Wordpress
-			if($requests->has('wp_api') && $requests->input('wp_api')){
+			if($request->has('wp_api') && $request->input('wp_api')){
 				$response = $this->seeder->WP('POST','jobs/'.$job->wp_id,$data);
 		
 				if($response->getStatusCode() == 200){
 					$job->save();
 				}
+				
 			}else{
 				$job->save();
 			}
