@@ -208,12 +208,13 @@ class DatabaseSeeder extends Seeder
 			}
 			
 			$data = array(
-				'username'	 => $user['username'],
+				/*'username'	 => $user['username'],
 				'first_name' => $user['fname'],
 				'last_name'	 => $user['lname'],
 				'email'		 => $user['email'],
 				'password'	 => $user['password'],
-				'roles'		 => 'administrator'
+				'roles'		 => 'administrator'*/
+				
 			);
 						
 			//create WP user
