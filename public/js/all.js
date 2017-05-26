@@ -257,39 +257,29 @@ angular
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user)
+	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user,accountData,auth)
 	{
 		
-		$scope.currentAsset = { user:user.data };//Initialize User data
+		//$scope.currentAsset = { /*user:user.data*/ };//Initialize User data
 		
-		var autocomplete;
+		this.user = JSON.parse(auth.getCookie('auth'));
+				
+		$scope.loading = true;
 		
-		angular.element('ul.tabs').tabs(); //Initialize Tabs
+		var AccountCtrl = this;
 		
-		$scope.currentAsset.experience = [{
-			job_title 	: 	'Web Developer',
-			location 	: 	'Vancouver, BC',
-			company 	: 	'XYZ Co',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		},{
-			job_title 	: 	'Web Manager',
-			location 	: 	'Burnaby, BC',
-			company 	: 	'ABC Co',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		}];
+		accountData.getUserData(this.user.id).then(function(result){
+			$scope.currentAsset = JSON.parse(result.data[0].resume);
+			
+			$scope.currentAsset.user = AccountCtrl.user;
+			
+			var autocomplete;
 		
-		$scope.currentAsset.education = [{
-			school	 	: 	'University of the Fraser Valley',
-			location 	: 	'Abbotsford, BC',
-			field 		: 	'Computer Information Systems',
-			degree 		: 	'Bsc',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		}];
+			angular.element('ul.tabs').tabs(); //Initialize Tabs
+			
+			$scope.loading = false;
 		
-		console.log('currentAsset',$scope.currentAsset);
+		});	
 		
 		/**
 		 * Edit User Profile
@@ -473,8 +463,18 @@ angular.module('jpApp')
 		/**
 		 * Save User Profile
 		 */
-		$scope.save = function(){
+		$scope.updateProfile = function(){
+			var self = this;
 			
+			console.log('updateProfile User',AccountCtrl.user);
+					
+			accountData.saveData(AccountCtrl.user.id,$scope.currentAsset).then(function(result){
+				console.log(result);
+				$scope.reset();
+			}).catch(function(error){
+				console.log(error);
+				//TO DO : DO Something if updating profile fails
+			});
 		}
 		
 		/**
@@ -579,6 +579,7 @@ angular.module('jpApp')
 						console.log('Logged in Auth',$auth.isAuthenticated());
 						console.log('Logged in token',$auth.getToken());
 						console.log('Logged in payload',$auth.getPayload());
+						auth.setCookie('auth',JSON.stringify(result.data.user),9);
 						$rootScope.user.info = result.data.user;
 						$scope.closeModal();
 					}).catch(function(error){
@@ -1337,23 +1338,24 @@ angular.module('jpApp')
 
 /**
  * @ngdoc function
- * @name jpApp.controller:accountData
+ * @name jpApp.service:accountData
  * @description
  * # JobsCtrl
- * Controller of the jpApp
+ * Service of the jpApp
  */
 angular.module('jpApp')
 	.service('accountData', function ($q,$http,jobs)
 	{
 		return {
-			getUserData : function(){
-				return $http.get('/api/myaccount');
+			user		: null,
+			getUserData : function(id){
+				return $http.get('/api/profile/'+id);
 			},
-			saveData 	:	function(){
-				return $http.post('/api/myaccount');
+			saveData 	:	function(id,data){
+				return $http.post('/api/profile/'+id,data);
 			},
 			getJobs		:	function(id){
-				return $http.get('/api/myaccount/{'+id+'}/jobs');
+				return $http.get('/api/profile/{'+id+'}/jobs');
 			}
 		};
 	});
@@ -1379,11 +1381,11 @@ angular.module('jpApp')
 				//console.log($http.post('/api/authenticate'));
 				
 				$http.post('/api/authenticate',object).then(	function(result){
-														console.log(result);
+														console.info('Auth Result',result);
 														deferred.resolve(result);
 													},
 													function(error){
-														console.log(error);
+														console.error('Auth Error',error);
 														deferred.resolve(error);
 													});
 				
@@ -2064,7 +2066,7 @@ angular.module('jpApp')
 			editProfile	:	function(){
 				var str	=	'';
 				
-				str += '<div class="col m6 s12">';
+				str += '<div class="col m12">';
 				str += '<div class="row">';
 				str += 		'<h4 class="left">Experience</h4>';
 				str += 		'<button ng-click="addExperience()" class="right btn-floating btn-small">'+elements.glyph('add','large')+'</button>';
@@ -2078,7 +2080,7 @@ angular.module('jpApp')
 				str += 		'</div>';
 				str += '</div>';
 				str += '</div>';
-				str += '<div class="col m6 s12">';
+				str += '<div class="col m12">';
 				str += '<div class="row">';
 				str += 		'<h4 class="left">Education</h4>';
 				str += 		'<button ng-click="addEducation()" class="right btn-floating">'+elements.glyph('add','large')+'</button>';

@@ -23,7 +23,7 @@ class AuthenticateController extends Controller
 	   // Apply the jwt.auth middleware to all methods in this controller
 	   // except for the authenticate method. We don't want to prevent
 	   // the user from retrieving their token if they don't already have it
-	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin','getProfile']]);
+	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin','getProfile','saveProfile']]);
 	   
 	   $this->mongo = new MongoDB\Client();
 	}
@@ -128,15 +128,13 @@ class AuthenticateController extends Controller
      * @params Request
      */
 	public function getProfile($id){
-	
-		$db = $this->mongo->users;
+				
+		$profile = $this->mongo->users->profiles->findOne([ 'user_id' => (int)$id ]);
 		
-		$db->users->find([ "user_id" => $id ]);
-		
-		if($db){
-			return $db;
+		if($profile){
+			return response()->json([$profile],200);
 		}else{
-			return false;
+			return response()->json(['message' => 'profile not found'],200);
 		}
 	}
 	
@@ -145,7 +143,26 @@ class AuthenticateController extends Controller
      * @params Request
      */
 	
-	public function saveProfile(Request $request){
-		
+	public function saveProfile($id,Request $request){
+				
+		//save to mongo
+		if($request){
+			
+			$data = $request->all();
+			
+			$data ? 
+				$profile = $this->mongo->users->profiles->updateOne(
+					['user_id' 	=> (int)$id],
+					['$set' 	=> ['resume' => json_encode($data) ] ]
+				)
+			: null;
+			
+			//return response
+			//if($profile){
+				return response()->json($data,200);
+			/*}else{
+				return response()->json(['message' => 'profile not found'],200);
+			}*/
+		}
 	}
 }

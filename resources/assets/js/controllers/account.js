@@ -8,39 +8,29 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user)
+	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user,accountData,auth)
 	{
 		
-		$scope.currentAsset = { user:user.data };//Initialize User data
+		//$scope.currentAsset = { /*user:user.data*/ };//Initialize User data
 		
-		var autocomplete;
+		this.user = JSON.parse(auth.getCookie('auth'));
+				
+		$scope.loading = true;
 		
-		angular.element('ul.tabs').tabs(); //Initialize Tabs
+		var AccountCtrl = this;
 		
-		$scope.currentAsset.experience = [{
-			job_title 	: 	'Web Developer',
-			location 	: 	'Vancouver, BC',
-			company 	: 	'XYZ Co',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		},{
-			job_title 	: 	'Web Manager',
-			location 	: 	'Burnaby, BC',
-			company 	: 	'ABC Co',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		}];
+		accountData.getUserData(this.user.id).then(function(result){
+			$scope.currentAsset = JSON.parse(result.data[0].resume);
+			
+			$scope.currentAsset.user = AccountCtrl.user;
+			
+			var autocomplete;
 		
-		$scope.currentAsset.education = [{
-			school	 	: 	'University of the Fraser Valley',
-			location 	: 	'Abbotsford, BC',
-			field 		: 	'Computer Information Systems',
-			degree 		: 	'Bsc',
-			dates		:	{	start : new Date() , end : new Date() },
-			description : 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu suscipit mi. Proin blandit sem ac consectetur maximus. Sed nisi quam, maximus a fermentum ac, pharetra eget justo. Quisque ut consequat lorem, pulvinar varius sapien.'
-		}];
+			angular.element('ul.tabs').tabs(); //Initialize Tabs
+			
+			$scope.loading = false;
 		
-		console.log('currentAsset',$scope.currentAsset);
+		});	
 		
 		/**
 		 * Edit User Profile
@@ -224,8 +214,18 @@ angular.module('jpApp')
 		/**
 		 * Save User Profile
 		 */
-		$scope.save = function(){
+		$scope.updateProfile = function(){
+			var self = this;
 			
+			console.log('updateProfile User',AccountCtrl.user);
+					
+			accountData.saveData(AccountCtrl.user.id,$scope.currentAsset).then(function(result){
+				console.log(result);
+				$scope.reset();
+			}).catch(function(error){
+				console.log(error);
+				//TO DO : DO Something if updating profile fails
+			});
 		}
 		
 		/**

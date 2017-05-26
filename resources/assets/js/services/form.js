@@ -143,7 +143,7 @@ angular.module('jpApp')
 			editProfile	:	function(){
 				var str	=	'';
 				
-				str += '<div class="col m6 s12">';
+				str += '<div class="col m12">';
 				str += '<div class="row">';
 				str += 		'<h4 class="left">Experience</h4>';
 				str += 		'<button ng-click="addExperience()" class="right btn-floating btn-small">'+elements.glyph('add','large')+'</button>';
@@ -157,7 +157,7 @@ angular.module('jpApp')
 				str += 		'</div>';
 				str += '</div>';
 				str += '</div>';
-				str += '<div class="col m6 s12">';
+				str += '<div class="col m12">';
 				str += '<div class="row">';
 				str += 		'<h4 class="left">Education</h4>';
 				str += 		'<button ng-click="addEducation()" class="right btn-floating">'+elements.glyph('add','large')+'</button>';

@@ -19,11 +19,11 @@ angular.module('jpApp')
 				//console.log($http.post('/api/authenticate'));
 				
 				$http.post('/api/authenticate',object).then(	function(result){
-														console.log(result);
+														console.info('Auth Result',result);
 														deferred.resolve(result);
 													},
 													function(error){
-														console.log(error);
+														console.error('Auth Error',error);
 														deferred.resolve(error);
 													});
 				

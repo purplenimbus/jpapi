@@ -493,8 +493,7 @@ class DatabaseSeeder extends Seeder
 		}
 	}
 	
-	public function run()
-    {
+	public function run(){
 		$this->import('users');
 		$this->import('skills');
 		$this->import('job_categories');
