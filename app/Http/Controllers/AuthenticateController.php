@@ -152,7 +152,7 @@ class AuthenticateController extends Controller
 			
 			$data ? 
 				$profile = $this->mongo->users->profiles->updateOne(
-					['user_id' 	=> (int)$id],
+					['user_id' 	=> (int)$id ],
 					['$set' 	=> ['resume' => json_encode($data) ] ]
 				)
 			: null;

@@ -155,7 +155,8 @@ class DatabaseSeeder extends Seeder
 							'form_params' => $payload ? $payload : null , 
 							'handler' => $stack, 
 							'auth' => 'oauth',
-							'exceptions ' =>  false
+							'exceptions ' =>  false,
+							'query' => [	'per_page' => 100	 ]
 						);
 				
 		$request = $this->guzzle->request($type,$url,$options);

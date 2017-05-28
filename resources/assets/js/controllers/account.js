@@ -10,28 +10,21 @@
 angular.module('jpApp')
 	.controller('AccountCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,user,accountData,auth)
 	{
-		
-		//$scope.currentAsset = { /*user:user.data*/ };//Initialize User data
-		
-		this.user = JSON.parse(auth.getCookie('auth'));
 				
-		$scope.loading = true;
-		
+		this.user = JSON.parse(auth.getCookie('auth'));
+						
 		var AccountCtrl = this;
 		
-		accountData.getUserData(this.user.id).then(function(result){
-			$scope.currentAsset = JSON.parse(result.data[0].resume);
-			
-			$scope.currentAsset.user = AccountCtrl.user;
-			
-			var autocomplete;
+		console.log('User',user);
+								
+		$scope.currentAsset = user.data[0].resume ? JSON.parse(user.data[0].resume) : { experience:[],education:[]};
 		
-			angular.element('ul.tabs').tabs(); //Initialize Tabs
-			
-			$scope.loading = false;
+		$scope.currentAsset.user = AccountCtrl.user;
 		
-		});	
-		
+		var autocomplete;
+	
+		angular.element('ul.tabs').tabs(); //Initialize Tabs
+				
 		/**
 		 * Edit User Profile
 		 */
@@ -216,9 +209,7 @@ angular.module('jpApp')
 		 */
 		$scope.updateProfile = function(){
 			var self = this;
-			
-			console.log('updateProfile User',AccountCtrl.user);
-					
+								
 			accountData.saveData(AccountCtrl.user.id,$scope.currentAsset).then(function(result){
 				console.log(result);
 				$scope.reset();

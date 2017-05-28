@@ -163,12 +163,13 @@ angular
 				controller	:	'AccountCtrl',
 				controllerAs: 	'Account',
 				resolve 	: {
-					user : function(accountData,$rootScope){
+					user : function(accountData,$rootScope,auth){
+												
+						var user_id = JSON.parse(auth.getCookie('auth')).id;
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						return accountData.getUserData().then(function(result){
-							console.log('Result',result);
+						return accountData.getUserData(user_id).then(function(result){
 						
 							angular.element('.progress').hide();
 						
