@@ -54,7 +54,8 @@ class Job extends Model
 		'job_location_id',
 		'updated_at',
 		'user_applied',
-		'job_skills'
+		'job_skills',
+		'wp_id'
     ];
 	
 	//Bind Job to Company
