@@ -188,7 +188,7 @@ class JobController extends Controller
 				}
 			}
 			
-			var_dump($requests);
+			var_dump($data);
 			
 			//$requests = (object)$requests;
 			
