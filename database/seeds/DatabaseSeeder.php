@@ -272,7 +272,20 @@ class DatabaseSeeder extends Seeder
 			$db = $this->mongo->users->profiles;
 			
 			//Save User Details to mongo	
-			isset($db) ? $db->insertOne($data) : null;
+			//check mongo for user
+			$user = $db->findOne([ 'user_id' => (int)$new_user->id ]);
+			
+			//create if user dosent exist
+			if(!$user){
+				echo 'no user found in mongo with id:'.$new_user->id."\r\n";
+				isset($db) ? $db->insertOne($data) : null;
+			}else{
+				echo 'user found in mongo with id:'.$new_user->id."\r\n";
+				var_dump($user);
+				continue;
+				//isset($db) ? $user = $db->findAndModify($data,true) : null;
+			}
+			
 			
 			echo 'Mongo Saved!';
 			
@@ -521,6 +534,7 @@ class DatabaseSeeder extends Seeder
 		$this->import('salary_types');
 		$this->import('jobs');
 		$this->import('companies');
+		//$this->call(JobSeeder::class);
     }
 	
 }

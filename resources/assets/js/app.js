@@ -225,7 +225,7 @@ angular
 				}
 			});
 
-	}).run(function($rootScope,$state,$stateParams,$location,$auth) {
+	}).run(function($rootScope,$state,$stateParams,$location,$auth,auth) {
 			
 		$rootScope.$location = {};
 	
@@ -240,6 +240,20 @@ angular
 		$rootScope.$auth = $auth;
 		
 		console.log('Runtime RootScope',$rootScope);
+		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
+		console.log('Logged payload',$rootScope.$auth.getPayload());
+		console.log('Logged Token',$rootScope.$auth.getToken());
+		
+		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
+		
+		$rootScope.user = {};
+		
+		$rootScope.$auth.isAuthenticated() && typeof(userData) !== 'undefined' ?
+			
+			$rootScope.user.info = userData
+			
+		: null;
+
 	
 	}).filter('trusted', function ($sce) {
 		return function(url) {

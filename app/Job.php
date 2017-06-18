@@ -48,7 +48,7 @@ class Job extends Model
 		'salary',
 		'salary_type',
 		'status',
-		'ref_id',
+		'job_ref_id',
 		'ref_url',
 		'location',
 		'job_location_id',
@@ -58,6 +58,7 @@ class Job extends Model
 		'wp_id'
     ];
 	
+	/* Relationships */
 	//Bind Job to Company
 	public function company(){
 		return $this->belongsTo('App\Company');

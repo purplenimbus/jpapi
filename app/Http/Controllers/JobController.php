@@ -121,7 +121,7 @@ class JobController extends Controller
 			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : '';
 			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : '';
 			$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
-			$job['job_skills'] 			= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+			$job['job_skills'] 		= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
 			$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
 			
 				

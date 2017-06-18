@@ -72,7 +72,7 @@ class JobSeeder extends Seeder
 									"description"	=>	"//li[@class=\"benefits3\"]//p[1]|//*[@itemprop]|//ul[@class=\"p_spantitle\"]",
 									"title_tag"		=>	"h1"
 								]
-			],(object)[
+			]*/,(object)[
 				"name"		=>	"smartrecruiters",
 				"url"		=>	"https://jobs.smartrecruiters.com/?keyword=nigeria",
 				"xpath"		=>	(object)[
@@ -81,7 +81,7 @@ class JobSeeder extends Seeder
 									"description"	=>	"//header//img|//main//h1|//section[@class=\"job-section\"]|//*[@itemprop]",
 									"title_tag"		=>	"h1"
 								]
-			]*/
+			]
 		];
 		
 		$this->client 		= 	new Guzzle();
@@ -95,7 +95,7 @@ class JobSeeder extends Seeder
 		
 		//Loop through Job sources
 		foreach($this->sources as $source){
-			echo $source->name."\r\n";
+			echo 'Job Source Name: '.$source->name."\r\n";
 
 			if(isset($source->url)):
 				
@@ -159,8 +159,8 @@ class JobSeeder extends Seeder
 			echo "Starting Jobs Loop"."\r\n";
 			//var_dump($job);
 			$ref_id		=	explode('/', parse_url($job->href,PHP_URL_PATH))[2];
-			echo $ref_id."\r\n";
-			if(!App\Job::where('ref_id',$ref_id)->first()){		
+			echo 'Job Ref ID: '.$ref_id."\r\n";
+			if(!App\Job::where('job_ref_id',$ref_id)->first()){		
 				
 				if(isset($job->href)){
 					$job_detail		=	$this->getJobs($job->href,$source->xpath->description);
@@ -190,9 +190,10 @@ class JobSeeder extends Seeder
 					
 					//Set Job Type
 					if($job_type){
-						//echo "Job Type ".$job_type."\r\n";
+						$job_type = str_replace("-"," ",$job_type);
+						echo "Job Type ".$job_type."\r\n";
 						$find_job = Job_Type::where('name',$job_type)->first();
-					
+						//var_dump($find_job);
 						if(isset($find_job->name)){
 							echo "Job Type found : ".$find_job->id."\r\n";
 							$type_id	=	$find_job->type_id;
@@ -203,9 +204,9 @@ class JobSeeder extends Seeder
 							$new_job->title			=	$job_title;
 							$new_job->description	=	$job_detail->content;
 							$new_job->ref_url		=	$job->href;
-							$new_job->ref_id		=	$ref_id;
+							$new_job->job_ref_id	=	$ref_id;
 							$new_job->company_id	=	$company_id;
-							$new_job->type_id		=	($type_id) ? $type_id : 0;
+							$new_job->job_type_id	=	($type_id) ? $type_id : 0;
 							$new_job->save();
 							$this->job_count++;
 						}
