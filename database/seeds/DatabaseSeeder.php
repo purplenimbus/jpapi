@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
 			]
 		];
 		
-		$this->mongo = new Mongo();
+		$this->mongo = new Mongo(env('MONGOURI', false));
 	}
 	
 	public function WP($type,$endpoint,$payload){

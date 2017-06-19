@@ -95,7 +95,8 @@ angular.module('jpApp')
 					str	+=		'<div class="row">';
 					str	+=			'<div class="range-field col m12 s12">';
 					str	+=			'<label>Required Skills</label>';
-					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
+					//str	+=				elements.form.chips({ colSize: 12, cls:'hidden' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
+					str	+=				elements.form.tagit({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills'});
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';

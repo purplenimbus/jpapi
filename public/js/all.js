@@ -994,6 +994,8 @@ angular.module('jpApp')
 					}
 				});
 				
+				//angular.element("#required_skills").tagit();
+				
 				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
 					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
@@ -1733,6 +1735,19 @@ angular.module('jpApp')
 				return 	str;
 			},
 			/**
+			 * Returns the ui tag it component
+			 * @param {object} object - The object holding the chip element properties
+			 * @param {string} object.chipType - The chip type based on the materialize
+			 * @returns {String}
+			 */
+			tagit	:	function(object){
+				var str	=	'';
+				
+				str	+=	' <ul id="'+object.name ? object.name : '' +'" class="chips '+object.chipType+'"></ul>';
+				
+				return 	str;
+			},
+			/**
 			 * Returns the materialize range component
 			 * @param {object} object - The object holding the range element properties
 			 * @param {string} object.cls - addtional classes for the element
@@ -2024,7 +2039,8 @@ angular.module('jpApp')
 					str	+=		'<div class="row">';
 					str	+=			'<div class="range-field col m12 s12">';
 					str	+=			'<label>Required Skills</label>';
-					str	+=			elements.form.chips({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
+					//str	+=				elements.form.chips({ colSize: 12, cls:'hidden' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
+					str	+=				elements.form.tagit({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills'});
 					str	+=			'</div>';
 					str	+=		'</div>';
 					str	+=		'<div class="row">';

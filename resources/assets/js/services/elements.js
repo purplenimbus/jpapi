@@ -267,6 +267,19 @@ angular.module('jpApp')
 				return 	str;
 			},
 			/**
+			 * Returns the ui tag it component
+			 * @param {object} object - The object holding the chip element properties
+			 * @param {string} object.chipType - The chip type based on the materialize
+			 * @returns {String}
+			 */
+			tagit	:	function(object){
+				var str	=	'';
+				
+				str	+=	' <ul id="'+object.name ? object.name : '' +'" class="chips '+object.chipType+'"></ul>';
+				
+				return 	str;
+			},
+			/**
 			 * Returns the materialize range component
 			 * @param {object} object - The object holding the range element properties
 			 * @param {string} object.cls - addtional classes for the element

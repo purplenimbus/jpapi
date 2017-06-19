@@ -150,6 +150,8 @@ angular.module('jpApp')
 					}
 				});
 				
+				//angular.element("#required_skills").tagit();
+				
 				angular.element('.chips-autocomplete').on('chip.add', function(e, chip){
 					JobCtrl.currentAsset.required_skills = angular.element(this).material_chip('data');
 				}).on('chip.delete', function(e, chip){
