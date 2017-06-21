@@ -281,7 +281,7 @@ class DatabaseSeeder extends Seeder
 				isset($db) ? $db->insertOne($data) : null;
 			}else{
 				echo 'user found in mongo with id:'.$new_user->id."\r\n";
-				var_dump($user);
+				
 				continue;
 				//isset($db) ? $user = $db->findAndModify($data,true) : null;
 			}
