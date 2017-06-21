@@ -25,7 +25,7 @@ class AuthenticateController extends Controller
 	   // the user from retrieving their token if they don't already have it
 	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin','getProfile','saveProfile']]);
 	   
-	   $this->mongo = new MongoDB\Client();
+	   $this->mongo = new MongoDB\Client(env('MONGOURI', false));
 	}
 	
 	public function authenticate(Request $request)
