@@ -42,12 +42,9 @@ angular
 						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').hide();
+						angular.element('.loader').hide();
 						
 						$rootScope.logged_in = false;
-		
-						angular.element(".dropdown-button").dropdown();
-						angular.element(".account-collapse").sideNav();
 					
 						
 						if(!$rootScope.user){
@@ -69,10 +66,8 @@ angular
 								$rootScope.user.location.place_id = result[1].place_id;
 								
 								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
-								
-								Materialize.updateTextFields();
-								
-								angular.element('.progress').hide();
+																
+								angular.element('.loader').hide();
 																
 								return result;
 								
@@ -90,12 +85,11 @@ angular
 					jobsData : function(jobs,$rootScope){
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return jobs.getData('jobs').then(function(result){
-							Materialize.toast('Got '+result.data.length+' Jobs', 3000);
 							console.log('Got some jobs',result);
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -111,10 +105,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -129,10 +123,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return companies.getData('companies').then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -148,10 +142,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return companies.getData('companies',$route.current.params.companyId).then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -171,7 +165,7 @@ angular
 						
 						return accountData.getUserData(user_id).then(function(result){
 						
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 						
 							return result;
 						}).catch(function(error){
@@ -195,7 +189,7 @@ angular
 						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
 						
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 						
 							return result;
 						}).catch(function(error){
@@ -207,7 +201,7 @@ angular
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
-			
+   
 			$stateProvider
 			.state('/myaccount',{
 				templateUrl	:	'/views/partials/account/account.html',
@@ -231,19 +225,20 @@ angular
 	
 		$rootScope.$location.base = $location.path().split('\/')[1];
 		
-		angular.element('.progress').show();
+		angular.element('.loader').show();
 		
 		//console.log('Runtime State',$state);
 		//Bind when to rootScope
 		$rootScope.$state = $state;
 		$rootScope.$stateParams = $stateParams;
 		$rootScope.$auth = $auth;
+		$rootScope.loggedIn  = $rootScope.$auth.isAuthenticated();
 		
 		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
+		console.log('Logged in?',$rootScope.loggedIn);
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
-		
+
 		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
 		
 		$rootScope.user = {};

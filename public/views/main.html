@@ -1,22 +1,21 @@
 <div id="map"></div>
-<main class="container">
-	<div class="row">
-		<section id="home" class="col m12 s12 center-align">
-			<form class="valign">
-				<div class="row">
-					<div class="col m5 s12 input-field">
-						<input type="text" class="form-control input-lg" id="job_title" ng-model="search.title">
-						<label for="job-title" class="active">Job Title</label>
-					</div>
-					<div class="col m5 s12 input-field">
-						<input type="text" class="form-control input-lg" id="job_location" ng-model="search.location">
-						<label for="job-location" class="active">Job Location</label>
-					</div>
-					<div class="col m2 input-field">
-						<button class="btn btn-primary btn-block btn-lg" ng-click="findjobs(search)">Find Jobs</button>
-					</div>
+<main class="uk-container-center uk-container">
+	<section id="home" class="uk-align-center">
+		<form class="valign uk-form">
+			<div class="uk-grid">
+				<div class="uk-form-icon uk-width-medium-4-10 uk-width-small-1-1">
+					<i class="uk-icon-person"></i>
+					<input type="text" ng-model="search.title" id="job_title" class="uk-form-large uk-width-1-1">
 				</div>
-			</form>
-		</section>
-	</div>
+				<div class="uk-form-icon uk-width-medium-4-10 uk-width-small-1-1">
+					<i class="uk-icon-location-arrow"></i>
+					<input type="text" ng-model="search.location" id="job_title" class="uk-form-large uk-width-1-1">
+				</div>
+
+				<div class="uk-width-medium-2-10">
+					<button class="uk-button uk-width-1-1 uk-button-large" ng-click="findjobs(search)">Find Jobs</button>
+				</div>
+			</div>
+		</form>
+	</section>
 </main><!-- /.container -->

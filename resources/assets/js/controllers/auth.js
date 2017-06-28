@@ -9,22 +9,8 @@
  */
 angular.module('jpApp')
 	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
 		
-		
-		//var vm = this;
-		
-		angular.element('.button-collapse').sideNav({
-			  menuWidth: 300, // Default is 300
-			  edge: 'right', // Choose the horizontal origin
-			  closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-			  draggable: true // Choose whether you can drag to open on touch screens
-			}
-		);
+		$rootScope.loggedIn = false; //Initialize logged in flag
 		
         $scope.login = function($event) {
 			
@@ -96,17 +82,5 @@ angular.module('jpApp')
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('close');
 		};
-		
-		//Activate account dropdown
-		angular.element('.dropdown-button').dropdown({
-		  inDuration: 300,
-		  outDuration: 225,
-		  constrainWidth: false, // Does not change width of dropdown to that of the activator
-		  hover: true, // Activate on hover
-		  gutter: 0, // Spacing from edge
-		  belowOrigin: true, // Displays dropdown below the button
-		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
-		  stopPropagation: false // Stops event propagation
-		});
 	
 	});

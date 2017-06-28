@@ -42,12 +42,9 @@ angular
 						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').hide();
+						angular.element('.loader').hide();
 						
 						$rootScope.logged_in = false;
-		
-						angular.element(".dropdown-button").dropdown();
-						angular.element(".account-collapse").sideNav();
 					
 						
 						if(!$rootScope.user){
@@ -69,10 +66,8 @@ angular
 								$rootScope.user.location.place_id = result[1].place_id;
 								
 								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
-								
-								Materialize.updateTextFields();
-								
-								angular.element('.progress').hide();
+																
+								angular.element('.loader').hide();
 																
 								return result;
 								
@@ -90,12 +85,11 @@ angular
 					jobsData : function(jobs,$rootScope){
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return jobs.getData('jobs').then(function(result){
-							Materialize.toast('Got '+result.data.length+' Jobs', 3000);
 							console.log('Got some jobs',result);
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -111,10 +105,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return jobs.getData('jobs',$route.current.params.jobId).then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -129,10 +123,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return companies.getData('companies').then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -148,10 +142,10 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.progress').show();
+						angular.element('.loader').show();
 						
 						return companies.getData('companies',$route.current.params.companyId).then(function(result){
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 							return result.data;
 						});
 					}
@@ -171,7 +165,7 @@ angular
 						
 						return accountData.getUserData(user_id).then(function(result){
 						
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 						
 							return result;
 						}).catch(function(error){
@@ -195,7 +189,7 @@ angular
 						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
 						
-							angular.element('.progress').hide();
+							angular.element('.loader').hide();
 						
 							return result;
 						}).catch(function(error){
@@ -207,7 +201,7 @@ angular
 			.otherwise({
 				templateUrl : 	'Not Found'
 			});
-			
+   
 			$stateProvider
 			.state('/myaccount',{
 				templateUrl	:	'/views/partials/account/account.html',
@@ -231,19 +225,20 @@ angular
 	
 		$rootScope.$location.base = $location.path().split('\/')[1];
 		
-		angular.element('.progress').show();
+		angular.element('.loader').show();
 		
 		//console.log('Runtime State',$state);
 		//Bind when to rootScope
 		$rootScope.$state = $state;
 		$rootScope.$stateParams = $stateParams;
 		$rootScope.$auth = $auth;
+		$rootScope.loggedIn  = $rootScope.$auth.isAuthenticated();
 		
 		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
+		console.log('Logged in?',$rootScope.loggedIn);
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
-		
+
 		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
 		
 		$rootScope.user = {};
@@ -542,22 +537,8 @@ angular.module('jpApp')
  */
 angular.module('jpApp')
 	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
-		this.awesomeThings = [
-		  'HTML5 Boilerplate',
-		  'AngularJS',
-		  'Karma'
-		];
 		
-		
-		//var vm = this;
-		
-		angular.element('.button-collapse').sideNav({
-			  menuWidth: 300, // Default is 300
-			  edge: 'right', // Choose the horizontal origin
-			  closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-			  draggable: true // Choose whether you can drag to open on touch screens
-			}
-		);
+		$rootScope.loggedIn = false; //Initialize logged in flag
 		
         $scope.login = function($event) {
 			
@@ -629,18 +610,6 @@ angular.module('jpApp')
 		$scope.closeModal	=	function(){
 			angular.element('#modal').modal('close');
 		};
-		
-		//Activate account dropdown
-		angular.element('.dropdown-button').dropdown({
-		  inDuration: 300,
-		  outDuration: 225,
-		  constrainWidth: false, // Does not change width of dropdown to that of the activator
-		  hover: true, // Activate on hover
-		  gutter: 0, // Spacing from edge
-		  belowOrigin: true, // Displays dropdown below the button
-		  alignment: 'left', // Displays dropdown with edge aligned to the left of button
-		  stopPropagation: false // Stops event propagation
-		});
 	
 	});
 
@@ -1503,7 +1472,7 @@ angular.module('jpApp')
 		row		:	function(body,cls){
 			var str = '';
 			
-			str += '<div class="row';
+			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
 			str += 		body;
@@ -1513,25 +1482,18 @@ angular.module('jpApp')
 		},
 		/**
 		 * Returns a column HTML element
-		 * @param {Integer} str - num of columns 1-12
+		 * @param {string} num - num of columns 1-12 as per UIKits Grid System
 		 * @param {String} body - The body of the column element
 		 * @returns {String}
 		 */
 		column	:	function(num,body){
 			var str=	'';
-			if( typeof num ===	'number'){
-				str	+=	'<div class="col m'+num+'">';
-				str	+=		body;
-				str	+=	'</div>';
-				
-				return str;
-			}else{
-				str	+=	'<div class="col m'+num[0]+' s'+num[1]+'">';
-				str	+=		body;
-				str	+=	'</div>';
-				
-				return str;
-			}
+			
+			str	+=	'<div class="uk-width-'+num+'">';
+			str	+=		body;
+			str	+=	'</div>';
+
+			return str;
 		},
 		/**
 		 * Returns a button HTML element
@@ -1545,7 +1507,7 @@ angular.module('jpApp')
 		button	:	function(object,body){
 			var str	=	'';
 			
-			str	+=	'<button class="btn ';
+			str	+=	'<button class="uk-button ';
 			str +=		object.cls ? object.cls+'"' : '"';
 			str	+=		object.type		?	'type="'+object.type+'"'	:	'';
 			str	+=		object.ngClick	?	'ng-click="'+object.ngClick+'">'	:	'>';
@@ -1554,32 +1516,7 @@ angular.module('jpApp')
 			
 			return str;
 		},
-		/**
-		 * Returns a materalize button toolbar
-		 * @param {string} action - The action associated the primary button
-		 * @param {string} icon - The icon for the secondary button
-		 * @param {array} array - The array holding the secondary buttons objects
-		 * @param {String} array.value.color - The secondary button color based on materialize
-		 * @param {String} array.value.action - The secondary action
-		 * @param {String} array.value.icon - The secondary button icon
-		 * @returns {String}
-		 */
-		toolbar : function(action,type,icon,array){
-			var str = '';
-			
-			str += '<div class="fixed-action-btn '+(type ? 'horizontal' : '')+' click-to-toggle">';
-			str += '	<a class="btn-floating btn-large red" '+action+'>';
-			str += '	  <i class="material-icons">'+(icon ? icon : 'menu')+'</i>';
-			str += '	</a>';
-			if(array){ 
-			str += '<ul>';
-				angular.forEach(array,function(value,key){
-					str += value ? '<li><a class="btn-floating '+(value.color ? value.color : 'red')+'" '+(value.action ? value.action : '')+'><i class="material-icons">'+(value.icon ? value.icon : 'insert_chart')+'</i></a></li>' : '';
-				});
-			str += '</ul>';
-			}
-			str += '</div>';;
-		},
+
 		/**
 		 * Returns the form object for generic form elements
 		 * @returns {object}
@@ -1873,7 +1810,7 @@ angular.module('jpApp')
 			experience : function(){
 				var str	=	'',self = this;
 								
-				str += 	'<div class="row">';
+				str += 	'<div class="uk-grid">';
 				//str += 		'<div class="col s12 m4">';
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Job Title' , name:'job_title' , cls:'typeahead', model : 'exp.job_title' });
 				//str += 		'</div>';
@@ -1893,7 +1830,7 @@ angular.module('jpApp')
 			education : function(){
 				var str	=	'',self = this;
 								
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col s12 m6">';
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'School' , name:'school' , cls:'typeahead', model : 'exp.school' });
 				str += 		'</div>';
@@ -1901,7 +1838,7 @@ angular.module('jpApp')
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Degree' , name:'degree' , cls:'typeahead', model : 'exp.degree' });
 				str += 		'</div>';
 				str += '</div>';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col s12 m6">';
 				str += 		self.input({ type: 'text' , colSize: 12 , label:'Field' , name:'field' , cls:'typeahead', model : 'exp.field' });
 				str += 		'</div>';
@@ -1909,7 +1846,7 @@ angular.module('jpApp')
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Location' , name:'location' , cls:'typeahead', model : 'exp.location' });
 				str += 		'</div>';
 				str += '</div>';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col m6 s12">';
 				str += 			self.date({	colSize: 12 , label:'Start Date' , name:'start' , cls:'', model : 'exp.dates.start' });
 				str += 		'</div>';
@@ -1962,30 +1899,30 @@ angular.module('jpApp')
 			login	:	function(){
 				var	str	=	'';
 				
-				str	+=	'<form>';
-				str	+=	'<div class="row form-group">';
+				str	+=	'<form class="uk-form">';
+				str	+=	'<div class="uk-form-row">';
 				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'email',	
-														cls			:	'input-lg validate'	,	
+														cls			:	'uk-form-large validate'	,	
 														placeholder	:	'Email'	,	
 														model		:	'email',
 														name		:	'email',
 														required	:	true
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="row form-group">';
+				str	+=	'<div class="uk-form-row">';
 				str	+=	elements.column(12,elements.form.input({ 	
 														type		:	'password',	
-														cls			:	'input-lg validate'	,	
+														cls			:	'uk-form-large validate'	,	
 														placeholder	:	'Password'	,	
 														model		:	'password',
 														name		:	'password',
 														required	:	true
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="row form-group">';
-				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'btn-large col m12 s12' }));
-				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'btn-large col m12 s12 grey lighten-1' }));
+				str	+=	'<div class="uk-form-row">';
+				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -2246,7 +2183,7 @@ angular.module('jpApp')
  * Service in the jpApp.
  */
 angular.module('jpApp')
-  .service('modal', function ($q,$compile) {
+  .service('modal', function ($q,$compile,$window) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 	return	{
 		modal	:	function(type,title,body,footer,$scope){
@@ -2254,28 +2191,30 @@ angular.module('jpApp')
 			var str	=	'',
 				deferred	=	$q.defer();
 			
-			str	+=	'<div id="modal" class="modal '+type+'">';
-			str += 		'<div class="container">';
-			str	+=			'<div class="modal-content">';
-			str += 				'<div class="row">';
-			str	+=					title;
-			str	+=				'</div>';
-			str	+=				'<div class="row">'+body+'</div>';
-			str	+=			'</div>';
-			str	+=			footer ? '<div class="modal-footer">'+footer+'</div>' : '';
+			str	+=	'<div id="modal" class="uk-modal '+type+'">';
+			str += 		'<div class="uk-modal-dialog">';
+			str	+=			title ? '<div class="uk-modal-header">'+title+'</div>' : '';
+			str	+=				body;
+			str	+=			footer ? '<div class="uk-modal-footer">'+footer+'</div>' : '';
 			str	+=		'</div>';
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));
 			
-			deferred.resolve(str);
-			
-			angular.element('#modal').modal({ complete : function(){ angular.element('#modal').remove(); } }).modal('open');
+			$window.UIkit.modal('#modal').on({
+
+				'hide.uk.modal': function(){
+					angular.element('#modal').remove();
+				}
+				
+			}).show();
 			
 			return deferred.promise;
+			
+			deferred.resolve(str);
 		}
 	};
-  });
+});
 
 'use strict';
 

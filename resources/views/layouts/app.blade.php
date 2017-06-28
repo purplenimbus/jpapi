@@ -8,11 +8,10 @@
     <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
-	<link rel="stylesheet" href="/bower_components/materialize/bin/materialize.css" />
+	<link rel="stylesheet" href="/bower_components/uikit/css/uikit.gradient.min.css" />
 	<!-- endbower -->
-	<link rel="stylesheet" href="/bower_components/materialize/extras/noUiSlider/nouislider.css" />
 	
-	<link rel="stylesheet" href="{{ URL::secureAsset('css/main.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class=" @{{ $location.base }}">
@@ -50,13 +49,12 @@
 	<script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="/bower_components/moment/moment.js"></script>
 	<script src="/bower_components/ckeditor/ckeditor.js"></script>
-	<script src="/bower_components/materialize/bin/materialize.js"></script>
 	<script src="/bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
 	<script src="/bower_components/angular-typeahead/dist/angular-typeahead.js"></script>
+	<script src="/bower_components/uikit/js/uikit.min.js"></script>
 	<!-- endbower -->
 	
-	<script src="{{ URL::secureAsset('js/all.js') }}"></script>
+	<script src="{{ URL::asset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
-	<script src="/bower_components/materialize/extras/noUiSlider/nouislider.min.js"></script>	
 </body>
 </html>

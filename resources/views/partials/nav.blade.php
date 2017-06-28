@@ -1,25 +1,34 @@
-<div class="navbar-fixed">
-	<nav class="teal accent-3" role="navigation" ng-controller="AuthCtrl">
-		<div class="nav-wrapper container">
-			<a id="logo-container" href="#/" class="brand-logo">
-				<i class="material-icons">explore</i>
-			</a>
-			<ul class="right hide-on-med-and-down">
-				<li><a href="#jobs">Jobs</a></li>
-				<li ng-if="!$root.$auth.isAuthenticated()"><a ng-click="signIn()"> Sign In</a></li>
-				<li ng-if="$root.$auth.isAuthenticated()"><a class="dropdown-button" data-activates="account"><i class="material-icons">account_circle</i></a></li>
-				<!-- Dropdown Structure -->
-				<ul id="account" class="dropdown-content">
-					<li ng-if="$root.$auth.isAuthenticated()"><a href="#myaccount" ui-sref-active="active"> My Account</a></li>
-					<li ng-if="$root.$auth.isAuthenticated()"><a ng-click="logout()"> Logout</a></li>
-				</ul>
-			</ul>
-			<ul id="nav-mobile" class="side-nav" style="transform: translateX(-100%);">
-				<li><a href="#jobs">Jobs</a></li>
-				<li ng-if="!$root.$auth.isAuthenticated()"><a class="waves-effect waves-light btn" ng-click="login()">Login</a></li>
-				<li ng-if="$root.$auth.isAuthenticated()"><a class="waves-effect waves-light btn" ng-click="my_account()">My Account</a></li>
-			</ul>
-			<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+<nav class="uk-navbar uk-navbar-attached" role="navigation" ng-controller="AuthCtrl">
+	<div class="uk-container-center uk-container">
+		<a href="" class="uk-navbar-toggle uk-visible-small"></a>
+		<a href="#/" class="uk-navbar-brand uk-hidden"><i class="uk-icon-sticky-note-o"></i></a>
+		<ul class="uk-navbar-nav">
+			<li><a href="#jobs">Jobs</a></li>
+		</ul>
+		<div class="uk-navbar-flip uk-navbar-content">
+			<button ng-if="!$root.loggedIn" class="uk-button uk-button-primary" ng-click="signIn()">Sign In</button>
+			<div ng-if="$root.loggedIn" class="uk-button-group">
+
+				<!-- This is a button -->
+				<button class="uk-button uk-button-primary">Account</button>
+
+				<!-- This is the container enabling the JavaScript -->
+				<div data-uk-dropdown="{mode:'click'}">
+
+					<!-- This is the button toggling the dropdown -->
+					<a href="" class="uk-button uk-button-primary"><i class="uk-icon-caret-down"></i></a>
+
+					<!-- This is the dropdown -->
+					<div class="uk-dropdown uk-dropdown-small">
+						<ul class="uk-nav uk-nav-dropdown">
+							<li><a href="#myaccount" ui-sref-active="active">My Account</a></li>
+							<li><a href="" ng-click="logout()">Logout</a></li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
 		</div>
-	</nav>
-</div>
+	</div>
+</nav>
+

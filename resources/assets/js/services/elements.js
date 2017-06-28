@@ -35,7 +35,7 @@ angular.module('jpApp')
 		row		:	function(body,cls){
 			var str = '';
 			
-			str += '<div class="row';
+			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
 			str += 		body;
@@ -45,25 +45,18 @@ angular.module('jpApp')
 		},
 		/**
 		 * Returns a column HTML element
-		 * @param {Integer} str - num of columns 1-12
+		 * @param {string} num - num of columns 1-12 as per UIKits Grid System
 		 * @param {String} body - The body of the column element
 		 * @returns {String}
 		 */
 		column	:	function(num,body){
 			var str=	'';
-			if( typeof num ===	'number'){
-				str	+=	'<div class="col m'+num+'">';
-				str	+=		body;
-				str	+=	'</div>';
-				
-				return str;
-			}else{
-				str	+=	'<div class="col m'+num[0]+' s'+num[1]+'">';
-				str	+=		body;
-				str	+=	'</div>';
-				
-				return str;
-			}
+			
+			str	+=	'<div class="uk-width-'+num+'">';
+			str	+=		body;
+			str	+=	'</div>';
+
+			return str;
 		},
 		/**
 		 * Returns a button HTML element
@@ -77,7 +70,7 @@ angular.module('jpApp')
 		button	:	function(object,body){
 			var str	=	'';
 			
-			str	+=	'<button class="btn ';
+			str	+=	'<button class="uk-button ';
 			str +=		object.cls ? object.cls+'"' : '"';
 			str	+=		object.type		?	'type="'+object.type+'"'	:	'';
 			str	+=		object.ngClick	?	'ng-click="'+object.ngClick+'">'	:	'>';
@@ -86,32 +79,7 @@ angular.module('jpApp')
 			
 			return str;
 		},
-		/**
-		 * Returns a materalize button toolbar
-		 * @param {string} action - The action associated the primary button
-		 * @param {string} icon - The icon for the secondary button
-		 * @param {array} array - The array holding the secondary buttons objects
-		 * @param {String} array.value.color - The secondary button color based on materialize
-		 * @param {String} array.value.action - The secondary action
-		 * @param {String} array.value.icon - The secondary button icon
-		 * @returns {String}
-		 */
-		toolbar : function(action,type,icon,array){
-			var str = '';
-			
-			str += '<div class="fixed-action-btn '+(type ? 'horizontal' : '')+' click-to-toggle">';
-			str += '	<a class="btn-floating btn-large red" '+action+'>';
-			str += '	  <i class="material-icons">'+(icon ? icon : 'menu')+'</i>';
-			str += '	</a>';
-			if(array){ 
-			str += '<ul>';
-				angular.forEach(array,function(value,key){
-					str += value ? '<li><a class="btn-floating '+(value.color ? value.color : 'red')+'" '+(value.action ? value.action : '')+'><i class="material-icons">'+(value.icon ? value.icon : 'insert_chart')+'</i></a></li>' : '';
-				});
-			str += '</ul>';
-			}
-			str += '</div>';;
-		},
+
 		/**
 		 * Returns the form object for generic form elements
 		 * @returns {object}
@@ -405,7 +373,7 @@ angular.module('jpApp')
 			experience : function(){
 				var str	=	'',self = this;
 								
-				str += 	'<div class="row">';
+				str += 	'<div class="uk-grid">';
 				//str += 		'<div class="col s12 m4">';
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Job Title' , name:'job_title' , cls:'typeahead', model : 'exp.job_title' });
 				//str += 		'</div>';
@@ -425,7 +393,7 @@ angular.module('jpApp')
 			education : function(){
 				var str	=	'',self = this;
 								
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col s12 m6">';
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'School' , name:'school' , cls:'typeahead', model : 'exp.school' });
 				str += 		'</div>';
@@ -433,7 +401,7 @@ angular.module('jpApp')
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Degree' , name:'degree' , cls:'typeahead', model : 'exp.degree' });
 				str += 		'</div>';
 				str += '</div>';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col s12 m6">';
 				str += 		self.input({ type: 'text' , colSize: 12 , label:'Field' , name:'field' , cls:'typeahead', model : 'exp.field' });
 				str += 		'</div>';
@@ -441,7 +409,7 @@ angular.module('jpApp')
 				str += 			self.input({ type: 'text' , colSize: 12 , label:'Location' , name:'location' , cls:'typeahead', model : 'exp.location' });
 				str += 		'</div>';
 				str += '</div>';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<div class="col m6 s12">';
 				str += 			self.date({	colSize: 12 , label:'Start Date' , name:'start' , cls:'', model : 'exp.dates.start' });
 				str += 		'</div>';
