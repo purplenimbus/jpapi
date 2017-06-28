@@ -6,8 +6,8 @@
 			<li><a href="#jobs">Jobs</a></li>
 		</ul>
 		<div class="uk-navbar-flip uk-navbar-content">
-			<button ng-if="!$root.loggedIn" class="uk-button uk-button-primary" ng-click="signIn()">Sign In</button>
-			<div ng-if="$root.loggedIn" class="uk-button-group">
+			<button ng-if="!$root.$auth.isAuthenticated()" class="uk-button uk-button-primary" ng-click="showLoginModal()">Sign In</button>
+			<div ng-if="$root.$auth.isAuthenticated()" class="uk-button-group">
 
 				<!-- This is a button -->
 				<button class="uk-button uk-button-primary">Account</button>

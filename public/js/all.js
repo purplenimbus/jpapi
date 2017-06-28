@@ -232,10 +232,9 @@ angular
 		$rootScope.$state = $state;
 		$rootScope.$stateParams = $stateParams;
 		$rootScope.$auth = $auth;
-		$rootScope.loggedIn  = $rootScope.$auth.isAuthenticated();
 		
 		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.loggedIn);
+		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
 
@@ -538,7 +537,7 @@ angular.module('jpApp')
 angular.module('jpApp')
 	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		
-		$rootScope.loggedIn = false; //Initialize logged in flag
+		//$rootScope.loggedIn = false; //Initialize logged in flag
 		
         $scope.login = function($event) {
 			
@@ -584,8 +583,8 @@ angular.module('jpApp')
             
         };
 		
-		$scope.signIn	=	function(){
-			var modalType	=	'',
+		$scope.showLoginModal	=	function(){
+			var modalType	=	'uk-modal-dialog-small',
 				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
@@ -608,7 +607,7 @@ angular.module('jpApp')
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('close');
+			angular.element('#modal').hide();
 		};
 	
 	});
@@ -1523,6 +1522,21 @@ angular.module('jpApp')
 		 */
 		form	:	{
 			/**
+			 * Returns uikit icons for form elements
+			 * @param {String} type - The type of icon based on https://material.io/icons/
+			 * @returns {String}
+			 */
+			glyph	:	function(type){
+				var str	=	'';
+				
+				//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+				str	+=	'<i class=" uk-icon-';
+				str	+=	type ? type+'">' : '">';
+				str	+=	'</i>';
+
+				return str;
+			},
+			/**
 			 * Returns an input element
 			 * @param {object} object - The object holding the input element attributes
 			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
@@ -1538,7 +1552,9 @@ angular.module('jpApp')
 				var	str	=	'',self = this;
 				
 				str +=	'<div class="input-field ';
-				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'col s12">';
+				str +=  object.icon ? 'uk-form-icon ' : '';
+				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'uk-width-1-1">';
+				str +=  object.icon ?  self.glyph(object.icon) : '';
 				str	+=	'<input ';
 				str	+=	object.type	?	'type="'+object.type+'"' : '';
 				str	+=	object.cls  ? 	'class="'+object.cls+'"' : '';
@@ -1860,17 +1876,16 @@ angular.module('jpApp')
 			}
 		},
 		/**
-		 * Returns materalize icons
+		 * Returns uikit icons
 		 * @param {String} type - The type of icon based on https://material.io/icons/
 		 * @returns {String}
 		 */
-		glyph	:	function(type,cls){
+		glyph	:	function(type){
 			var str	=	'';
 			
 			//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
-			str	+=	'<i class="material-icons ';
-			str	+=	cls ? cls+'">' : '">';
-			str	+=	type;
+			str	+=	'<i class=" uk-icon-';
+			str	+=	type ? type+'">' : '">';
 			str	+=	'</i>';
 
 			return str;
@@ -1901,28 +1916,30 @@ angular.module('jpApp')
 				
 				str	+=	'<form class="uk-form">';
 				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column(12,elements.form.input({ 	
+				str	+=	elements.column('1-1',elements.form.input({ 	
 														type		:	'email',	
-														cls			:	'uk-form-large validate'	,	
+														cls			:	'uk-form-large uk-width-1-1 validate'	,	
 														placeholder	:	'Email'	,	
 														model		:	'email',
 														name		:	'email',
-														required	:	true
+														required	:	true ,
+														icon 		:	'user'
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column(12,elements.form.input({ 	
+				str	+=	elements.column('1-1',elements.form.input({ 	
 														type		:	'password',	
-														cls			:	'uk-form-large validate'	,	
+														cls			:	'uk-form-large  uk-width-1-1 validate'	,	
 														placeholder	:	'Password'	,	
 														model		:	'password',
 														name		:	'password',
-														required	:	true
+														required	:	true,
+														icon 		:	'lock'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-row">';
-				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
-				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=	'<div class="uk-form-row uk-grid">';
+				str	+=		elements.column('1-2',elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=		elements.column('1-2',elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -2200,14 +2217,14 @@ angular.module('jpApp')
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));
-			
-			$window.UIkit.modal('#modal').on({
+						
+			$window.UIkit.modal('#modal').show().on({
 
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
 				}
 				
-			}).show();
+			});
 			
 			return deferred.promise;
 			

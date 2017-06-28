@@ -86,6 +86,21 @@ angular.module('jpApp')
 		 */
 		form	:	{
 			/**
+			 * Returns uikit icons for form elements
+			 * @param {String} type - The type of icon based on https://material.io/icons/
+			 * @returns {String}
+			 */
+			glyph	:	function(type){
+				var str	=	'';
+				
+				//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
+				str	+=	'<i class=" uk-icon-';
+				str	+=	type ? type+'">' : '">';
+				str	+=	'</i>';
+
+				return str;
+			},
+			/**
 			 * Returns an input element
 			 * @param {object} object - The object holding the input element attributes
 			 * @param {Integer} object.colSize - The column size of the input element ( Defaults to 12 )
@@ -101,7 +116,9 @@ angular.module('jpApp')
 				var	str	=	'',self = this;
 				
 				str +=	'<div class="input-field ';
-				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'col s12">';
+				str +=  object.icon ? 'uk-form-icon ' : '';
+				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'uk-width-1-1">';
+				str +=  object.icon ?  self.glyph(object.icon) : '';
 				str	+=	'<input ';
 				str	+=	object.type	?	'type="'+object.type+'"' : '';
 				str	+=	object.cls  ? 	'class="'+object.cls+'"' : '';
@@ -423,17 +440,16 @@ angular.module('jpApp')
 			}
 		},
 		/**
-		 * Returns materalize icons
+		 * Returns uikit icons
 		 * @param {String} type - The type of icon based on https://material.io/icons/
 		 * @returns {String}
 		 */
-		glyph	:	function(type,cls){
+		glyph	:	function(type){
 			var str	=	'';
 			
 			//str	+=	'<span class="glyphicon glyphicon-'+type+'" aria-hidden="true"></span>';
-			str	+=	'<i class="material-icons ';
-			str	+=	cls ? cls+'">' : '">';
-			str	+=	type;
+			str	+=	'<i class=" uk-icon-';
+			str	+=	type ? type+'">' : '">';
 			str	+=	'</i>';
 
 			return str;

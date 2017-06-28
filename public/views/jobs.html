@@ -1,6 +1,6 @@
-<div class="container">
-	<div class="row">
-		<aside class="col m2 s12 sidebar hide">
+<div class="uk-container uk-container-center">
+	<div class="uk-grid">
+		<aside class="uk-width-1-1 sidebar uk-hidden">
 			<div class="panel">
 				<div class="panel-content">
 					<h3 class="">Salary</h3>
@@ -24,27 +24,32 @@
 				</div>
 			</div>
 		</aside>
-		<main class="col m12 s12">
-			<div id="filter" class="row hide">
+		<main class="uk-width-1-1">
+			<div id="filter" class="uk-grid uk-hidden">
 				<div class="col-md-12">
 			
 				</div>
 			</div>
-			<div id="content" class="row">
-				<div class="col m12 s12">
-					<div class="list-unstyled jobs collection">
-						<a href="#jobs/{{ job.id }}" class="collection-item" ng-repeat="job in jobs.jobs">
-							{{ job.title }} <span class="grey-text text-lighten-1">{{ job.job_type.name }}</span>
-							<div class="right text-right hide">
-								<span>{{ job.company.name }} , {{ job.location.name }}</span>
+			<div id="content" class="uk-grid">
+				<div class="uk-width-1-1">
+					<ul class="uk-list uk-list-line jobs">
+						<li ng-repeat="job in jobs.jobs">
+							<div class="uk-clearfix">
+								<div class="uk-float-left">
+									<a href="#jobs/{{ job.id }}" class="">{{ job.title }}</a> 	
+									<span ng-if="job.company.name" class="uk-text-muted">{{ job.company.name }}</span> <span ng-if="job.location.name" class="uk-text-muted">, {{ job.location.name }}</span>
+								</div>
+								<div class="uk-float-right">
+									<span class="uk-text-uppercase uk-badge" ng-if="job.job_type.name">{{ job.job_type.name }}</span>
+								</div>
 							</div>
-						</a>
-					</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</main>
-		<aside class="col m3 inset hide">
-			<div class="row">
+		<aside class="col m3 inset uk-hidden">
+			<div class="uk-grid">
 				<div class="col s12 m12">
 					<div class="card">
 						<div class="card-image">

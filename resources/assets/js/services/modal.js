@@ -25,14 +25,14 @@ angular.module('jpApp')
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));
-			
-			$window.UIkit.modal('#modal').on({
+						
+			$window.UIkit.modal('#modal').show().on({
 
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
 				}
 				
-			}).show();
+			});
 			
 			return deferred.promise;
 			

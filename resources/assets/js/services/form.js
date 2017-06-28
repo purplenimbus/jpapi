@@ -20,28 +20,30 @@ angular.module('jpApp')
 				
 				str	+=	'<form class="uk-form">';
 				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column(12,elements.form.input({ 	
+				str	+=	elements.column('1-1',elements.form.input({ 	
 														type		:	'email',	
-														cls			:	'uk-form-large validate'	,	
+														cls			:	'uk-form-large uk-width-1-1 validate'	,	
 														placeholder	:	'Email'	,	
 														model		:	'email',
 														name		:	'email',
-														required	:	true
+														required	:	true ,
+														icon 		:	'user'
 													}));
 				str	+=	'</div>';
 				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column(12,elements.form.input({ 	
+				str	+=	elements.column('1-1',elements.form.input({ 	
 														type		:	'password',	
-														cls			:	'uk-form-large validate'	,	
+														cls			:	'uk-form-large  uk-width-1-1 validate'	,	
 														placeholder	:	'Password'	,	
 														model		:	'password',
 														name		:	'password',
-														required	:	true
+														required	:	true,
+														icon 		:	'lock'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-row">';
-				str	+=		elements.column(6,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
-				str	+=		elements.column(6,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=	'<div class="uk-form-row uk-grid">';
+				str	+=		elements.column('1-2',elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=		elements.column('1-2',elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				

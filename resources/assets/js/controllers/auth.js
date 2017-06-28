@@ -10,7 +10,7 @@
 angular.module('jpApp')
 	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
 		
-		$rootScope.loggedIn = false; //Initialize logged in flag
+		//$rootScope.loggedIn = false; //Initialize logged in flag
 		
         $scope.login = function($event) {
 			
@@ -56,8 +56,8 @@ angular.module('jpApp')
             
         };
 		
-		$scope.signIn	=	function(){
-			var modalType	=	'',
+		$scope.showLoginModal	=	function(){
+			var modalType	=	'uk-modal-dialog-small',
 				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
@@ -80,7 +80,7 @@ angular.module('jpApp')
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').modal('close');
+			angular.element('#modal').hide();
 		};
 	
 	});

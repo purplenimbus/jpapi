@@ -232,10 +232,9 @@ angular
 		$rootScope.$state = $state;
 		$rootScope.$stateParams = $stateParams;
 		$rootScope.$auth = $auth;
-		$rootScope.loggedIn  = $rootScope.$auth.isAuthenticated();
 		
 		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.loggedIn);
+		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
 
