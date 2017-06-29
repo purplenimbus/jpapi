@@ -1,70 +1,71 @@
 <div class="view-asset">
-	<div ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="fixed-action-btn">
+	<aside class="toolbar">
 		<div class="uk-container uk-container-center">
-			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
-				<i class="large material-icons">mode_edit</i>
-			</a>
-		</div>
-	</div>
-	<aside class="toolbar thick">
-		<div class="uk-grid">
-			<div class="uk-container uk-container-center">
-				<div class="title center grey-text text-lighten-5">
-					<h1>{{ currentAsset.title }}</h1>
-					<div class="chips">
-						<div class="chip grey-text text-lighten-5">
-							<a href="#companies/{{ currentAsset.company.id }}" title="{{ currentAsset.company.name }}">{{ currentAsset.company.name }}</a>
-						</div>
-					</div>
-					<div class="location" ng-show="currentAsset.location">
-						<i class="material-icons">location_on</i> {{ currentAsset.location.name}}
-					</div>
-					<div class="info">
-						<ul class="collection">
-							<li ng-show="currentAsset.job_category.name">
-								<i class="material-icons">info_outline</i>{{ currentAsset.job_category.name }}
-							</li>
-							<li ng-show="currentAsset.job_type.name">
-								<i class="material-icons">work</i>{{ currentAsset.job_type.name }}
-							</li>
-							<li ng-show="currentAsset.job_level.name">
-								<i class="material-icons">group_work</i>{{ currentAsset.job_level.name }}
-							</li>
-							<li ng-show="currentAsset.salary_type.name">
-								<i class="material-icons">monetization_on</i> Salary <span class="min">{{ currentAsset.salary | date }}</span> - <span class="max"></span> {{ currentAsset.salary_type.name }}
-							</li>
-							<li ng-show="currentAsset.application_deadline">
-								<i class="material-icons">date_range</i>{{ currentAsset.application_deadline | date }}
-							</li>
-						</ul>
-					</div>
-					<a ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id)" class="btn">Apply</a>
-					<a ng-if="currentAsset.status && currentAsset.user_applied" class="btn"><i class="material-icons right">done</i>Applied</a>
-				</div>
-			</div>
+		
 		</div>
 	</aside>
-	<section class="uk-grid grey lighten-3 info thick">
-		<div class="uk-container uk-container-center">
-			<h6 class="center">Job Description</h6>
-			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
+	<div class="uk-container uk-container-center bg-grey">
+		<div class="uk-grid">
+			<main class="uk-width-7-10">
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
+					<div class="uk-grid">
+						<div class="uk-width-3-10">
+							<div class="uk-thumbnail uk-thumbnail-expand">
+								<img src="http://purplenimbus.net/jp/wp-content/uploads/2017/03/logo-placeholder-2.png" />
+							</div>
+						</div>
+						<div class="uk-width-7-10">
+							<article class="uk-article">
+								<p class="uk-article-lead">{{ currentAsset.title }}</p>
+								<p><span ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</span> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
+								<p class="uk-article-meta info">
+									<ul class="uk-subnav uk-subnav-line uk-text-muted">
+										<li ng-if="currentAsset.job_category.name">
+											{{ currentAsset.job_category.name }}
+										</li>
+										<li ng-if="currentAsset.job_type.name">
+											{{ currentAsset.job_type.name }}
+										</li>
+										<li ng-if="currentAsset.job_level.name">
+											{{ currentAsset.job_level.name }}
+										</li>
+										<li ng-if="currentAsset.salary_type.name">
+											Salary <span class="min">{{ currentAsset.salary | date }}</span> - <span class="max"></span> {{ currentAsset.salary_type.name }}
+										</li>
+										<li ng-if="currentAsset.application_deadline">
+											{{ currentAsset.application_deadline | date }}
+										</li>
+									</ul>
+								</p>
+								<div class="uk-button-group">
+									<button ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id)" class="uk-button uk-button-primary">Apply</a>
+									<button ng-if="currentAsset.status && currentAsset.user_applied" class="uk-button uk-button-primary"><i class="uk-icon-check-circle-o"></i> Applied</a>
+									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
+								</div>
+							</article>
+						</div>
+					</div>
+				</div>
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
+					<section ng-if="currentAsset.description" class="description">
+						<h3 class="uk-panel-title">Job Description</h3>
+						<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
+					</section>
+					<section class="skills" ng-if="currentAsset.job_skills.length >= 1">
+						<h3 class="uk-panel-title">Required Skills</h3>
+						<div class="skills">
+							<div class="chip" ng-repeat="skill in currentAsset.job_skills">{{ skill.tag }}</div>
+						</div>
+					</section>	
+				</div>
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
+					<h3 class="uk-panel-title">About {{ currentAsset.company.name }}</h3>
+					<div ng-bind-html="currentAsset.company.description">{{ currentAsset.company.description }}</div>
+				</div>
+			</main>
+			<aside class="uk-width-3-10">
+			
+			</aside>
 		</div>
-	</section>
-	<section class="uk-grid skills lighten-3 thick" ng-if="currentAsset.job_skills.length >= 1">
-		<div class="uk-container uk-container-center">
-			<h6 class="center">Required Skills</h6>
-			<div class="skills">
-				<div class="chip" ng-repeat="skill in currentAsset.job_skills">{{ skill.tag }}</div>
-			</div>
-		</div>
-	</section>
-	<section class="uk-grid company thick">
-		<div class="uk-container uk-container-center">
-			<h6 class="center">About {{ currentAsset.company.name }}</h6>
-			<div ng-bind-html="currentAsset.company.description">{{ currentAsset.company.description }}</div>
-		</div>
-	</section>	
-	<section class="uk-grid company thick" ng-if="currentAsset.location.url">
-		<div id="map"></div>
-	</section>
+	</div>
 </div>

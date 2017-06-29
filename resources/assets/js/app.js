@@ -38,7 +38,7 @@ angular
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
-					init : function($rootScope,location){
+					init : function($rootScope,accountData){
 						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
@@ -46,34 +46,13 @@ angular
 						
 						$rootScope.logged_in = false;
 					
+						var location = accountData.setUserLocation();
 						
-						if(!$rootScope.user){
-							$rootScope.user = {};
-						}
+						$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
+														
+						angular.element('.loader').hide();
 						
-						//Get Home location of the current user
-						if(navigator.geolocation && !$rootScope.user.location) {
-							//console.log('Location Needed');
-							
-							$rootScope.user.location =	{};
-							
-							return location.getLocation().then(function(result){
-								
-								console.log('Location Result',result);
-								
-								$rootScope.user.location.location = result[1].formatted_address;
-									
-								$rootScope.user.location.place_id = result[1].place_id;
-								
-								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
-																
-								angular.element('.loader').hide();
-																
-								return result;
-								
-							});
-
-						}
+						return location;
 					}
 				}
 			})

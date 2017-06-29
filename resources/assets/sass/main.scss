@@ -39,6 +39,7 @@ body{
 		}
 		aside{
 			&.toolbar{
+				min-height:180px;
 				background:url('/images/view-job-bg.jpg');
 				background-size:cover;
 				padding:0px;
@@ -204,6 +205,9 @@ body{
 			.view-asset{
 				h1,h6{
 					font-weight:300;
+				}
+				main{
+					margin-top: -70px;
 				}
 			}
 		}

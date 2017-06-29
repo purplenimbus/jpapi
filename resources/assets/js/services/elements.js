@@ -35,6 +35,8 @@ angular.module('jpApp')
 		row		:	function(body,cls){
 			var str = '';
 			
+			console.log('Elements str',str);
+			
 			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
@@ -50,9 +52,14 @@ angular.module('jpApp')
 		 * @returns {String}
 		 */
 		column	:	function(num,body){
-			var str=	'';
+			var str=	'',
+			width = '';
 			
-			str	+=	'<div class="uk-width-'+num+'">';
+			if(typeof num === 'array' && num.length){
+				width = num[0]+'-'+num[1];
+			}
+			
+			str	+=	'<div class="uk-width-'+width+'">';
 			str	+=		body;
 			str	+=	'</div>';
 
@@ -117,7 +124,7 @@ angular.module('jpApp')
 				
 				str +=	'<div class="input-field ';
 				str +=  object.icon ? 'uk-form-icon ' : '';
-				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'uk-width-1-1">';
+				str +=  object.colSize ? 'col m'+object.colSize.toString()+' uk-width-1-1">' : 'uk-width-1-1">';
 				str +=  object.icon ?  self.glyph(object.icon) : '';
 				str	+=	'<input ';
 				str	+=	object.type	?	'type="'+object.type+'"' : '';

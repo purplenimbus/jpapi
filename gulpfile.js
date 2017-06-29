@@ -36,6 +36,6 @@ elixir.config.images = {
 elixir(function(mix) {
     mix.scriptsIn()
         .wiredep('resources/views/layouts.app.blade.php')
-		//.jshint();
 		.imagemin();
+		//.jshint();
 });

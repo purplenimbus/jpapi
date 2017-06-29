@@ -38,7 +38,7 @@ angular
 				controller	:	'MainCtrl',
 				controllerAs	:	'main',
 				resolve : {
-					init : function($rootScope,location){
+					init : function($rootScope,accountData){
 						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
@@ -46,34 +46,13 @@ angular
 						
 						$rootScope.logged_in = false;
 					
+						var location = accountData.setUserLocation();
 						
-						if(!$rootScope.user){
-							$rootScope.user = {};
-						}
+						$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
+														
+						angular.element('.loader').hide();
 						
-						//Get Home location of the current user
-						if(navigator.geolocation && !$rootScope.user.location) {
-							//console.log('Location Needed');
-							
-							$rootScope.user.location =	{};
-							
-							return location.getLocation().then(function(result){
-								
-								console.log('Location Result',result);
-								
-								$rootScope.user.location.location = result[1].formatted_address;
-									
-								$rootScope.user.location.place_id = result[1].place_id;
-								
-								$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
-																
-								angular.element('.loader').hide();
-																
-								return result;
-								
-							});
-
-						}
+						return location;
 					}
 				}
 			})
@@ -1320,7 +1299,7 @@ angular.module('jpApp')
  * Service of the jpApp
  */
 angular.module('jpApp')
-	.service('accountData', function ($q,$http,jobs)
+	.service('accountData', function ($q,$http,jobs,$rootScope,location)
 	{
 		return {
 			user		: null,
@@ -1332,6 +1311,34 @@ angular.module('jpApp')
 			},
 			getJobs		:	function(id){
 				return $http.get('/api/profile/{'+id+'}/jobs');
+			},
+			/**
+			 * Sets the Users Location in the $rootScope
+			 */
+			setUserLocation : function(){
+				if(!$rootScope.user){
+					$rootScope.user = {};
+				}
+				
+				//Get Home location of the current user
+				if(navigator.geolocation && !$rootScope.user.location) {
+					//console.log('Location Needed');
+					
+					$rootScope.user.location =	{};
+					
+					return location.getLocation().then(function(result){
+						
+						console.log('Location Result',result);
+						
+						$rootScope.user.location.location = result[1].formatted_address;
+							
+						$rootScope.user.location.place_id = result[1].place_id;
+														
+						return result;
+						
+					});
+
+				}
 			}
 		};
 	});
@@ -1471,6 +1478,8 @@ angular.module('jpApp')
 		row		:	function(body,cls){
 			var str = '';
 			
+			console.log('Elements str',str);
+			
 			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
@@ -1486,9 +1495,14 @@ angular.module('jpApp')
 		 * @returns {String}
 		 */
 		column	:	function(num,body){
-			var str=	'';
+			var str=	'',
+			width = '';
 			
-			str	+=	'<div class="uk-width-'+num+'">';
+			if(typeof num === 'array' && num.length){
+				width = num[0]+'-'+num[1];
+			}
+			
+			str	+=	'<div class="uk-width-'+width+'">';
 			str	+=		body;
 			str	+=	'</div>';
 
@@ -1553,7 +1567,7 @@ angular.module('jpApp')
 				
 				str +=	'<div class="input-field ';
 				str +=  object.icon ? 'uk-form-icon ' : '';
-				str +=  object.colSize ? 'col m'+object.colSize.toString()+' s12">' : 'uk-width-1-1">';
+				str +=  object.colSize ? 'col m'+object.colSize.toString()+' uk-width-1-1">' : 'uk-width-1-1">';
 				str +=  object.icon ?  self.glyph(object.icon) : '';
 				str	+=	'<input ';
 				str	+=	object.type	?	'type="'+object.type+'"' : '';
@@ -1915,8 +1929,8 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form class="uk-form">';
-				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column('1-1',elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid">';
+				str	+=	elements.column(1,elements.form.input({ 	
 														type		:	'email',	
 														cls			:	'uk-form-large uk-width-1-1 validate'	,	
 														placeholder	:	'Email'	,	
@@ -1926,8 +1940,8 @@ angular.module('jpApp')
 														icon 		:	'user'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-row">';
-				str	+=	elements.column('1-1',elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid">';
+				str	+=	elements.column(1,elements.form.input({ 	
 														type		:	'password',	
 														cls			:	'uk-form-large  uk-width-1-1 validate'	,	
 														placeholder	:	'Password'	,	
@@ -1937,9 +1951,9 @@ angular.module('jpApp')
 														icon 		:	'lock'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-row uk-grid">';
-				str	+=		elements.column('1-2',elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
-				str	+=		elements.column('1-2',elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=	'<div class="uk-form-uk-grid uk-grid">';
+				str	+=		elements.column(5,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=		elements.column(5,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -1965,41 +1979,36 @@ angular.module('jpApp')
 				var str	=	'';
 				
 					str	+=	'<form>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type e.g Full time , Part time..', name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_type',typeahead : { datasets:'jobTypes'}});
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level e.g Entry , Junior, Intermediate..' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_level',typeahead : { datasets:'jobLevels'}});
-					str	+=			elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_category',typeahead : { datasets:'jobCategories'}});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true });
-					str	+=			elements.form.input({ type:'text', colSize: 6, cls:'typeahead' , label : 'Minimum Qualification' , name : 'min_qualifications' , model:'currentAsset.min_qualification' , required:true , asset :'min_qualification',typeahead : { datasets:'minQualification'}});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 });
-					str	+=		'</div>';			
-					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12 s12">';
-					str	+=				'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>';
-					str	+=				'<div id="pay"></div>';
-					str	+=			'</div>';
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.input({ type:'text', colSize: 12, cls:'typeahead' , label : 'Salary Type' , name : 'salary_types' , model:'currentAsset.salary_type.name' , required:true , asset :'salary_type',typeahead : { datasets:'salaryTypes'}});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true});
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			'<div class="range-field col m12 s12">';
-					str	+=			'<label>Required Skills</label>';
-					//str	+=				elements.form.chips({ colSize: 12, cls:'hidden' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'});
-					str	+=				elements.form.tagit({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills'});
-					str	+=			'</div>';
-					str	+=		'</div>';
-					str	+=		'<div class="row">';
-					str	+=			elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentAsset.application_deadline', required:true });
-					str	+=		'</div>';
+					
+					str	+=		elements.row(
+									elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.title' , label : 'Job Title' , name : 'job_title' , required:true })+
+									elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Type e.g Full time , Part time..', name : 'job_types' , model:'currentAsset.job_type.name' , required:true , asset :'job_type',typeahead : { datasets:'jobTypes'}})+
+									elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Level e.g Entry , Junior, Intermediate..' , name : 'job_levels' , model:'currentAsset.job_level.name' , required:true , asset :'job_level',typeahead : { datasets:'jobLevels'}})+
+									elements.form.input({ type:'text', colSize: 2, cls:'typeahead' , label : 'Job Category' , name : 'job_categories' , model:'currentAsset.job_category.name' , required:true , asset :'job_category',typeahead : { datasets:'jobCategories'}})
+								);
+								
+					str	+=		elements.row(elements.form.input({ type:'text' ,colSize: 6, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Job Location' , name : 'job_location' , required:true })+
+											elements.form.input({ type:'text', colSize: 6, cls:'typeahead' , label : 'Minimum Qualification' , name : 'min_qualifications' , model:'currentAsset.min_qualification' , required:true , asset :'min_qualification',typeahead : { datasets:'minQualification'}})
+											);
+											
+					str	+=		elements.row(elements.form.range({ colSize: 12, cls:'', model:'currentAsset.min_experience' , label : 'Minimum Experience' , name : 'job_min_experience' , min:0,max:15 }));
+					
+					str	+=		elements.row('<div class="range-field col m12 s12">'+
+												'<label>Salary <span class="min"></span> - <span class="max"></span> {{ currentAsset.salary_type.name }}</label>'+
+												'<div id="pay"></div>'+
+											'</div>');
+					
+					str	+=		elements.row(elements.form.input({ type:'text', colSize: 12, cls:'typeahead' , label : 'Salary Type' , name : 'salary_types' , model:'currentAsset.salary_type.name' , required:true , asset :'salary_type',typeahead : { datasets:'salaryTypes'}}));
+					
+					str	+=		elements.row(elements.form.textarea({ colSize: 12, cls:'' , label : 'Job Description' , name : 'job_description' , model:'currentAsset.description' , required:true}));
+					
+					str	+=		elements.row('<div class="range-field col m12 s12">'+
+												'<label>Required Skills</label>'+
+					//str	+=				elements.form.chips({ colSize: 12, cls:'hidden' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills',chipType : 'chips-autocomplete'})+
+												elements.form.tagit({ colSize: 12, cls:'' , label : 'Required Skills' , name : 'required_skills' , model:'currentAsset.required_skills'})+
+											'</div>');
+									
+					str	+=			elements.row(elements.form.date({ colSize: 12, cls:'' , label : 'Application Deadline' , name : 'application_deadline' , model:'currentAsset.application_deadline', required:true }));
 					str	+=	'</form>';
 					
 				return str;
@@ -2012,21 +2021,21 @@ angular.module('jpApp')
 				var str	=	'';
 				
 					str	+=	'<form>';
-					//str +=		elements.row(elements.toolbar('ng-click="action()"'));
-					str	+=		'<div class="row">';
+					//str +=		elements.uk-grid(elements.toolbar('ng-click="action()"'));
+					str	+=		'<div class="uk-grid">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.name' , label : 'Company Name' , name : 'company_name' , required:true });
 					str	+=			elements.form.input({ type:'text', colSize: 4, cls:'typeahead' , label : 'Company Type e.g Software , Construction ', name : 'company_cat' , model:'currentAsset.company_category[0].name' , required:true , asset :'company_category',typeahead : { datasets:'companyCats'}});
 					//str	+=			elements.form.select({ colSize: 4, cls:'' , label : 'Company Category' , name : 'company_cat' , model:'currentAsset.company_category' , required:true ,asset:'company'});
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'autocomplete', model:'currentAsset.location.name' , label : 'Company Location' , name : 'company_location' , required:true });
 					str	+=		'</div>';
-					str	+=		'<div class="row">';
+					str	+=		'<div class="uk-grid">';
 					str	+=			elements.form.input({ type:'text' ,colSize: 8, cls:'', model:'currentAsset.address' , label : 'Company Address' , name : 'company_address' , required:false });
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.zipcode' , label : 'Zipcode' , name : 'zipcode' , required:false });
 					str +=		'</div>';
-					str	+=		'<div class="row">';
+					str	+=		'<div class="uk-grid">';
 					str	+=			elements.form.textarea({ colSize: 12, cls:'' , label : 'Company Description' , name : 'company_description' , model:'currentAsset.description' , required:true});
 					str	+=		'</div>';
-					str	+=		'<div class="row">';
+					str	+=		'<div class="uk-grid">';
 					str	+=			elements.form.input({ type:'email' ,colSize: 4, cls:'', model:'currentAsset.email' , label : 'Email Address' , name : 'email' , required:false });
 					str	+=			elements.form.input({ type:'tel' ,colSize: 4, cls:'', model:'currentAsset.phone' , label : 'Phone Number' , name : 'phone' , required:false });
 					str	+=			elements.form.input({ type:'text' ,colSize: 4, cls:'', model:'currentAsset.logo' , label : 'Company Logo' , name : 'logo' });
@@ -2043,12 +2052,12 @@ angular.module('jpApp')
 				var str	=	'';
 				
 				str += '<div class="col m12">';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<h4 class="left">Experience</h4>';
 				str += 		'<button ng-click="addExperience()" class="right btn-floating btn-small">'+elements.glyph('add','large')+'</button>';
 				str += '</div>';
-				str += '<div class="row card" ng-repeat="exp in currentAsset.experience">';
-				str += 		'<div class="row">';
+				str += '<div class="uk-grid card" ng-repeat="exp in currentAsset.experience">';
+				str += 		'<div class="uk-grid">';
 				str += 			'<button class="right btn-floating btn-small" ng-click="removeExperience($index)">'+elements.glyph('delete','large')+'</button>';
 				str += 		'</div>';
 				str += 		'<div class="card-content">';
@@ -2057,12 +2066,12 @@ angular.module('jpApp')
 				str += '</div>';
 				str += '</div>';
 				str += '<div class="col m12">';
-				str += '<div class="row">';
+				str += '<div class="uk-grid">';
 				str += 		'<h4 class="left">Education</h4>';
 				str += 		'<button ng-click="addEducation()" class="right btn-floating">'+elements.glyph('add','large')+'</button>';
 				str += '</div>';
-				str += '<div class="row card" ng-repeat="exp in currentAsset.education">';
-				str += 		'<div class="row">';
+				str += '<div class="uk-grid card" ng-repeat="exp in currentAsset.education">';
+				str += 		'<div class="uk-grid">';
 				str += 			'<button class="right btn-floating btn-small" ng-click="removeEducation($index)">'+elements.glyph('delete','large')+'</button>';
 				str += 		'</div>';
 				str += 		'<div class="card-content">';

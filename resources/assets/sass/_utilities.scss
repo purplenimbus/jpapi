@@ -14,7 +14,7 @@
 	border-color: $gray;
 }
 
-/*
+
 .loading{
 	background: rgba(white,0.5);
 	width:100%;
@@ -30,7 +30,15 @@
 		transform: translateY(-50%) translateX(-50%);
 	}
 }
-*/
+
+
+.bg-grey{
+	background: #fafafa;
+}
+
+.bg-white{
+	background: white;
+}
 
 .progress{
 	margin:0px;
