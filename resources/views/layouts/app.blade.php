@@ -8,6 +8,7 @@
     <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
+	<link rel="stylesheet" href="/bower_components/uikit/css/uikit.gradient.min.css" />
 	<!-- endbower -->
 	
 	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">

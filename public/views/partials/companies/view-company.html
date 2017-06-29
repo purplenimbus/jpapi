@@ -1,55 +1,48 @@
 <div class="view-asset">
-	<div ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="fixed-action-btn">
-		<div class="container">
-			<a class="btn-floating btn-large red waves-effect waves-light" ng-click="edit($event)">
-				<i class="large material-icons">mode_edit</i>
-			</a>
-		</div>
-	</div>
-	<aside class="toolbar thick lighten-3">
-		<div class="row">
-			<div class="container">
-				<div class="title center grey-text text-lighten-5">
-					<img class="responsive-img circle" ng-show="currentAsset.logo" src="{{ currentAsset.logo }}">
-					<h1>{{ currentAsset.name }} </h1>
-					<div class="chips">
-						<div class="chip grey-text text-lighten-5">
-							{{ currentAsset.company_category[0].name }}
-						</div>
-					</div>
-					<div class="info">
-						<ul class="collection">
-							<li ng-show="currentAsset.job_category.name">
-								<i class="material-icons">insert_chart</i> {{ currentAsset.company_category[0].name }}
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
+	<aside class="toolbar">
+		<div class="uk-container uk-container-center">
+		
 		</div>
 	</aside>
-	<section class="row hide info grey lighten-1">
-		<div class="container">
-			<div class="row">
-				<div class="col m4 s12">{{ currentAsset.address }}</div>
-				<div class="col m4 s12">{{ currentAsset.zip }}</div>
-			</div>
+	<div class="uk-container uk-container-center bg-grey">
+		<div class="uk-grid">
+			<main class="uk-width-medium-7-10 uk-width-small-1-1 job-info">
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
+					<div class="uk-grid">
+						<div class="uk-width-3-10">
+							<div class="uk-thumbnail uk-thumbnail-expand">
+								<img ng-if="currentAsset.logo" src="{{ currentAsset.logo }}"/>
+							</div>
+						</div>
+						<div class="uk-width-7-10">
+							<article class="uk-article">
+								<p class="uk-article-lead">{{ currentAsset.name }}</p>
+								<p class="uk-article-meta">{{ currentAsset.company_category[0].name }}</p>
+								<div class="uk-button-group">
+									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
+								</div>
+							</article>
+						</div>
+					</div>
+				</div>
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
+					<h3 class="uk-panel-title">About {{ currentAsset.name }}</h3>
+					<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
+				</div>
+			</main>
+			<aside class="uk-width-medium-3-10 uk-width-small-1-1">
+				<div class="uk-panel uk-margin-small-top">
+					<h3 class="uk-panel-title">Job Openings</h3>
+					<ul class="uk-list uk-list-line">
+						<li ng-repeat="job in currentAsset.jobs">
+							<a href="#jobs/{{ job.id }}">
+								{{ job.title }} <span class="uk-mute-text">{{ job.job_type.name }}</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</aside>
 		</div>
-	</section>	
-	<section class="row description grey lighten-3 thick">
-		<div class="container">
-			<h6 class="center">About {{ currentAsset.name }}</h6>
-			<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
-		</div>
-	</section>
-	<section class="row jobs lighten-2 thick">
-		<div class="container">
-			<h6 class="center teal-text text-lighten-2">Job Openings</h6>
-			<div class="collection">
-				<a href="#jobs/{{ job.id }}" ng-repeat="job in currentAsset.jobs" class="collection-item">
-					{{ job.title }} <span class="grey-text text-lighten-1">{{ job.job_type.name }}</span>
-				</a>
-			</div>
-		</div>
-	</section>
+	</div>
 </div>
+

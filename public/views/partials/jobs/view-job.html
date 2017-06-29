@@ -6,20 +6,20 @@
 	</aside>
 	<div class="uk-container uk-container-center bg-grey">
 		<div class="uk-grid">
-			<main class="uk-width-7-10">
+			<main class="uk-width-medium-7-10 uk-width-small-1-1 job-info">
 				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
 					<div class="uk-grid">
 						<div class="uk-width-3-10">
 							<div class="uk-thumbnail uk-thumbnail-expand">
-								<img src="http://purplenimbus.net/jp/wp-content/uploads/2017/03/logo-placeholder-2.png" />
+								<img src="{{ currentAsset.company.logo }}" />
 							</div>
 						</div>
 						<div class="uk-width-7-10">
 							<article class="uk-article">
 								<p class="uk-article-lead">{{ currentAsset.title }}</p>
-								<p><span ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</span> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
+								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
 								<p class="uk-article-meta info">
-									<ul class="uk-subnav uk-subnav-line uk-text-muted">
+									<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small">
 										<li ng-if="currentAsset.job_category.name">
 											{{ currentAsset.job_category.name }}
 										</li>
@@ -63,7 +63,7 @@
 					<div ng-bind-html="currentAsset.company.description">{{ currentAsset.company.description }}</div>
 				</div>
 			</main>
-			<aside class="uk-width-3-10">
+			<aside class="uk-width-medium-3-10 uk-width-small-1-11">
 			
 			</aside>
 		</div>

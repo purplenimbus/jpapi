@@ -6,8 +6,8 @@ require( 'elixir-jshint' );
 require('laravel-elixir-imagemin');
 
 var paths = {
-    //'bootstrap': './public/bower_components/bootstrap-sass/assets/',
-    //'materialize': './public/bower_components/materialize/sass/'
+    'bootstrap': './public/bower_components/bootstrap-sass/assets/',
+    'materialize': './public/bower_components/materialize/sass/'
 }
 
 /*
@@ -34,8 +34,13 @@ elixir.config.images = {
 };
  
 elixir(function(mix) {
-    mix.scriptsIn()
-        .wiredep('resources/views/layouts.app.blade.php')
-		.imagemin();
-		//.jshint();
+	mix.sass('main.scss','public/css/', {includePaths: [paths.bootstrap + 'stylesheets/',paths.materialize+'components/']})
+	//.scripts(['./public/bower_components/materialize/extras/noUiSlider/nouislider.min.js'])
+	.scriptsIn()
+	/*.styles([
+		'./public/bower_components/materialize/extras/noUiSlider/nouislider.css'
+	])*/
+	.wiredep('resources/views/layouts.app.blade.php')
+	//.jshint();
+	.imagemin();
 });

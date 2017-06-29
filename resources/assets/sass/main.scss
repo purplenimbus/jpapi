@@ -19,6 +19,9 @@ body{
 				margin:0px !important;
 			}
 		}
+		main.job-info{
+			margin-top: -70px;
+		}
 		section{
 			&#home{
 				height: 87vh;
@@ -205,9 +208,6 @@ body{
 			.view-asset{
 				h1,h6{
 					font-weight:300;
-				}
-				main{
-					margin-top: -70px;
 				}
 			}
 		}
