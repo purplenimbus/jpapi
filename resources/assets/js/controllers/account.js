@@ -23,7 +23,7 @@ angular.module('jpApp')
 		
 		var autocomplete;
 	
-		angular.element('ul.tabs').tabs(); //Initialize Tabs
+		//angular.element('ul.tabs').tabs(); //Initialize Tabs
 				
 		/**
 		 * Edit User Profile

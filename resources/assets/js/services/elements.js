@@ -34,14 +34,14 @@ angular.module('jpApp')
 		 */
 		row		:	function(body,cls){
 			var str = '';
-			
-			console.log('Elements str',str);
-			
+						
 			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
 			str += 		body;
 			str += '</div>';
+			
+			console.log('Elements str',str);
 			
 			return str;
 		},

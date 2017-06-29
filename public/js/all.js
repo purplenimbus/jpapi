@@ -260,7 +260,7 @@ angular.module('jpApp')
 		
 		var autocomplete;
 	
-		angular.element('ul.tabs').tabs(); //Initialize Tabs
+		//angular.element('ul.tabs').tabs(); //Initialize Tabs
 				
 		/**
 		 * Edit User Profile
@@ -1477,14 +1477,14 @@ angular.module('jpApp')
 		 */
 		row		:	function(body,cls){
 			var str = '';
-			
-			console.log('Elements str',str);
-			
+						
 			str += '<div class="uk-grid';
 			str += cls ? cls : '';
 			str += '">';
 			str += 		body;
 			str += '</div>';
+			
+			console.log('Elements str',str);
 			
 			return str;
 		},
@@ -2226,13 +2226,15 @@ angular.module('jpApp')
 			str	+=	'</div>';
 			
 			angular.element('body').append($compile(str)($scope));
-						
-			$window.UIkit.modal('#modal').show().on({
-
+			
+			console.log('Modal $window',$window);
+			
+			var modal = $window.UIkit.modal('#modal').show();
+			
+			modal.on({
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
 				}
-				
 			});
 			
 			return deferred.promise;
