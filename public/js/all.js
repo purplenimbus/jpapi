@@ -534,11 +534,17 @@ angular.module('jpApp')
 			validation.validate(form).then(function(result){
 				
 				console.log(result);
-				
+				angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
 				if(result.valid){											
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
 						console.log('Data',result);
+						angular.element('#modal .uk-alert')
+								.removeClass('uk-hidden uk-alert-danger')
+								.addClass('uk-alert-success')
+								.children('p')
+								.html('Logged In Successfully'); //Show Success Alert
+								
 						$rootScope.user = {};
 						console.log('Logged in Rootscope',$rootScope);
 						console.log('Logged in Auth',$auth.isAuthenticated());
@@ -546,10 +552,18 @@ angular.module('jpApp')
 						console.log('Logged in payload',$auth.getPayload());
 						auth.setCookie('auth',JSON.stringify(result.data.user),9);
 						$rootScope.user.info = result.data.user;
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+						
 					}).catch(function(error){
 						console.log('Login Error',error);
 						//TO DO Add Error Message to login modal
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+						angular.element('#modal .uk-alert')
+								.removeClass('uk-hidden uk-alert-succress')
+								.addClass('uk-alert-danger')
+								.children('p')
+								.html('Invalid Login');//Add error message
 					});
 					
 				}else{
@@ -563,7 +577,7 @@ angular.module('jpApp')
         };
 		
 		$scope.showLoginModal	=	function(){
-			var modalType	=	'uk-modal-dialog-small',
+			var modalType	=	'login',
 				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
@@ -1494,15 +1508,21 @@ angular.module('jpApp')
 		 * @param {String} body - The body of the column element
 		 * @returns {String}
 		 */
-		column	:	function(num,body){
+		column	:	function(num,body,cls){
 			var str=	'',
 			width = '';
 			
-			if(typeof num === 'array' && num.length){
+			console.log('num',Array.isArray(num),num);
+			
+			if(Array.isArray(num) && num.length){
 				width = num[0]+'-'+num[1];
 			}
 			
-			str	+=	'<div class="uk-width-'+width+'">';
+			console.log('column',width);
+			
+			str	+=	'<div class="uk-width-'+width+' ';
+			str +=  cls ? cls : '';
+			str +=  '">';
 			str	+=		body;
 			str	+=	'</div>';
 
@@ -1929,8 +1949,8 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form class="uk-form">';
-				str	+=	'<div class="uk-form-uk-grid">';
-				str	+=	elements.column(1,elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid uk-margin-small-bottom">';
+				str	+=	elements.column([1,1],elements.form.input({ 	
 														type		:	'email',	
 														cls			:	'uk-form-large uk-width-1-1 validate'	,	
 														placeholder	:	'Email'	,	
@@ -1940,8 +1960,8 @@ angular.module('jpApp')
 														icon 		:	'user'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-uk-grid">';
-				str	+=	elements.column(1,elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid uk-margin-small-bottom">';
+				str	+=	elements.column([1,1],elements.form.input({ 	
 														type		:	'password',	
 														cls			:	'uk-form-large  uk-width-1-1 validate'	,	
 														placeholder	:	'Password'	,	
@@ -1951,9 +1971,9 @@ angular.module('jpApp')
 														icon 		:	'lock'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-uk-grid uk-grid">';
-				str	+=		elements.column(5,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
-				str	+=		elements.column(5,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=	'<div class="uk-form-uk-grid uk-grid uk-grid-small">';
+				str	+=		elements.column([5,10],elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }),'uk-margin-small-bottom');
+				str	+=		elements.column([5,10],elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }),'uk-margin-small-bottom');
 				str	+=	'</div>';
 				str	+=	'</form>';
 				
@@ -2219,7 +2239,12 @@ angular.module('jpApp')
 			
 			str	+=	'<div id="modal" class="uk-modal '+type+'">';
 			str += 		'<div class="uk-modal-dialog">';
+			str +=  		'<div class="uk-modal-spinner uk-hidden"></div>';
 			str	+=			title ? '<div class="uk-modal-header">'+title+'</div>' : '';
+			str	+=				'<div class="uk-alert uk-hidden">';
+			str	+=				'<a href="" class="uk-alert-close uk-close"></a>';
+			str	+=				'<p></p>';
+			str +=				'</div>';
 			str	+=				body;
 			str	+=			footer ? '<div class="uk-modal-footer">'+footer+'</div>' : '';
 			str	+=		'</div>';

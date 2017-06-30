@@ -51,15 +51,21 @@ angular.module('jpApp')
 		 * @param {String} body - The body of the column element
 		 * @returns {String}
 		 */
-		column	:	function(num,body){
+		column	:	function(num,body,cls){
 			var str=	'',
 			width = '';
 			
-			if(typeof num === 'array' && num.length){
+			console.log('num',Array.isArray(num),num);
+			
+			if(Array.isArray(num) && num.length){
 				width = num[0]+'-'+num[1];
 			}
 			
-			str	+=	'<div class="uk-width-'+width+'">';
+			console.log('column',width);
+			
+			str	+=	'<div class="uk-width-'+width+' ';
+			str +=  cls ? cls : '';
+			str +=  '">';
 			str	+=		body;
 			str	+=	'</div>';
 

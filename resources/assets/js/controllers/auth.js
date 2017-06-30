@@ -28,11 +28,17 @@ angular.module('jpApp')
 			validation.validate(form).then(function(result){
 				
 				console.log(result);
-				
+				angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
 				if(result.valid){											
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
 						console.log('Data',result);
+						angular.element('#modal .uk-alert')
+								.removeClass('uk-hidden uk-alert-danger')
+								.addClass('uk-alert-success')
+								.children('p')
+								.html('Logged In Successfully'); //Show Success Alert
+								
 						$rootScope.user = {};
 						console.log('Logged in Rootscope',$rootScope);
 						console.log('Logged in Auth',$auth.isAuthenticated());
@@ -40,10 +46,18 @@ angular.module('jpApp')
 						console.log('Logged in payload',$auth.getPayload());
 						auth.setCookie('auth',JSON.stringify(result.data.user),9);
 						$rootScope.user.info = result.data.user;
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+						
 					}).catch(function(error){
 						console.log('Login Error',error);
 						//TO DO Add Error Message to login modal
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+						angular.element('#modal .uk-alert')
+								.removeClass('uk-hidden uk-alert-succress')
+								.addClass('uk-alert-danger')
+								.children('p')
+								.html('Invalid Login');//Add error message
 					});
 					
 				}else{
@@ -57,7 +71,7 @@ angular.module('jpApp')
         };
 		
 		$scope.showLoginModal	=	function(){
-			var modalType	=	'uk-modal-dialog-small',
+			var modalType	=	'login',
 				modalTitle	=	'<h4 class="left">Login</h4>',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');

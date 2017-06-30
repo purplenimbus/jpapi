@@ -107,6 +107,11 @@ textarea.materialize-textarea {
     .chips.hollow .chip a {
       color: lightgray; }
 
+#modal.login .uk-modal-dialog {
+  max-width: 400px; }
+  #modal.login .uk-modal-dialog .uk-modal-spinner {
+    z-index: 1000; }
+
 body .navbar {
   margin: 0px;
   border-bottom: 1px solid lightgray; }

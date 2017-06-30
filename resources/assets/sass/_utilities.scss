@@ -138,3 +138,14 @@ textarea.materialize-textarea{
 		}
 	}
 }
+
+#modal{
+	&.login{
+		.uk-modal-dialog{
+			max-width:400px;
+			.uk-modal-spinner{
+				z-index:1000;
+			}
+		}
+	}
+}

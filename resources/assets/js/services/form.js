@@ -19,8 +19,8 @@ angular.module('jpApp')
 				var	str	=	'';
 				
 				str	+=	'<form class="uk-form">';
-				str	+=	'<div class="uk-form-uk-grid">';
-				str	+=	elements.column(1,elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid uk-margin-small-bottom">';
+				str	+=	elements.column([1,1],elements.form.input({ 	
 														type		:	'email',	
 														cls			:	'uk-form-large uk-width-1-1 validate'	,	
 														placeholder	:	'Email'	,	
@@ -30,8 +30,8 @@ angular.module('jpApp')
 														icon 		:	'user'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-uk-grid">';
-				str	+=	elements.column(1,elements.form.input({ 	
+				str	+=	'<div class="uk-form-uk-grid uk-margin-small-bottom">';
+				str	+=	elements.column([1,1],elements.form.input({ 	
 														type		:	'password',	
 														cls			:	'uk-form-large  uk-width-1-1 validate'	,	
 														placeholder	:	'Password'	,	
@@ -41,9 +41,9 @@ angular.module('jpApp')
 														icon 		:	'lock'
 													}));
 				str	+=	'</div>';
-				str	+=	'<div class="uk-form-uk-grid uk-grid">';
-				str	+=		elements.column(5,elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }));
-				str	+=		elements.column(5,elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }));
+				str	+=	'<div class="uk-form-uk-grid uk-grid uk-grid-small">';
+				str	+=		elements.column([5,10],elements.button({ ngClick : 'login($event)',label:'login' , cls : 'uk-button-large uk-width-1-1' }),'uk-margin-small-bottom');
+				str	+=		elements.column([5,10],elements.button({ ngClick : 'authenticate(\'linkedin\')',label:'login with LinkedIn' , cls : 'uk-button-large uk-width-1-1' }),'uk-margin-small-bottom');
 				str	+=	'</div>';
 				str	+=	'</form>';
 				

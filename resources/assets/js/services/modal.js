@@ -18,7 +18,12 @@ angular.module('jpApp')
 			
 			str	+=	'<div id="modal" class="uk-modal '+type+'">';
 			str += 		'<div class="uk-modal-dialog">';
+			str +=  		'<div class="uk-modal-spinner uk-hidden"></div>';
 			str	+=			title ? '<div class="uk-modal-header">'+title+'</div>' : '';
+			str	+=				'<div class="uk-alert uk-hidden">';
+			str	+=				'<a href="" class="uk-alert-close uk-close"></a>';
+			str	+=				'<p></p>';
+			str +=				'</div>';
 			str	+=				body;
 			str	+=			footer ? '<div class="uk-modal-footer">'+footer+'</div>' : '';
 			str	+=		'</div>';
