@@ -43,12 +43,13 @@ class WordpressController extends Controller
 		$model = DB::table($model_type)
 					->where('wp_id',$wp_id)
 					->get();
+		$data = array();
 					
 		foreach($requests as $key => $req){
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
-				echo "------------------------------------------------";
+				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
 					case 'array' : 
@@ -58,12 +59,14 @@ class WordpressController extends Controller
 					
 					default : 
 						echo "STRING  : ".$request[$key]." \r\n";
+						$data[$key] = $request->input($key);
 						break;
 				}
 			}
 		}
 		
-		//var_dump($model);
+		echo "Data : ".$key."\r\n";
+		var_dump($data);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		/*
