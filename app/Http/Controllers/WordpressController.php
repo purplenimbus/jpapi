@@ -70,7 +70,7 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
-		$job = Job::where('wp_id',$wp_id);
+		$job = Job::where('wp_id',$wp_id)->get();
 					
 		$data = array();
 					
