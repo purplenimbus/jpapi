@@ -146,6 +146,8 @@ class JobController extends Controller
 		
 		$data = array();
 		
+		echo "Data from wordpress"."\r\n";
+		
 		var_dump($requests);
 		
 		if($job):
