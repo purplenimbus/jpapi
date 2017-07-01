@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
 
 class WordpressController extends Controller
 {
@@ -35,6 +37,10 @@ class WordpressController extends Controller
 		echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
 		
 		var_dump($requests);
+		
+		$model = DB::table($model_type)->get();
+		
+		return response()->json(['data' => $model],200);
     }
 	
 }
