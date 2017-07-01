@@ -37,13 +37,15 @@ class WordpressController extends Controller
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
 		echo "JP MODEL OBJECT \r\n";
-		
+				
 		$model = DB::table($model_type)->get();
+		
+		var_dump($model);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		/*
 		
-		//var_dump($model_type);
+		//
 		
 		//var_dump($requests);
 		
