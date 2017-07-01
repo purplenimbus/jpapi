@@ -39,9 +39,9 @@ class WordpressController extends Controller
 		
 		//var_dump($requests);
 		
-		$model = DB::table($model_type)->get();
+		$model = DB::table($model_type)->get();*/
 		
-		return response()->json(['data' => $model],200);*/
+		return response()->json(['$requests' => $requests],200);
     }
 	
 }
