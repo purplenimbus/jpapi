@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Model;
 
 class WordpressController extends Controller
 {
@@ -41,7 +42,7 @@ class WordpressController extends Controller
 		
 		$model = DB::table($model_type)->get();*/
 		
-		return response()->json(['model_type' => $model_type],200);
+		//return response()->json(['model_type' => $model_type],200);
     }
 	
 }
