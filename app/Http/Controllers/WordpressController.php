@@ -48,7 +48,19 @@ class WordpressController extends Controller
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				var_dump($request[$key]);
-				echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+				switch(gettype($request[$key])){
+					case 'array' : function(){
+						echo "ARRAY ++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+					}; 
+					
+					break;
+					
+					default : function(){
+						echo "STRING  : ".$request[$key]." \r\n";
+					}; 
+					
+					break;
+				}
 			}
 		}
 		
