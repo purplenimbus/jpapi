@@ -69,9 +69,7 @@ class WordpressController extends Controller
 		$requests = $request->all();
 		
 		$wp_id 		= $request->wp_id;
-		
-		$job = Job::where('wp_id',$wp_id)->get();
-					
+							
 		$data = array();
 					
 		foreach($requests as $key => $req){
@@ -103,9 +101,11 @@ class WordpressController extends Controller
 		
 		var_dump($data);
 		
-		$job->fill($data);
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data)->get();
 		
-		$job->save();
+		//$job->fill($data);
+		
+		//$job->save();
 				
 		return $job;
 	}
