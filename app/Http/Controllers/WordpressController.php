@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
 
+use	App\Job;
+use	App\Salary;
+use	App\Job_Type;
+use	App\Job_Category;
+use	App\Job_Level;
+use	App\Job_Skill;
+use	App\Location;
+use	App\Application;
+
 class WordpressController extends Controller
 {
     /**
@@ -38,6 +47,27 @@ class WordpressController extends Controller
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
+		switch($model_type){
+			case 'jobs' : $data = $this->job(); break;
+		}
+		
+		echo "Data : ".$key."\r\n";
+		
+		var_dump($data);
+		
+		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+
+		return response()->json(['data' => $data],200);
+
+    }
+	
+	/**
+     * Job Model
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function job($requests){
 		echo "JP MODEL OBJECT \r\n";
 				
 		$model = DB::table($model_type)
@@ -70,22 +100,9 @@ class WordpressController extends Controller
 			}
 		}
 		
-		echo "Data : ".$key."\r\n";
-		
-		var_dump($data);
-		
-		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
-		/*
-		
-		//
-		
-		//var_dump($requests);
-		
-		$model = DB::table($model_type)->get();
-		
-		return response()->json(['model_type' => $model_type],200);
-		
-		*/
-    }
+		$job = Job::create($data);
+				
+		return $job;
+	}
 	
 }
