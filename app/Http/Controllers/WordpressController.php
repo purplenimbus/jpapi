@@ -38,7 +38,9 @@ class WordpressController extends Controller
 		
 		echo "JP MODEL OBJECT \r\n";
 				
-		$model = DB::table($model_type)->get();
+		$model = DB::table($model_type)
+					->where('wp_id',$wp_id)
+					->get();
 		
 		var_dump($model);
 		
