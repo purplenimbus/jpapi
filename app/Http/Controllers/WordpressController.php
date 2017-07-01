@@ -34,7 +34,7 @@ class WordpressController extends Controller
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		echo "WP ID : ".$wp_id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
+		echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
@@ -43,8 +43,16 @@ class WordpressController extends Controller
 		$model = DB::table($model_type)
 					->where('wp_id',$wp_id)
 					->get();
+					
+		foreach($requests as $key => $req){
+			if($request->has($key)){
+				echo "key : ".$key."\r\n";
+				var_dump($request[$key]);
+				echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+			}
+		}
 		
-		var_dump($model);
+		//var_dump($model);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		/*
