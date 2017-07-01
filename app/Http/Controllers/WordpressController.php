@@ -30,13 +30,13 @@ class WordpressController extends Controller
 		
 		$model_type = $requests['jp_model'];
 		
-		var_dump($model_type);
+		//var_dump($model_type);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n"
 		
 		echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
 		
-		var_dump($requests);
+		//var_dump($requests);
 		
 		$model = DB::table($model_type)->get();
 		
