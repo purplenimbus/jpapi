@@ -30,4 +30,5 @@ class WordpressController extends Controller
 		
 		var_dump($requests);
     }
+	
 }
