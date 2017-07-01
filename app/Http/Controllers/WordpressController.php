@@ -32,7 +32,7 @@ class WordpressController extends Controller
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		//echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
+		echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
 		
 		/*
 		
@@ -42,7 +42,7 @@ class WordpressController extends Controller
 		
 		$model = DB::table($model_type)->get();*/
 		
-		//return response()->json(['model_type' => $model_type],200);
+		return response()->json(['model_type' => $model_type],200);
     }
 	
 }
