@@ -48,7 +48,7 @@ class WordpressController extends Controller
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
 		switch($model_type){
-			case 'jobs' : $data = $this->job(); break;
+			case 'jobs' : $data = $this->job($requests,$request); break;
 		}
 		
 		echo "Data : ".$key."\r\n";
@@ -67,7 +67,7 @@ class WordpressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function job($requests){
+    private function job($request_data,$request){
 		echo "JP MODEL OBJECT \r\n";
 				
 		$model = DB::table($model_type)
@@ -76,7 +76,7 @@ class WordpressController extends Controller
 					
 		$data = array();
 					
-		foreach($requests as $key => $req){
+		foreach($request_data as $key => $req){
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
