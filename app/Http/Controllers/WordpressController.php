@@ -107,7 +107,7 @@ class WordpressController extends Controller
 		
 		//$job->save();
 				
-		return $job;
+		return $job->id;
 	}
 	
 }
