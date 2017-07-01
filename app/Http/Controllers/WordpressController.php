@@ -27,11 +27,11 @@ class WordpressController extends Controller
     {
         $requests = $request->all();
 		
-		$model_type = $requests['jp_model'];
+		//$model_type = $requests['jp_model'];
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n"
 		
-		echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
+		//echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
 		
 		/*
 		
