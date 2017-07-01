@@ -140,12 +140,13 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
-		$job		=	Job::findorfail($id);
+		$job		=	Job::find($id);
 		
 		$requests	=	$request->all();
 		
 		$data = array();
-		//var_dump($requests);
+		
+		var_dump($requests);
 		
 		if($job):
 			foreach($requests as $key => $req){
