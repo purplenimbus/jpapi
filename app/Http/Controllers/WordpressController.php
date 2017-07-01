@@ -47,10 +47,10 @@ class WordpressController extends Controller
 		foreach($requests as $key => $req){
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
-				var_dump($request[$key]);
 				switch(gettype($request[$key])){
 					case 'array' : function(){
 						echo "ARRAY ++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+						var_dump($request[$key]);
 					}; 
 					
 					break;
