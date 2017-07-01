@@ -1,68 +1,57 @@
-<div class="uk-container uk-container-center">
+<aside class="header">
+	<div class="uk-container uk-container-center">
+	
+	</div>
+</aside>
+<div class="uk-container uk-container-center jobs_component">
 	<div class="uk-grid">
-		<aside class="uk-width-1-1 sidebar uk-hidden">
-			<div class="panel">
-				<div class="panel-content">
-					<h3 class="">Salary</h3>
-					<span class="hide">
-						<h3>Job Location</h3>
-						<ul class="list-unstyled">
-							<li>(3) Job Location</li>
-							<li>(5) Job Location</li>
-						</ul>
-					</span>
-					<h3>Job Category</h3>
-					<ul class="list-unstyled">
-						<li>(3) Job Category</li>
-						<li>(5) Job Category</li>
+		<div class="uk-width-small-1-1 uk-width-medium-7-10">
+			<div class="uk-panel uk-panel-box">
+				<aside class="uk-width-1-1 sidebar uk-margin">
+					<!-- Filter Controls -->
+					<ul id="toolbar" class="uk-subnav uk-subnav-pill">
+						<li data-uk-filter="" class="uk-active"><a href="">All</a></li>
+						<li data-uk-filter="part time"><a href="">Part Time</a></li>
+						<li data-uk-filter="full time"><a href="">Full Time</a></li>
 					</ul>
-					<h3>Job Type</h3>
-					<ul class="list-unstyled">
-						<li>(3) Job Type</li>
-						<li>(5) Job Type</li>
-					</ul>
-				</div>
-			</div>
-		</aside>
-		<main class="uk-width-1-1">
-			<div id="filter" class="uk-grid uk-hidden">
-				<div class="col-md-12">
-			
-				</div>
-			</div>
-			<div id="content" class="uk-grid">
-				<div class="uk-width-1-1">
-					<ul class="uk-list uk-list-line jobs">
-						<li ng-repeat="job in jobs.jobs">
-							<div class="uk-clearfix">
-								<div class="uk-float-left">
-									<a href="#jobs/{{ job.id }}" class="">{{ job.title }}</a> 	
-									<span ng-if="job.company.name" class="uk-text-muted">{{ job.company.name }}</span> <span ng-if="job.location.name" class="uk-text-muted">, {{ job.location.name }}</span>
-								</div>
-								<div class="uk-float-right">
-									<span class="uk-text-uppercase uk-badge" ng-if="job.job_type.name">{{ job.job_type.name }}</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</main>
-		<aside class="col m3 inset uk-hidden">
-			<div class="uk-grid">
-				<div class="col s12 m12">
-					<div class="card">
-						<div class="card-image">
-						  <img src="/images/view-job-bg.jpg;">
-						  <span class="card-title">Company Name</span>
-						  <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
-						</div>
-						<div class="card-content">
-						  <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+				</aside>
+				<main class="uk-width-1-1">
+					<div id="filter" class="uk-grid uk-hidden">
+						<div class="col-md-12">
+						
 						</div>
 					</div>
-				</div>
+					<div id="content">
+						<div class="uk-grid-width-small-1-1 uk-grid-width-medium-1-2" data-uk-grid="{controls: '#toolbar',gutter:20,animation:false}">
+							<div ng-repeat="job in jobs.jobs" data-uk-filter="{{ job.job_type.name }}">
+								<article class="uk-comment uk-panel-header">
+									<header class="uk-comment-header">
+										<img class="uk-comment-avatar" src="{{ job.company.logo }}" alt="{{ job.company.name }}" width="50" height="50">
+										<h4 class="uk-comment-title uk-margin-top-remove"><a href="#jobs/{{ job.id }}">{{ job.title }}</a></h4>
+										<div class="uk-comment-meta">{{ job.job_type.name }} | {{ job.created_at | moment }}</div>
+									</header>
+								</article>
+							</div>
+							<ul class="uk-list uk-list-line jobs uk-hidden">
+								<li ng-repeat="job in jobs.jobs">
+									<div class="uk-clearfix">
+										<div class="uk-float-left">
+											<a href="#jobs/{{ job.id }}" class="">{{ job.title }}</a> 	
+											<span ng-if="job.company.name" class="uk-text-muted">{{ job.company.name }}</span> <span ng-if="job.location.name" class="uk-text-muted">, {{ job.location.name }}</span>
+										</div>
+										<div class="uk-float-right">
+											<span class="uk-text-uppercase uk-badge" ng-if="job.job_type.name">{{ job.job_type.name }}</span>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</main>
 			</div>
+		</div>
+		<aside class="uk-width-small-1-1 uk-width-medium-3-10 inset uk-hidden">
+			
 		</aside>
 	</div>
 </div>

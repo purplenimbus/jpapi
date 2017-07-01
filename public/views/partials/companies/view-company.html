@@ -1,5 +1,5 @@
 <div class="view-asset">
-	<aside class="toolbar">
+	<aside class="header">
 		<div class="uk-container uk-container-center">
 		
 		</div>
@@ -17,7 +17,7 @@
 						<div class="uk-width-7-10">
 							<article class="uk-article">
 								<p class="uk-article-lead">{{ currentAsset.name }}</p>
-								<p class="uk-article-meta">{{ currentAsset.company_category[0].name }}</p>
+								<p class="uk-article-meta uk-text-uppercase">{{ currentAsset.company_category[0].name }}</p>
 								<div class="uk-button-group">
 									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
 								</div>
@@ -31,7 +31,7 @@
 				</div>
 			</main>
 			<aside class="uk-width-medium-3-10 uk-width-small-1-1">
-				<div class="uk-panel uk-margin-top">
+				<div class="uk-panel uk-margin-top job_list">
 					<h3 class="uk-panel-title">Job Openings</h3>
 					<ul class="uk-list uk-list-line">
 						<li ng-repeat="job in currentAsset.jobs">

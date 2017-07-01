@@ -1,0 +1,15 @@
+.login{
+	transition: all 0.5s;
+	.uk-modal-dialog{
+		&.error{
+			background: #fff1f0;
+			color: #d85030;
+			border-color: rgba(216,80,48,.3);
+		}
+		&.success{
+			background: #f2fae3;
+			color: #659f13;
+			border-color: rgba(101,159,19,.3);
+		}
+	}
+}

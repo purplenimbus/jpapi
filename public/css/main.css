@@ -108,155 +108,191 @@ textarea.materialize-textarea {
       color: lightgray; }
 
 #modal.login .uk-modal-dialog {
-  max-width: 400px; }
+  max-width: 300px; }
   #modal.login .uk-modal-dialog .uk-modal-spinner {
     z-index: 1000; }
 
-body .navbar {
+.uk-panel-box {
+  border-radius: 0px;
+  box-shadow: 2px 2px 1px 1px rgba(0, 0, 0, 0.05); }
+
+.uk-thumbnail {
+  border: 0px; }
+
+.job_list ul li article header {
   margin: 0px;
-  border-bottom: 1px solid lightgray; }
-  body .navbar .navbar-right {
-    margin: 0px !important; }
+  border: 0px; }
+  .job_list ul li article header ul {
+    padding-left: 0px; }
+    .job_list ul li article header ul li {
+      padding-left: 0px; }
 
-body main.job-info {
+aside.toolbar {
+  min-height: 180px; }
+
+.jobs_component .uk-panel {
+  background: white;
   margin-top: -70px; }
+  .jobs_component .uk-panel article header {
+    border-radius: 0px; }
+    .jobs_component .uk-panel article header h4 {
+      font-size: 12px; }
 
-body section#home {
-  height: 87vh;
-  position: relative; }
-  body section#home form {
-    width: 100%; }
+.login {
+  transition: all 0.5s; }
+  .login .uk-modal-dialog.error {
+    background: #fff1f0;
+    color: #d85030;
+    border-color: rgba(216, 80, 48, 0.3); }
+  .login .uk-modal-dialog.success {
+    background: #f2fae3;
+    color: #659f13;
+    border-color: rgba(101, 159, 19, 0.3); }
 
-body .sub-header h1 {
-  margin: 0px; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif; }
 
-body aside.toolbar {
-  min-height: 180px;
-  background: url("/images/view-job-bg.jpg");
-  background-size: cover;
-  padding: 0px;
-  background-position: center bottom; }
-  body aside.toolbar .row {
-    background-color: rgba(0, 0, 0, 0.7);
-    margin: 0px; }
-    body aside.toolbar .row .title {
-      padding: 15px 0;
-      margin: 0px;
-      position: relative; }
-      body aside.toolbar .row .title img.circle {
-        width: 100px; }
-      body aside.toolbar .row .title .location {
-        font-size: 13px;
-        margin-top: 15px; }
-        body aside.toolbar .row .title .location i {
-          font-size: inherit; }
-      body aside.toolbar .row .title h1 {
-        margin: 0px;
-        font-size: 30px; }
-      body aside.toolbar .row .title .chips {
-        margin-top: 15px;
-        border: none !important;
-        margin-bottom: 0px;
-        min-height: 0px; }
-        body aside.toolbar .row .title .chips .chip {
-          background: transparent;
-          border: 2px solid lightgray;
-          margin: 0px;
-          line-height: 26px; }
-          body aside.toolbar .row .title .chips .chip a {
-            color: lightgray; }
-      body aside.toolbar .row .title .info ul {
-        margin: 10px 0;
-        border: 0px; }
-        body aside.toolbar .row .title .info ul li {
-          text-transform: uppercase;
-          margin-right: 10px;
-          display: inline-block;
-          background: transparent;
-          border: 0px;
-          font-size: 10px;
-          min-height: initial; }
-          body aside.toolbar .row .title .info ul li i {
-            font-size: inherit;
-            margin-right: 5px;
-            vertical-align: middle; }
-    body aside.toolbar .row span {
-      line-height: 33px; }
+p {
+  font-family: 'Lato', sans-serif; }
 
-body aside.sidebar {
-  font-size: 12px; }
-  body aside.sidebar .panel .panel-body .header {
-    padding-bottom: 10px;
-    margin-bottom: 10px; }
-  body aside.sidebar .panel .panel-body h3 {
-    line-height: 22px;
-    padding: 0px;
+body {
+  font-family: 'Roboto', sans-serif; }
+  body .navbar {
     margin: 0px;
-    font-weight: bold;
-    font-size: inherit;
-    text-transform: uppercase; }
-  body aside.sidebar .panel .panel-body dl.row {
-    margin-bottom: 0px;
-    text-transform: capitalize;
-    color: gray;
-    vertical-align: middle; }
-    body aside.sidebar .panel .panel-body dl.row dt {
-      color: gray;
-      line-height: 30px; }
-    body aside.sidebar .panel .panel-body dl.row dd {
-      color: #1de9b6;
-      line-height: 30px; }
-      body aside.sidebar .panel .panel-body dl.row dd span {
-        color: gray;
-        font-style: italic; }
-        body aside.sidebar .panel .panel-body dl.row dd span select.form-control, body aside.sidebar .panel .panel-body dl.row dd span input.form-control {
-          margin-bottom: 10px;
-          text-transform: capitalize; }
-
-body main #content {
-  position: relative; }
-  body main #content .jobs li {
-    padding-right: 10px;
-    padding-left: 10px; }
-    body main #content .jobs li .panel {
-      position: relative;
-      border: 1px solid lightgray; }
-      body main #content .jobs li .panel .panel-body h4 {
-        font-size: 14px;
-        font-weight: bold; }
-      body main #content .jobs li .panel .panel-body small {
-        color: gray; }
-  body main #content .card .panel-heading h1 {
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 0px; }
-  body main #content .card .card-content .job_details li h2 {
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 0px; }
-
-body main .view-asset h1, body main .view-asset h6 {
-  font-weight: 300; }
-
-body.myaccount aside h5 {
-  font-size: 16px; }
-
-body.myaccount main section {
-  font-size: 12px; }
-  body.myaccount main section h5 {
-    margin-top: 0px;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: bold; }
-  body.myaccount main section .info {
-    padding: 5px 0; }
-    body.myaccount main section .info h6 {
+    border-bottom: 1px solid lightgray; }
+    body .navbar .navbar-right {
+      margin: 0px !important; }
+  body main.job-info {
+    margin-top: -70px; }
+  body section#home {
+    height: 87vh;
+    position: relative; }
+    body section#home form {
+      width: 100%; }
+  body .sub-header h1 {
+    margin: 0px; }
+  body aside.header {
+    min-height: 180px;
+    background: url("/images/view-job-bg.jpg");
+    background-size: cover;
+    padding: 0px;
+    background-position: center bottom; }
+    body aside.header .row {
+      background-color: rgba(0, 0, 0, 0.7);
+      margin: 0px; }
+      body aside.header .row .title {
+        padding: 15px 0;
+        margin: 0px;
+        position: relative; }
+        body aside.header .row .title img.circle {
+          width: 100px; }
+        body aside.header .row .title .location {
+          font-size: 13px;
+          margin-top: 15px; }
+          body aside.header .row .title .location i {
+            font-size: inherit; }
+        body aside.header .row .title h1 {
+          margin: 0px;
+          font-size: 30px; }
+        body aside.header .row .title .chips {
+          margin-top: 15px;
+          border: none !important;
+          margin-bottom: 0px;
+          min-height: 0px; }
+          body aside.header .row .title .chips .chip {
+            background: transparent;
+            border: 2px solid lightgray;
+            margin: 0px;
+            line-height: 26px; }
+            body aside.header .row .title .chips .chip a {
+              color: lightgray; }
+        body aside.header .row .title .info ul {
+          margin: 10px 0;
+          border: 0px; }
+          body aside.header .row .title .info ul li {
+            text-transform: uppercase;
+            margin-right: 10px;
+            display: inline-block;
+            background: transparent;
+            border: 0px;
+            font-size: 10px;
+            min-height: initial; }
+            body aside.header .row .title .info ul li i {
+              font-size: inherit;
+              margin-right: 5px;
+              vertical-align: middle; }
+      body aside.header .row span {
+        line-height: 33px; }
+  body aside.sidebar {
+    font-size: 12px; }
+    body aside.sidebar .panel .panel-body .header {
+      padding-bottom: 10px;
+      margin-bottom: 10px; }
+    body aside.sidebar .panel .panel-body h3 {
+      line-height: 22px;
+      padding: 0px;
+      margin: 0px;
       font-weight: bold;
-      font-size: 14px; }
-    body.myaccount main section .info span {
-      color: gray; }
-    body.myaccount main section .info p {
+      font-size: inherit;
       text-transform: uppercase; }
+    body aside.sidebar .panel .panel-body dl.row {
+      margin-bottom: 0px;
+      text-transform: capitalize;
+      color: gray;
+      vertical-align: middle; }
+      body aside.sidebar .panel .panel-body dl.row dt {
+        color: gray;
+        line-height: 30px; }
+      body aside.sidebar .panel .panel-body dl.row dd {
+        color: #1de9b6;
+        line-height: 30px; }
+        body aside.sidebar .panel .panel-body dl.row dd span {
+          color: gray;
+          font-style: italic; }
+          body aside.sidebar .panel .panel-body dl.row dd span select.form-control, body aside.sidebar .panel .panel-body dl.row dd span input.form-control {
+            margin-bottom: 10px;
+            text-transform: capitalize; }
+  body main #content {
+    position: relative; }
+    body main #content .jobs li {
+      padding-right: 10px;
+      padding-left: 10px; }
+      body main #content .jobs li .panel {
+        position: relative;
+        border: 1px solid lightgray; }
+        body main #content .jobs li .panel .panel-body h4 {
+          font-size: 14px;
+          font-weight: bold; }
+        body main #content .jobs li .panel .panel-body small {
+          color: gray; }
+    body main #content .card .panel-heading h1 {
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 0px; }
+    body main #content .card .card-content .job_details li h2 {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 0px; }
+  body main .view-asset h1, body main .view-asset h6 {
+    font-weight: 300; }
+  body.myaccount aside h5 {
+    font-size: 16px; }
+  body.myaccount main section {
+    font-size: 12px; }
+    body.myaccount main section h5 {
+      margin-top: 0px;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: bold; }
+    body.myaccount main section .info {
+      padding: 5px 0; }
+      body.myaccount main section .info h6 {
+        font-weight: bold;
+        font-size: 14px; }
+      body.myaccount main section .info span {
+        color: gray; }
+      body.myaccount main section .info p {
+        text-transform: uppercase; }
 
 /*# sourceMappingURL=main.css.map */

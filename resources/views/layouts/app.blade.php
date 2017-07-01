@@ -8,11 +8,12 @@
     <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
-	<link rel="stylesheet" href="/bower_components/uikit/css/uikit.gradient.min.css" />
+	<link rel="stylesheet" href="/bower_components/uikit/css/uikit.almost-flat.min.css" />
 	<!-- endbower -->
+	<link rel="stylesheet" href="/bower_components/uikit/css/components/notify.gradient.min.css" />
 	
 	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto" rel="stylesheet">
 </head>
 <body class=" @{{ $location.base }}">
 	@include('partials.nav')
@@ -53,6 +54,9 @@
 	<script src="/bower_components/angular-typeahead/dist/angular-typeahead.js"></script>
 	<script src="/bower_components/uikit/js/uikit.min.js"></script>
 	<!-- endbower -->
+	
+	<script src="/bower_components/uikit/js/components/grid.min.js"></script>
+	<script src="/bower_components/uikit/js/components/notify.min.js"></script>
 	
 	<script src="{{ URL::asset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>

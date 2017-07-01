@@ -1,0 +1,39 @@
+.job_list{
+	ul{
+		li{
+			article{
+				header{
+					margin:0px;
+					border:0px;
+					ul{
+						padding-left:0px;
+						li{
+							padding-left:0px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+aside{
+	&.toolbar{
+		min-height:180px;
+	}
+}
+
+.jobs_component{
+	.uk-panel{
+		background:white;
+		margin-top:-70px;
+		article{
+			header{
+				border-radius: 0px;
+				h4{
+					font-size: 12px;
+				}
+			}
+		}
+	}
+}

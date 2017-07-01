@@ -142,10 +142,19 @@ textarea.materialize-textarea{
 #modal{
 	&.login{
 		.uk-modal-dialog{
-			max-width:400px;
+			max-width:300px;
 			.uk-modal-spinner{
 				z-index:1000;
 			}
 		}
 	}
+}
+
+.uk-panel-box{
+	border-radius:0px;
+	box-shadow: 2px 2px 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.uk-thumbnail {
+    border: 0px;
 }

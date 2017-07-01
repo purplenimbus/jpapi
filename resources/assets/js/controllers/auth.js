@@ -33,6 +33,10 @@ angular.module('jpApp')
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
 						console.log('Data',result);
+						
+						angular.element('#modal .uk-modal-dialog').removeClass('error')
+												.addClass('success');
+												
 						angular.element('#modal .uk-alert')
 								.removeClass('uk-hidden uk-alert-danger')
 								.addClass('uk-alert-success')
@@ -53,9 +57,12 @@ angular.module('jpApp')
 					}).catch(function(error){
 						console.log('Login Error',error);
 						//TO DO Add Error Message to login modal
+						angular.element('#modal .uk-modal-dialog').removeClass('success')
+												.addClass('error');
+												
 						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 						angular.element('#modal .uk-alert')
-								.removeClass('uk-hidden uk-alert-succress')
+								.removeClass('uk-hidden uk-alert-success')
 								.addClass('uk-alert-danger')
 								.children('p')
 								.html('Invalid Login');//Add error message
@@ -73,7 +80,7 @@ angular.module('jpApp')
 		
 		$scope.showLoginModal	=	function(){
 			var modalType	=	'login',
-				modalTitle	=	'<h4 class="left">Login</h4>',
+				modalTitle	=	'',
 				modalBody	=	form.login(),
 				modalFooter	=	'';//elements.button({	type	:	'submit',	cls:	'btn teal accent-3',	ngClick	:	'login($event)'	},'Login');
 				

@@ -8,10 +8,14 @@ $primary-color : #1de9b6;
 
 
 @import 'utilities';
+@import 'widgets';
+@import 'forms';
+@import 'fonts';
 
 body{
 		//margin-top: 50px;
 		//padding-top:70px;
+		font-family: 'Roboto', sans-serif;
 		.navbar{
 			margin:0px;
 			border-bottom: 1px solid lightgray;
@@ -41,7 +45,7 @@ body{
 			
 		}
 		aside{
-			&.toolbar{
+			&.header{
 				min-height:180px;
 				background:url('/images/view-job-bg.jpg');
 				background-size:cover;
