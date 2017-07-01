@@ -26,7 +26,7 @@ class WordpressController extends Controller
     {
         $requests = $request->all();
 		
-		//echo "WP ID : ".$wp_id." , ".$requests->jp_model." \r\n";
+		echo "WP ID : ".$wp_id." , ".$requests['jp_model']." \r\n";
 		
 		var_dump($requests);
     }
