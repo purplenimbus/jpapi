@@ -101,7 +101,7 @@ class WordpressController extends Controller
 		
 		var_dump($data);
 		
-		$job = Job::where('wp_id' => $wp_id)->get();
+		$job = Job::where('wp_id' , $wp_id)->get();
 		
 		if($job){
 			$job->fill($data);
