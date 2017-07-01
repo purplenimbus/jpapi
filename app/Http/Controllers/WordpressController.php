@@ -24,15 +24,17 @@ class WordpressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update($wp_id,Request $request)
+    public function update($id,Request $request)
     {
         $requests = $request->all();
 		
 		$model_type = $request->jp_model;
 		
+		$wp_id 		= $request->wp_id;
+		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		echo "WP ID : ".$wp_id." , MODEL TYPE : ".$model_type." \r\n";
+		echo "WP ID : ".$wp_id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
