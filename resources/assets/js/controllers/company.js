@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData)
+	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData,$window)
 	{
 		
 		var autocomplete,CompanyCtrl = this;
@@ -18,6 +18,8 @@ angular.module('jpApp')
 		console.log($route);
 		
 		$scope.currentAsset = CompanyCtrl.currentAsset = companyData;
+		
+		console.log('Company Updates',$scope.currentAsset,$window);
 		
 		$scope.companyOptions = function(options) {
 			switch(options){

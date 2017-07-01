@@ -62,6 +62,7 @@ class CompanyController extends Controller
 		$company['company_category']	= 	$company->category;
 		
 		//echo $company['jobs'][0];
+		
 				
 		return $company->toJson();
     }

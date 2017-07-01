@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
+	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth,$window) {
 		
 		//$rootScope.loggedIn = false; //Initialize logged in flag
 		
@@ -48,6 +48,7 @@ angular.module('jpApp')
 						$rootScope.user.info = result.data.user;
 						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+
 						
 					}).catch(function(error){
 						console.log('Login Error',error);

@@ -232,5 +232,13 @@ angular
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);
 		};
+	}).filter('moment', function () {
+		return function(val,format) {
+			var relative_str;
+			
+			relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			
+			return relative_str;
+		};
 	});
   

@@ -232,6 +232,14 @@ angular
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);
 		};
+	}).filter('moment', function () {
+		return function(val,format) {
+			var relative_str;
+			
+			relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			
+			return relative_str;
+		};
 	});
   
 
@@ -514,7 +522,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth) {
+	.controller('AuthCtrl', function ($auth,$state,$rootScope,$scope,validation,form,elements,modal,jobs,companies,$location,$route,auth,$window) {
 		
 		//$rootScope.loggedIn = false; //Initialize logged in flag
 		
@@ -554,6 +562,7 @@ angular.module('jpApp')
 						$rootScope.user.info = result.data.user;
 						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+
 						
 					}).catch(function(error){
 						console.log('Login Error',error);
@@ -637,7 +646,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData)
+	.controller('CompanyCtrl', function ($scope,companies,jobs,$route,$location,$filter,modal,elements,$rootScope,form,companyData,$window)
 	{
 		
 		var autocomplete,CompanyCtrl = this;
@@ -647,6 +656,8 @@ angular.module('jpApp')
 		console.log($route);
 		
 		$scope.currentAsset = CompanyCtrl.currentAsset = companyData;
+		
+		console.log('Company Updates',$scope.currentAsset,$window);
 		
 		$scope.companyOptions = function(options) {
 			switch(options){

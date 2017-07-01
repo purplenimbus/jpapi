@@ -35,9 +35,14 @@
 					<h3 class="uk-panel-title">Job Openings</h3>
 					<ul class="uk-list uk-list-line">
 						<li ng-repeat="job in currentAsset.jobs">
-							<a href="#jobs/{{ job.id }}">
-								{{ job.title }} <span class="uk-mute-text">{{ job.job_type.name }}</span>
-							</a>
+							<article class="uk-comment">
+								<header class="uk-comment-header">
+									<a href="#jobs/{{ job.id }}">{{ job.title }}</a> 
+									<ul class="uk-subnav uk-subnav-line uk-comment-meta">
+										<li>{{ job.created_at | moment:'YYYYMMDD' }}</li>
+									</ul>
+								</header>
+							</article>
 						</li>
 					</ul>
 				</div>

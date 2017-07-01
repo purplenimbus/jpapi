@@ -53,6 +53,7 @@ class Job extends Model
 		'location',
 		'job_location_id',
 		'updated_at',
+		'created_at',
 		'user_applied',
 		'job_skills',
 		'wp_id'
