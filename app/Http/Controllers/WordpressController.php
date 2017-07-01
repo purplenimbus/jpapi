@@ -34,9 +34,7 @@ class WordpressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update($id,Request $request)
-    {
-        $requests = $request->all();
-		
+    {		
 		$model_type = $request->jp_model;
 		
 		$wp_id 		= $request->wp_id;
@@ -48,11 +46,9 @@ class WordpressController extends Controller
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
 		switch($model_type){
-			case 'jobs' : $data = $this->job($requests,$request); break;
+			case 'jobs' : $data = $this->job($request); break;
 		}
-		
-		echo "Data : ".$key."\r\n";
-		
+				
 		var_dump($data);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
@@ -67,12 +63,14 @@ class WordpressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function job($request_data,$request){
+    private function job($request){
 		echo "JP MODEL OBJECT \r\n";
-				
-		$model = DB::table($model_type)
-					->where('wp_id',$wp_id)
-					->get();
+		
+		$requests = $request->all();
+		
+		$wp_id 		= $request->wp_id;
+		
+		$job = Job::where('wp_id',$wp_id);
 					
 		$data = array();
 					
@@ -98,9 +96,16 @@ class WordpressController extends Controller
 						break;
 				}
 			}
+			echo "Job Data : ".$key."\r\n";
 		}
 		
-		$job = Job::create($data);
+		echo "Job Data for Input : \r\n";
+		
+		var_dump($data);
+		
+		$job->fill($data);
+		
+		$job->save();
 				
 		return $job;
 	}
