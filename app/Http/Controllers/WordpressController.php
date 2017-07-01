@@ -27,7 +27,9 @@ class WordpressController extends Controller
     {
         $requests = $request->all();
 		
-		$model_type = $requests['jp_model'];
+		var_dump($requests);
+		
+		/*$model_type = $requests['jp_model'];
 		
 		//var_dump($model_type);
 		
@@ -39,7 +41,7 @@ class WordpressController extends Controller
 		
 		$model = DB::table($model_type)->get();
 		
-		return response()->json(['data' => $model],200);
+		return response()->json(['data' => $model],200);*/
     }
 	
 }
