@@ -101,13 +101,24 @@ class WordpressController extends Controller
 		
 		var_dump($data);
 		
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data)->get();
+		$job = Job::where('wp_id' => $wp_id)->get();
 		
-		//$job->fill($data);
+		if($job){
+			$job->fill($data);
+			
+			$job->save();
+			
+			return $job;
+		}else{
+			$new_job = new Job;
 		
-		//$job->save();
+			$new_job->fill($data);
 				
-		return $job;
+			$new_job->save();
+			
+			return $new_job;
+		}
+		
 	}
 	
 }
