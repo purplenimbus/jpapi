@@ -74,7 +74,7 @@ class WordpressController extends Controller
 					
 		$data = array();
 					
-		foreach($request_data as $key => $req){
+		foreach($requests as $key => $req){
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
