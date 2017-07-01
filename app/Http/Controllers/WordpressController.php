@@ -30,6 +30,8 @@ class WordpressController extends Controller
 		
 		var_dump($model_type);
 		
+		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n"
+		
 		echo "WP ID : ".$wp_id." , ".$model_type." \r\n";
 		
 		var_dump($requests);
