@@ -49,7 +49,7 @@ class WordpressController extends Controller
 			case 'jobs' : $data = $this->job($request); break;
 		}
 				
-		var_dump($data);
+		//var_dump($data);
 		
 		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
@@ -82,7 +82,7 @@ class WordpressController extends Controller
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
 				echo "----------------SAMPLE JOB------------------------- \r\n";
-				var_dump($sample_job->assignable);
+				//var_dump($sample_job->assignable);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
@@ -106,8 +106,9 @@ class WordpressController extends Controller
 		
 		echo "Job Data for Input : \r\n";
 		
-		var_dump($data);
+		return $data;
 		
+		/*
 		$job = Job::where('wp_id' , $wp_id)->get();
 		
 		if($job){
@@ -123,7 +124,7 @@ class WordpressController extends Controller
 			$new_job = Job::create($data);;
 			
 			return $new_job;
-		}
+		}*/
 		
 	}
 	
