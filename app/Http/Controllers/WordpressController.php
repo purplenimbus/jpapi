@@ -80,7 +80,7 @@ class WordpressController extends Controller
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
 				echo "----------------SAMPLE JOB------------------------- \r\n";
-				//var_dump($sample_job->assignable);
+				var_dump($sample_job->assignable);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
