@@ -62,7 +62,25 @@ class Job extends Model
     ];
 	
 	function __construct(){
-		$this->assignable = $fillable;
+		$this->assignable = [
+			'title',
+			'description',
+			'job_company_id',
+			'job_salary_id',
+			'job_location_id',
+			'job_type_id',
+			'job_category_id',
+			'job_level_id',
+			'application_deadline',
+			'min_experience',
+			'min_qualification',
+			'salary',
+			'job_currency_id',
+			'status',
+			'job_ref_id',
+			'ref_url',
+			'skills'
+		];
 	}
 	/* Relationships */
 	//Bind Job to Company
