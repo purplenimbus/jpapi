@@ -79,9 +79,9 @@ class WordpressController extends Controller
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
-				echo $key." exists in job model ?".isset($sample_job[$key])."\r\n";
+				echo $key." exists in job model ?".isset($sample_job->$key)."\r\n";
 				echo "----------------SAMPLE JOB------------------------- \r\n";
-				var_dump($sample_job);
+				var_dump($sample_job->$key);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
