@@ -104,12 +104,17 @@ class WordpressController extends Controller
 		$job = Job::where('wp_id' , $wp_id)->get();
 		
 		if($job){
+			
+			echo "JOB FOUND \r\n";
+			
 			$job->fill($data);
 			
 			$job->save();
 			
 			return $job;
 		}else{
+			echo "CREATING JOB FOUND \r\n";
+			
 			$new_job = new Job;
 		
 			$new_job->fill($data);
