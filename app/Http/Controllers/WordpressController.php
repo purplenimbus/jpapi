@@ -141,9 +141,9 @@ class WordpressController extends Controller
      */
 	public function get_jp_resource_id($wp_id,$model){
 		
-		//$model_name = "'App\Model\'".$model;
+		$model_name = "'App\Model\'".$model;
 		
-		$resource = $model::where('wp_id', $id)->first();
+		$resource = $model_name::where('wp_id', $id)->first();
 		
 		return $resource;
 	}
