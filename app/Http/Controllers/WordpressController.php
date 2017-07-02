@@ -90,7 +90,7 @@ class WordpressController extends Controller
 						echo "------------------------------------------------ \r\n";
 						var_dump($request[$key]);
 						
-						$data['jp_column'] = $this->get_jp_resource_id($request[$key]['wp_id'],$request[$key]['jp_model']);
+						$data[$request[$key]['jp_column']] = $this->get_jp_resource_id($request[$key]['wp_id'],$request[$key]['jp_model']);
 						
 						break;
 					
