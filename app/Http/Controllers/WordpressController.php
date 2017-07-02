@@ -113,11 +113,7 @@ class WordpressController extends Controller
 		}else{
 			echo "CREATING JOB \r\n";
 			
-			$new_job = new Job;
-		
-			$new_job->fill($data);
-				
-			$new_job->save();
+			$new_job = Job::create($data);;
 			
 			return $new_job;
 		}
