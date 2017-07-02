@@ -69,20 +69,22 @@ class WordpressController extends Controller
 		$requests = $request->all();
 		
 		$wp_id 		= $request->wp_id;
+		
+		$sample_job = new Job;
 							
 		$data = array();
-					
+				
 		foreach($requests as $key => $req){
-			if($request->has($key)){
+			if($request->has($key) && isset($sample_job[$key])){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
 					case 'array' : 
-						echo "ARRAY \r\n";
-						echo "------------------------------------------------ \r\n";
-						var_dump($request[$key]);
+						//echo "ARRAY \r\n";
+						//echo "------------------------------------------------ \r\n";
+						//var_dump($request[$key]);
 						
 						break;
 					
