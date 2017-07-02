@@ -90,7 +90,7 @@ class WordpressController extends Controller
 						echo "------------------------------------------------ \r\n";
 						var_dump($request[$key]);
 						
-						//$data[$this->map_array_fields($key)];
+						$data['jp_column'] = $this->get_jp_resource_id($data['wp_id'],$data['jp_model']);
 						
 						break;
 					
@@ -139,7 +139,7 @@ class WordpressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-	public function map_array_fields($wp_id,$model){
+	public function get_jp_resource_id($wp_id,$model){
 
 	}
 	/**
