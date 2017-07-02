@@ -81,7 +81,7 @@ class WordpressController extends Controller
 				echo "Value Type : ".gettype($request[$key])."\r\n";
 				echo "Fillable? ".isset($sample_job->assignable[$key])."\r\n";
 				//echo "----------------SAMPLE JOB------------------------- \r\n";
-				//var_dump($sample_job->assignable);
+				var_dump($sample_job->assignable[$key]);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key]) && isset($sample_job->assignable[$key]) ){
