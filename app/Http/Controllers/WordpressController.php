@@ -76,12 +76,12 @@ class WordpressController extends Controller
 		
 		foreach($requests as $key => $req){
 			
-			if($request->has($key) && isset($sample_job->assignable[$key])){
+			if($request->has($key) /*&& isset($sample_job->assignable[$key])*/){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
-				echo "Fillable? ".isset($sample_job->assignable[$key])."\r\n";
+				echo "Fillable? ".isset($sample_job->assignable[strtolower($key)])."\r\n";
 				//echo "----------------SAMPLE JOB------------------------- \r\n";
-				var_dump($sample_job->assignable[$key]);
+				var_dump($sample_job->assignable[strtolower($key)]);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
