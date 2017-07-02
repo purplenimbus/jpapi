@@ -148,15 +148,6 @@ class WordpressController extends Controller
 		return $resource;
 	}
 	
-	/**
-     * Map models to table names
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function get_jp_resource_id($wp_id,$model){
-		DB::table('users')->where('name', 'John')->first();
-	}
 	
 	/**
      * Store job updates from wordpress
