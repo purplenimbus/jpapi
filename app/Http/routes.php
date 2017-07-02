@@ -37,7 +37,7 @@ Route::group(['prefix'	=>	'api'],function(){
 	Route::get('min_qualifications', 'JobController@min_qualifications');
 	
 	//Wordpress API
-	Route::post('jobs/wp/{wp_id}', 'JobController@get_jp_job_id');
+	Route::post('jobs/wp/{wp_id}', 'WordpressController@get_jp_job_id');
 	Route::post('wp/{wp_id}', 'WordpressController@update');
 	
 	//TO DO Refactor or Remove
