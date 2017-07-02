@@ -76,13 +76,12 @@ class WordpressController extends Controller
 		
 		foreach($requests as $key => $req){
 			
-			echo $key." exists in job model ?".isset($sample_job[$key])."\r\n";
-			
-			var_dump($sample_job[$key]);
-			
-			if($request->has($key) && isset($sample_job[$key])){
+			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
+				echo $key." exists in job model ?".isset($sample_job[$key])."\r\n";
+				echo "----------------SAMPLE JOB------------------------- \r\n";
+				var_dump($sample_job);
 				echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
@@ -101,7 +100,7 @@ class WordpressController extends Controller
 						break;
 				}
 			}
-			echo "Job Data : ".$key."\r\n";
+			//echo "Job Data : ".$key."\r\n";
 		}
 		
 		echo "Job Data for Input : \r\n";
