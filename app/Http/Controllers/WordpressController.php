@@ -76,7 +76,7 @@ class WordpressController extends Controller
 		
 		foreach($requests as $key => $req){
 			
-			echo $key." exists in job model ?".isset($sample_job[$key]);
+			echo $key." exists in job model ?".isset($sample_job[$key])."\r\n";
 			
 			if($request->has($key) && isset($sample_job[$key])){
 				echo "key : ".$key."\r\n";
