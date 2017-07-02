@@ -90,12 +90,14 @@ class WordpressController extends Controller
 						echo "------------------------------------------------ \r\n";
 						var_dump($request[$key]);
 						
+						$data[$this->map_array_fields($key)];
+						
 						break;
 					
 					default : 
 						//echo "STRING  : ".$request[$key]." \r\n";
 						//echo "------------------------------------------------ \r\n";
-						if(array_search($key,$sample_job->assignable) !== false){
+						if(array_search($key,$sample_job->assignable) !== false && ($key !== 'wp_api' || $key !== 'jp_model')){
 							$data[$key] = $request->input($key);
 						}else{
 							continue;
@@ -131,6 +133,20 @@ class WordpressController extends Controller
 		
 	}
 	
+	/**
+     * Map wordpress array fields
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function map_array_fields($key){
+		$str = '';
+		
+		switch($key){
+			case 'job_levels' : $str = 'job_level_id'
+			default : break;
+		}
+	}
 	/**
      * Store job updates from wordpress
      *
