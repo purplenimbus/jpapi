@@ -107,11 +107,11 @@ class WordpressController extends Controller
 			
 			echo "JOB FOUND \r\n";
 			
-			$job->update($data);
+			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 						
-			return $job;
+			return $jp_job;
 		}else{
-			echo "CREATING JOB FOUND \r\n";
+			echo "CREATING JOB \r\n";
 			
 			$new_job = new Job;
 		
