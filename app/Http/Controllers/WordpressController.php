@@ -138,9 +138,7 @@ class WordpressController extends Controller
     {
         //
 		$job = Job::where('wp_id',$wp_id)->value('id');
-		
-		var_dump($job);
-		
+				
 		if($job){
 			return response()->json($job,200);
 		}else{
