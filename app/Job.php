@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    var assignable;
+    var $assignable;
 	/**
      * The attributes that are mass assignable.
      *
