@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    /**
+    var assignable;
+	/**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -30,8 +31,7 @@ class Job extends Model
 		'ref_url',
 		'skills'
     ];
-	
-	$this->assignable = $fillable;
+
 	
 	protected $visible = [
 		'id',
@@ -61,6 +61,9 @@ class Job extends Model
 		'wp_id'
     ];
 	
+	function __construct(){
+		$this->assignable = $fillable;
+	}
 	/* Relationships */
 	//Bind Job to Company
 	public function company(){
