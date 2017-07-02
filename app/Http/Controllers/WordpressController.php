@@ -150,7 +150,7 @@ class WordpressController extends Controller
 			}else{
 				return false;
 			}
-		}(\Exception $e) {
+		}(Exception $e) {
 			return $e->getMessage();
 		}
 		
