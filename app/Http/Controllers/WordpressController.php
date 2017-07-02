@@ -86,15 +86,15 @@ class WordpressController extends Controller
 				
 				switch(gettype($request[$key])){
 					case 'array' : 
-						//echo "ARRAY \r\n";
-						//echo "------------------------------------------------ \r\n";
-						//var_dump($request[$key]);
+						echo "ARRAY \r\n";
+						echo "------------------------------------------------ \r\n";
+						var_dump($request[$key]);
 						
 						break;
 					
 					default : 
-						echo "STRING  : ".$request[$key]." \r\n";
-						echo "------------------------------------------------ \r\n";
+						//echo "STRING  : ".$request[$key]." \r\n";
+						//echo "------------------------------------------------ \r\n";
 						$data[$key] = $request->input($key);
 						
 						break;
