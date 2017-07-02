@@ -47,7 +47,8 @@ class Job extends Model
 		'status',
 		'job_ref_id',
 		'ref_url',
-		'skills'
+		'skills',
+		'wp_id'
     ];
 
 	
