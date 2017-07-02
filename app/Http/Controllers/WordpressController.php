@@ -73,8 +73,11 @@ class WordpressController extends Controller
 		$sample_job = new Job;
 							
 		$data = array();
-				
+		
 		foreach($requests as $key => $req){
+			
+			echo $key." exists in job model ?".isset($sample_job[$key]);
+			
 			if($request->has($key) && isset($sample_job[$key])){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
