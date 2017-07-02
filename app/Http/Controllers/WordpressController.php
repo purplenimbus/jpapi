@@ -79,11 +79,12 @@ class WordpressController extends Controller
 			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
-				echo "----------------SAMPLE JOB------------------------- \r\n";
-				var_dump($sample_job->assignable);
+				echo "Fillable? ".isset($sample_job->assignable[$key])."\r\n";
+				//echo "----------------SAMPLE JOB------------------------- \r\n";
+				//var_dump($sample_job->assignable);
 				echo "------------------------------------------------ \r\n";
 				
-				switch(gettype($request[$key])){
+				switch(gettype($request[$key]) && isset($sample_job->assignable[$key]) ){
 					case 'array' : 
 						//echo "ARRAY \r\n";
 						//echo "------------------------------------------------ \r\n";
