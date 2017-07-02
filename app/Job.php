@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    var $assignable;
+    //var $assignable;
 	/**
      * The attributes that are mass assignable.
      *
@@ -62,7 +62,7 @@ class Job extends Model
     ];
 	
 	function __construct(){
-		$this->assignable = [
+		/*$this->assignable = [
 			'title',
 			'description',
 			'job_company_id',
@@ -80,7 +80,7 @@ class Job extends Model
 			'job_ref_id',
 			'ref_url',
 			'skills'
-		];
+		];*/
 	}
 	/* Relationships */
 	//Bind Job to Company
