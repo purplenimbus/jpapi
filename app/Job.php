@@ -31,6 +31,8 @@ class Job extends Model
 		'skills'
     ];
 	
+	$this->assignable = $fillable;
+	
 	protected $visible = [
 		'id',
         'title',
