@@ -66,6 +66,8 @@ class WordpressController extends Controller
     private function job($request){
 		echo "JP MODEL OBJECT \r\n";
 		
+		var_dump($request);
+		
 		$requests = $request->all();
 		
 		$wp_id 		= $request->wp_id;
