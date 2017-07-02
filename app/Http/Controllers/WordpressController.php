@@ -90,7 +90,7 @@ class WordpressController extends Controller
 						echo "------------------------------------------------ \r\n";
 						var_dump($request[$key]);
 						
-						$data[$this->map_array_fields($key)];
+						//$data[$this->map_array_fields($key)];
 						
 						break;
 					
