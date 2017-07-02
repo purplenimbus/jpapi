@@ -76,7 +76,7 @@ class WordpressController extends Controller
 		
 		foreach($requests as $key => $req){
 			
-			if($request->has($key) && array_search($key,$sample_job->assignable) !== false ){
+			if($request->has($key)){
 				echo "key : ".$key."\r\n";
 				echo "Value Type : ".gettype($request[$key])."\r\n";
 				echo "Fillable? ".(array_search($key,$sample_job->assignable) !== false)."\r\n";
@@ -95,7 +95,11 @@ class WordpressController extends Controller
 					default : 
 						//echo "STRING  : ".$request[$key]." \r\n";
 						//echo "------------------------------------------------ \r\n";
-						$data[$key] = $request->input($key);
+						if(array_search($key,$sample_job->assignable) !== false){
+							$data[$key] = $request->input($key);
+						}else{
+							continue;
+						}
 						
 						break;
 				}
