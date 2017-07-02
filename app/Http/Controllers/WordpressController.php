@@ -139,13 +139,8 @@ class WordpressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-	public function map_array_fields($key){
-		$str = '';
-		
-		switch($key){
-			case 'job_levels' : $str = 'job_level_id'
-			default : break;
-		}
+	public function map_array_fields($wp_id,$model){
+
 	}
 	/**
      * Store job updates from wordpress
