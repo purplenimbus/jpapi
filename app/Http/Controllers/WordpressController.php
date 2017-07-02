@@ -107,10 +107,8 @@ class WordpressController extends Controller
 			
 			echo "JOB FOUND \r\n";
 			
-			$job->fill($data);
-			
-			$job->save();
-			
+			$job->create($data);
+						
 			return $job;
 		}else{
 			echo "CREATING JOB FOUND \r\n";
