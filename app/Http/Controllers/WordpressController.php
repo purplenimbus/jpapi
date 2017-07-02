@@ -111,9 +111,8 @@ class WordpressController extends Controller
 		
 		echo "Job Data for Input : \r\n";
 		
-		return $data;
+		//return $data;
 		
-		/*
 		$job = Job::where('wp_id' , $wp_id)->get();
 		
 		if($job){
@@ -129,7 +128,7 @@ class WordpressController extends Controller
 			$new_job = Job::create($data);;
 			
 			return $new_job;
-		}*/
+		}
 		
 	}
 	
@@ -146,7 +145,7 @@ class WordpressController extends Controller
 			$resource = $model_name::where('wp_id', $wp_id)->first();
 			
 			if($resource->id){
-				return $resource;
+				return $resource->id;
 			}else{
 				return false;
 			}
