@@ -30,7 +30,7 @@ class Job extends Model
      *
      * @var array
      */
-    protected $fillable = $thig->assignable;
+    protected $fillable = $this->assignable;
 
 	
 	protected $visible = [
