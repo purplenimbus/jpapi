@@ -134,14 +134,30 @@ class WordpressController extends Controller
 	}
 	
 	/**
-     * Map wordpress array fields
+     * Get jp model id based on wp id
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
 	public function get_jp_resource_id($wp_id,$model){
-
+		
+		$model_name = "'App\Model\'".$model;
+		
+		$resource = $model_name::where('wp_id', $id)->first();
+		
+		return $resource;
 	}
+	
+	/**
+     * Map models to table names
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function get_jp_resource_id($wp_id,$model){
+		DB::table('users')->where('name', 'John')->first();
+	}
+	
 	/**
      * Store job updates from wordpress
      *
