@@ -64,7 +64,7 @@ class WordpressController extends Controller
      * @return \Illuminate\Http\Response
      */
     private function job($request){
-		echo "JP MODEL OBJECT \r\n";
+		//echo "JP MODEL OBJECT \r\n";
 				
 		$requests = $request->all();
 		
