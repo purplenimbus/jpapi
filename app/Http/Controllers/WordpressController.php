@@ -122,13 +122,13 @@ class WordpressController extends Controller
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 						
-			return $jp_job;
+			return response()->json(['data' => $jp_job , 'message' =>  'job id '.$jp_job->id.' updated successfully'],200);
 		}else{
 			echo "CREATING JOB \r\n";
 			
 			$new_job = Job::create($data);;
 			
-			return $new_job;
+			return response()->json(['data' => $new_job , 'message' =>  'New job created'],200);
 		}
 		
 	}
