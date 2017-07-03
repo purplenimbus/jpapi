@@ -88,6 +88,7 @@ class WordpressController extends Controller
 					case 'array' : 
 						echo "ARRAY \r\n";
 						echo "------------------------------------------------ \r\n";
+						
 						var_dump($request[$key]);
 						
 						$data[$request[$key]['jp_column']] = $this->get_jp_resource_id($request[$key]['wp_id'],$request[$key]['jp_model']);
