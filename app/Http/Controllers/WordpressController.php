@@ -77,17 +77,17 @@ class WordpressController extends Controller
 		foreach($requests as $key => $req){
 			
 			if($request->has($key)){
-				echo "key : ".$key."\r\n";
-				echo "Value Type : ".gettype($request[$key])."\r\n";
-				echo "Fillable? ".(array_search($key,$sample_job->assignable) !== false)."\r\n";
+				//echo "key : ".$key."\r\n";
+				//echo "Value Type : ".gettype($request[$key])."\r\n";
+				//echo "Fillable? ".(array_search($key,$sample_job->assignable) !== false)."\r\n";
 				//echo "----------------SAMPLE JOB------------------------- \r\n";
 				//var_dump(array_search($key,$sample_job->assignable));
-				echo "------------------------------------------------ \r\n";
+				//echo "------------------------------------------------ \r\n";
 				
 				switch(gettype($request[$key])){
 					case 'array' : 
-						echo "ARRAY \r\n";
-						echo "------------------------------------------------ \r\n";
+						//echo "ARRAY \r\n";
+						//echo "------------------------------------------------ \r\n";
 						
 						//var_dump($request[$key]);
 						
