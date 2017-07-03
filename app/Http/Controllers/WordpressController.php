@@ -89,7 +89,7 @@ class WordpressController extends Controller
 						echo "ARRAY \r\n";
 						echo "------------------------------------------------ \r\n";
 						
-						var_dump($request[$key]);
+						//var_dump($request[$key]);
 						
 						$data[$request[$key]['jp_column']] = $this->get_jp_resource_id($request[$key]['wp_id'],$request[$key]['jp_model']);
 						
@@ -112,7 +112,7 @@ class WordpressController extends Controller
 		
 		echo "Job Data for Input : \r\n";
 		
-		//return $data;
+		var_dump($data);
 		
 		$job = Job::where('wp_id' , $wp_id)->get();
 		
