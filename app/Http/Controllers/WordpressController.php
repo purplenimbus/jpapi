@@ -39,11 +39,11 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
-		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
+		//echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
 		
-		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
 		switch($model_type){
 			case 'jobs' : $data = $this->job($request); break;
@@ -51,7 +51,7 @@ class WordpressController extends Controller
 				
 		//var_dump($data);
 		
-		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
 		return response()->json(['data' => $data],200);
 
@@ -112,7 +112,7 @@ class WordpressController extends Controller
 		
 		echo "Job Data for Input : \r\n";
 		
-		//var_dump($data);
+		var_dump($data);
 		
 		$job = Job::where('wp_id' , $wp_id)->first();
 		
