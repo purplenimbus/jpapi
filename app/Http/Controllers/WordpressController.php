@@ -112,9 +112,9 @@ class WordpressController extends Controller
 			//echo "Job Data : ".$key."\r\n";
 		}
 		
-		//echo "Job Data for Input : \r\n";
+		echo "Job Data for Input : \r\n";
 		
-		//var_dump($data);
+		var_dump($data);
 		
 		$job = Job::where('wp_id' , $wp_id)->first();
 		
