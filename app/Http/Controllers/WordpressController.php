@@ -120,7 +120,7 @@ class WordpressController extends Controller
 		
 		if($job){
 						
-			//echo "JOB FOUND ".$job->id."\r\n";
+			echo "JOB FOUND ".$job->id."\r\n";
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 									
