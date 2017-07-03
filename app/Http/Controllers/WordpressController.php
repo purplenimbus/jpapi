@@ -110,9 +110,9 @@ class WordpressController extends Controller
 			//echo "Job Data : ".$key."\r\n";
 		}
 		
-		echo "Job Data for Input : \r\n";
+		//echo "Job Data for Input : \r\n";
 		
-		var_dump($data);
+		//var_dump($data);
 		
 		$job = Job::where('wp_id' , $wp_id)->first();
 		
@@ -120,7 +120,7 @@ class WordpressController extends Controller
 			
 			//var_dump($job);
 			
-			echo "JOB FOUND ".$job->id."\r\n";
+			//echo "JOB FOUND ".$job->id."\r\n";
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 						
@@ -131,7 +131,7 @@ class WordpressController extends Controller
 			
 			//var_dump($new_job);
 			
-			echo "CREATING JOB ".$new_job->id."\r\n";
+			//echo "CREATING JOB ".$new_job->id."\r\n";
 			
 			return response()->json(['data' => $new_job , 'message' =>  'New job created'],200);
 		}
