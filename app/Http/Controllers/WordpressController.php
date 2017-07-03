@@ -131,7 +131,7 @@ class WordpressController extends Controller
 			
 			//var_dump($new_job);
 			
-			//echo "CREATING JOB ".$new_job->id."\r\n";
+			echo "CREATING JOB ".$new_job->id."\r\n";
 			
 			var_dump($new_job);
 			
