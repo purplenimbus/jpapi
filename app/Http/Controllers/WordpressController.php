@@ -118,6 +118,8 @@ class WordpressController extends Controller
 		
 		if($job){
 			
+			var_dump($job);
+			
 			echo "JOB FOUND ".$job->id."\r\n";
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
@@ -126,6 +128,8 @@ class WordpressController extends Controller
 		}else{
 			
 			$new_job = Job::create($data);
+			
+			var_dump($new_job);
 			
 			echo "CREATING JOB ".$new_job->id."\r\n";
 			
