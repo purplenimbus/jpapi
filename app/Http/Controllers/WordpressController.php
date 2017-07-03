@@ -48,10 +48,12 @@ class WordpressController extends Controller
 		switch($model_type){
 			case 'jobs' : $data = $this->job($request); break;
 		}
-				
-		//var_dump($data);
 		
-		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
+		echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
+				
+		var_dump($data);
+		
+		echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
 		return response()->json(['data' => $data],200);
 
@@ -124,7 +126,7 @@ class WordpressController extends Controller
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 						
-			return response()->json(['data' => $jp_job , 'message' =>  'job id '.$job->id.' updated successfully'],200);
+			return 	$jp_job;
 		}else{
 			
 			$new_job = Job::create($data);
@@ -133,7 +135,7 @@ class WordpressController extends Controller
 			
 			//echo "CREATING JOB ".$new_job->id."\r\n";
 			
-			return response()->json(['data' => $new_job , 'message' =>  'New job created'],200);
+			return 	$new_job;
 		}
 		
 	}
