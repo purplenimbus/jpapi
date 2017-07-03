@@ -118,15 +118,16 @@ class WordpressController extends Controller
 		
 		if($job){
 			
-			echo "JOB FOUND \r\n";
+			echo "JOB FOUND ".$job->id."\r\n";
 			
 			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
 						
-			return response()->json(['data' => $jp_job , 'message' =>  'job id '.$jp_job->id.' updated successfully'],200);
+			return response()->json(['data' => $jp_job , 'message' =>  'job id '.$job->id.' updated successfully'],200);
 		}else{
-			echo "CREATING JOB \r\n";
 			
-			$new_job = Job::create($data);;
+			$new_job = Job::create($data);
+			
+			echo "CREATING JOB ".$new_job->id."\r\n";
 			
 			return response()->json(['data' => $new_job , 'message' =>  'New job created'],200);
 		}
