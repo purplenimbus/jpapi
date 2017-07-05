@@ -133,8 +133,8 @@ class WordpressController extends Controller
 						}
 						
 						break;
-				}*/
-			}
+				}
+			}*/
 			//echo "Job Data : ".$key."\r\n";
 		}*/
 		
