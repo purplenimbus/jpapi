@@ -74,7 +74,7 @@ class WordpressController extends Controller
 		
 		echo "Incoming Data \r\n";
 				
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$requests)->first();
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$requests);
 		
 		var_dump($job);
 		
