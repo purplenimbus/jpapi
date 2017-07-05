@@ -196,7 +196,7 @@ class WordpressController extends Controller
 			
 			echo $key." field fillable? ".array_search($key,$array)." \r\n"; 
 			
-			if(!array_search($key,$array)){
+			if(array_search($key,$array) === false){
 				unset($requests[$key]);
 			}
 		}
