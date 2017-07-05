@@ -55,7 +55,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
-		return response()->json(['id' => $data],200);
+		return response()->json(['id' => $data->id ],200);
 
     }
 	
@@ -72,10 +72,36 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
-		$sample_job = new Job;
-							
-		$data = array();
+		echo "Incoming Data \r\n";
 		
+		var_dump($new_job);
+		
+		//$sample_job = new Job;
+							
+		//$data = array();
+		
+		$job = Job::where('wp_id' , $wp_id)->first();
+		
+		if($job){
+						
+			echo "JOB FOUND ".$job->id."\r\n";
+			
+			//$jp_job = Job::where('wp_id' , $wp_id)->update($data);
+									
+			$job_id = $job->id;
+		}else{
+			
+			$new_job = Job::create($data)->save();
+			
+			//var_dump($new_job);
+			
+			//echo "CREATING JOB ".$new_job->id."\r\n";
+			
+			//var_dump($new_job);
+			
+			$job_id = $new_job->id;
+		}
+		/*
 		foreach($requests as $key => $req){
 			
 			if($request->has($key)){
@@ -85,7 +111,7 @@ class WordpressController extends Controller
 				//echo "----------------SAMPLE JOB------------------------- \r\n";
 				//var_dump(array_search($key,$sample_job->assignable));
 				//echo "------------------------------------------------ \r\n";
-				
+				/*
 				switch(gettype($request[$key])){
 					case 'array' : 
 						//echo "ARRAY \r\n";
@@ -107,37 +133,16 @@ class WordpressController extends Controller
 						}
 						
 						break;
-				}
+				}*/
 			}
 			//echo "Job Data : ".$key."\r\n";
-		}
+		}*/
 		
 		echo "Job Data for Input : \r\n";
 		
 		var_dump($data);
 		
-		$job = Job::where('wp_id' , $wp_id)->first();
-		
-		if($job){
-						
-			echo "JOB FOUND ".$job->id."\r\n";
-			
-			$jp_job = Job::where('wp_id' , $wp_id)->update($data);
-									
-			return 	$job->id;
-		}else{
-			
-			$new_job = Job::create($data)->save();
-			
-			//var_dump($new_job);
-			
-			echo "CREATING JOB ".$new_job->id."\r\n";
-			
-			var_dump($new_job);
-			
-			return 	$new_job->id;
-		}
-		
+		return $job_id;
 	}
 	
 	/**
