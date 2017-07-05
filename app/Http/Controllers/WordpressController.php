@@ -67,12 +67,12 @@ class WordpressController extends Controller
      */
     private function job($request){
 		//echo "JP MODEL OBJECT \r\n";
-				
-		$requests = $request->all();
 		
 		$wp_id 		= $request->wp_id;
 		
 		echo "Incoming Data \r\n";
+		
+		
 				
 		$job = Job::updateOrCreate(['wp_id' => $wp_id],$requests);
 		
@@ -132,7 +132,7 @@ class WordpressController extends Controller
 		}
 		*/
 		
-		return $job_id;
+		return $job;
 	}
 	
 	/**
@@ -176,5 +176,23 @@ class WordpressController extends Controller
 			return response()->json(['message'=>'job not found with wp id '.$wp_id],404);
 		}
     }
+	/**
+     * Parse request for valid data
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	
+	private function parse_request($request){
+		
+		$requests = $request->all();
+		
+		foreach($requests as $key => $req){
+			if($request->has($key)){
+				var_dump($requests[$key]);
+			}
+		}
+		
+		return $requests;
+	}
 }
