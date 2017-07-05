@@ -134,10 +134,11 @@ class WordpressController extends Controller
 						
 						break;
 				}
-			}*/
-			//echo "Job Data : ".$key."\r\n";
-		}*/
+			}
 		
+			//echo "Job Data : ".$key."\r\n";
+		}
+		*/
 		echo "Job Data for Input : \r\n";
 		
 		var_dump($data);
