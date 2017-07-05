@@ -66,74 +66,15 @@ class WordpressController extends Controller
      * @return \Illuminate\Http\Response
      */
     private function job($request){
-		//echo "JP MODEL OBJECT \r\n";
 		
 		$wp_id 		= $request->wp_id;
 		
 		$sample_job = new Job;
 		
 		$data = $this->parse_request($request,$sample_job->getFillable());
-				
-		//var_dump($data);
-				
+								
 		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
-						
-		echo "Job Data id:".$job->id."\r\n";
-				
-		/*
-		if($job){
-						
-			echo "JOB FOUND ".$job->id."\r\n";
-			
-			$jp_job = Job::where('wp_id' , $wp_id)->update($requests);
-									
-			$job_id = $jp_job->id;
-		}else{
-			
-			$new_job = Job::create($requests)->save();
-			
-			$job_id = $new_job->id;
-		}
-		*/
-		/*
-		foreach($requests as $key => $req){
-			
-			if($request->has($key)){
-				//echo "key : ".$key."\r\n";
-				//echo "Value Type : ".gettype($request[$key])."\r\n";
-				//echo "Fillable? ".(array_search($key,$sample_job->assignable) !== false)."\r\n";
-				//echo "----------------SAMPLE JOB------------------------- \r\n";
-				//var_dump(array_search($key,$sample_job->assignable));
-				//echo "------------------------------------------------ \r\n";
-				/*
-				switch(gettype($request[$key])){
-					case 'array' : 
-						//echo "ARRAY \r\n";
-						//echo "------------------------------------------------ \r\n";
-						
-						//var_dump($request[$key]);
-						
-						$data[$request[$key]['jp_column']] = $this->get_jp_resource_id($request[$key]['wp_id'],$request[$key]['jp_model']);
-						
-						break;
-					
-					default : 
-						//echo "STRING  : ".$request[$key]." \r\n";
-						//echo "------------------------------------------------ \r\n";
-						if(array_search($key,$sample_job->assignable) !== false && ($key !== 'wp_api' || $key !== 'jp_model')){
-							$data[$key] = $request->input($key);
-						}else{
-							continue;
-						}
-						
-						break;
-				}
-			}
-		
-			//echo "Job Data : ".$key."\r\n";
-		}
-		*/
-		
+								
 		return $job;
 	}
 	
@@ -189,9 +130,7 @@ class WordpressController extends Controller
 	private function parse_request($request,$array){
 		
 		$requests = $request->all();
-		
-		//var_dump($array);
-		
+				
 		foreach($requests as $key => $req){
 			
 			echo $key." field fillable? ".array_search($key,$array)." \r\n"; 
@@ -200,10 +139,6 @@ class WordpressController extends Controller
 				unset($requests[$key]);
 			}
 		}
-		
-		echo "Returned requests \r\n";
-		
-		var_dump($requests);
 		
 		return $requests;
 	}
