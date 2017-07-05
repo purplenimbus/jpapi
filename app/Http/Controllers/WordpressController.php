@@ -70,11 +70,13 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
-		//$data = $this->parse_request($request);
+		$sample_job = new Job;
+		
+		$data = $this->parse_request($request,$sample_job->assignable);
 				
 		//var_dump($data);
 				
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$this->parse_request($request,$job));
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
 						
 		"Job Data id:".$job->id."\r\n";
 				
@@ -180,15 +182,16 @@ class WordpressController extends Controller
      * Parse request for valid data
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  array  required fields to return from request
      * @return \Illuminate\Http\Response
      */
 	
-	private function parse_request($request,$model){
+	private function parse_request($request,$array){
 		
 		$requests = $request->all();
 		
 		foreach($requests as $key => $req){
-			if(!array_search($key,$model->assignable)){
+			if(!array_search($key,$array)){
 				unset($requests[$key]);
 			}
 		}
