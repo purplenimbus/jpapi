@@ -78,7 +78,7 @@ class WordpressController extends Controller
 				
 		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
 						
-		"Job Data id:".$job->id."\r\n";
+		echo "Job Data id:".$job->id."\r\n";
 				
 		/*
 		if($job){
@@ -190,11 +190,19 @@ class WordpressController extends Controller
 		
 		$requests = $request->all();
 		
+		echo "Fillable fields \r\n";
+		
+		var_dump($array);
+		
 		foreach($requests as $key => $req){
 			if(!array_search($key,$array)){
 				unset($requests[$key]);
 			}
 		}
+		
+		echo "Returned requests \r\n";
+		
+		var_dump($requests);
 		
 		return $requests;
 	}
