@@ -70,11 +70,15 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
+		$data = $this->parse_request($request);
+		
 		echo "Incoming Data \r\n";
 		
-		
+		var_dump($data);
 				
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$requests);
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
+		
+		"Job Data \r\n";
 		
 		var_dump($job);
 		
