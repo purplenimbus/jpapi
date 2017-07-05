@@ -72,7 +72,7 @@ class WordpressController extends Controller
 		
 		$sample_job = new Job;
 		
-		$data = $this->parse_request($request,$sample_job->assignable);
+		$data = $this->parse_request($request,$sample_job->getFillable());
 				
 		//var_dump($data);
 				
