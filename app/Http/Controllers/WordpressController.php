@@ -183,7 +183,7 @@ class WordpressController extends Controller
      * @return \Illuminate\Http\Response
      */
 	
-	private function parse_request($request){
+	private function parse_request($request,$model){
 		
 		$requests = $request->all();
 		
