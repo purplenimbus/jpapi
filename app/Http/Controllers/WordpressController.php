@@ -74,7 +74,7 @@ class WordpressController extends Controller
 		
 		echo "Incoming Data \r\n";
 		
-		var_dump($new_job);
+		var_dump($requests);
 		
 		//$sample_job = new Job;
 							
