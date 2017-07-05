@@ -46,7 +46,7 @@ class WordpressController extends Controller
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
 		switch($model_type){
-			case 'jobs' : $data = $this->job($request); break;
+			case 'jobs' : $data = $this->jp_model($request,'Job'); break;
 		}
 		
 		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
@@ -60,24 +60,29 @@ class WordpressController extends Controller
     }
 	
 	/**
-     * Job Model
+     * Create Model
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function job($request){
+    private function jp_model($request,$model){
 		
-		$wp_id 		= $request->wp_id;
-		
-		$sample_job = new Job;
-		
-		$data = $this->parse_request($request,$sample_job->getFillable());
+		$model_name = "App\\".$model;
+
+		try{
+			$sample_model = new $model_name;
+			
+			$data = $this->parse_request($request,$sample_model->getFillable());
 								
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
+			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 								
-		return $job;
+			return $resource;
+
+		}catch(Exception $e) {
+			return $e->getMessage();
+		}
+
 	}
-	
 	/**
      * Get jp model id based on wp id
      *
