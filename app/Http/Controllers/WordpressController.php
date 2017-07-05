@@ -132,9 +132,7 @@ class WordpressController extends Controller
 		$requests = $request->all();
 				
 		foreach($requests as $key => $req){
-			
-			echo $key." field fillable? ".array_search($key,$array)." \r\n"; 
-			
+						
 			if(array_search($key,$array) === false){
 				unset($requests[$key]);
 			}
