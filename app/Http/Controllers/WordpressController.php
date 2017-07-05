@@ -76,6 +76,8 @@ class WordpressController extends Controller
 				
 		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
 		
+		"Job Fillable:".$job->getFillable()."\r\n";
+		
 		"Job Data id:".$job->id."\r\n";
 				
 		/*
