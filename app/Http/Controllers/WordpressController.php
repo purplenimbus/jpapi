@@ -91,7 +91,7 @@ class WordpressController extends Controller
 			$job_id = $job->id;
 		}else{
 			
-			$new_job = Job::create($data)->save();
+			$new_job = Job::create($requests)->save();
 			
 			//var_dump($new_job);
 			
@@ -139,9 +139,6 @@ class WordpressController extends Controller
 			//echo "Job Data : ".$key."\r\n";
 		}
 		*/
-		echo "Job Data for Input : \r\n";
-		
-		var_dump($data);
 		
 		return $job_id;
 	}
