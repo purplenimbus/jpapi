@@ -74,12 +74,8 @@ class WordpressController extends Controller
 				
 		//var_dump($data);
 				
-		$job = Job::updateOrCreate(['wp_id' => $wp_id],$data);
-		
-		"Job Fillable: \r\n";
-		
-		var_dump($job->getFillable());
-		
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$this->parse_request($request,$job));
+						
 		"Job Data id:".$job->id."\r\n";
 				
 		/*
@@ -192,8 +188,8 @@ class WordpressController extends Controller
 		$requests = $request->all();
 		
 		foreach($requests as $key => $req){
-			if($request->has($key)){
-				var_dump($requests[$key]);
+			if(!array_search($key,$model->assignable)){
+				unset($requests[$key]);
 			}
 		}
 		
