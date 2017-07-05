@@ -73,34 +73,26 @@ class WordpressController extends Controller
 		$wp_id 		= $request->wp_id;
 		
 		echo "Incoming Data \r\n";
+				
+		$job = Job::updateOrCreate(['wp_id' => $wp_id],$requests)->first();
 		
-		var_dump($requests);
+		var_dump($job);
 		
-		//$sample_job = new Job;
-							
-		//$data = array();
-		
-		$job = Job::where('wp_id' , $wp_id)->first();
-		
+		/*
 		if($job){
 						
 			echo "JOB FOUND ".$job->id."\r\n";
 			
-			//$jp_job = Job::where('wp_id' , $wp_id)->update($data);
+			$jp_job = Job::where('wp_id' , $wp_id)->update($requests);
 									
-			$job_id = $job->id;
+			$job_id = $jp_job->id;
 		}else{
 			
 			$new_job = Job::create($requests)->save();
 			
-			//var_dump($new_job);
-			
-			//echo "CREATING JOB ".$new_job->id."\r\n";
-			
-			//var_dump($new_job);
-			
 			$job_id = $new_job->id;
 		}
+		*/
 		/*
 		foreach($requests as $key => $req){
 			
