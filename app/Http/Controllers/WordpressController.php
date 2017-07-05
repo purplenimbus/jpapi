@@ -70,7 +70,7 @@ class WordpressController extends Controller
 		
 		$wp_id 		= $request->wp_id;
 		
-		$data = $this->parse_request($request);
+		//$data = $this->parse_request($request);
 				
 		//var_dump($data);
 				
