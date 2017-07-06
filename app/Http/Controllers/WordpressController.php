@@ -26,6 +26,7 @@ class WordpressController extends Controller
     public function __construct()
     {
         //$this->middleware('auth');
+		$this->seeder = New Seeder;
     }
 	/**
      * Store wordpress resources
@@ -63,16 +64,17 @@ class WordpressController extends Controller
      * Create Model
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  string  $model
      * @return \Illuminate\Http\Response
      */
-    private function jp_model($request,$model){
+    public function jp_model($request,$model){
 		
 		$model_name = "App\\".$model;
-
+		
 		try{
 			$sample_model = new $model_name;
 			
-			$data = $this->parse_request($request,$sample_model->getFillable());
+			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 								
@@ -124,25 +126,5 @@ class WordpressController extends Controller
 			return response()->json(['message'=>'job not found with wp id '.$wp_id],404);
 		}
     }
-	/**
-     * Parse request for valid data
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  required fields to return from request
-     * @return \Illuminate\Http\Response
-     */
 	
-	private function parse_request($request,$array){
-		
-		$requests = $request->all();
-				
-		foreach($requests as $key => $req){
-						
-			if(array_search($key,$array) === false){
-				unset($requests[$key]);
-			}
-		}
-		
-		return $requests;
-	}
 }

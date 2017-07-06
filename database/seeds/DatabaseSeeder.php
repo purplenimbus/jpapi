@@ -537,4 +537,26 @@ class DatabaseSeeder extends Seeder
 		//$this->call(JobSeeder::class);
     }
 	
+	/**
+     * Parse request for valid data
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  required fields to return from request
+     * @return \Illuminate\Http\Response
+     */
+	
+	public function parse_request($request,$array){
+		
+		$requests = $request->all();
+				
+		foreach($requests as $key => $req){
+						
+			if(array_search($key,$array) === false){
+				unset($requests[$key]);
+			}
+		}
+		
+		return $requests;
+	}
+	
 }
