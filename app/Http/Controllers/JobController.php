@@ -76,7 +76,7 @@ class JobController extends Controller
 				$job['company'] = isset($job->company->name) ? $job->company->name : '';
 				$job['location'] = isset($job->location->name) ? $job->location->name : '';
 				$job['job_type'] = isset($job->job_type->name) ? $job->job_type->name : '';
-				$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+				//$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
 			}
 
 		return $jobs->toJson();
