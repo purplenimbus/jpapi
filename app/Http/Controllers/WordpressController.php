@@ -78,7 +78,7 @@ class WordpressController extends Controller
 			
 			//get jpApi company id
 			if ($request->has('wp_company_id')) {
-				$request->company_id = $this->get_jp_resource_id($request->wp_id,'Company');
+				$request->company_id = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 
 			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
@@ -105,6 +105,7 @@ class WordpressController extends Controller
 	public function get_jp_resource_id($wp_id,$model){
 		
 		$model_name = "App\\".$model;
+		
 		try{
 			$resource = $model_name::where('wp_id', $wp_id)->get();
 			
