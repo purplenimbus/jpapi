@@ -109,7 +109,7 @@ class WordpressController extends Controller
 		try{
 			$resource = $model_name::where('wp_id', $wp_id)->get();
 			
-			var_dump($resource);
+			var_dump($resource->id);
 			
 			if($resource->id){
 				return $resource->id;
