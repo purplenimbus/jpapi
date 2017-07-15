@@ -44,7 +44,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		//echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
+		echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
@@ -52,9 +52,9 @@ class WordpressController extends Controller
 			case 'jobs' : $data = $this->jp_model($request,'Job'); break;
 		}
 		
-		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
+		echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
-		//var_dump($data);
+		var_dump($data);
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
