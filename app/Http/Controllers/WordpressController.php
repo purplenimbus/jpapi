@@ -52,7 +52,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
-		//var_dump($data);
+		var_dump($data);
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
