@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Seeder;
 
 use	App\Job;
 use	App\Salary;
@@ -16,6 +15,8 @@ use	App\Job_Level;
 use	App\Job_Skill;
 use	App\Location;
 use	App\Application;
+
+use DatabaseSeeder as Seeder;
 
 class WordpressController extends Controller
 {
