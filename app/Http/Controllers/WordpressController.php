@@ -78,7 +78,7 @@ class WordpressController extends Controller
 
 			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
 			
-			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			//echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
 			//get jpApi company id
 			if ($request->has('wp_company_id')) {
