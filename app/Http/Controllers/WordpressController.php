@@ -37,20 +37,15 @@ class WordpressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update($id,Request $request)
-    {		
-		$model_type = $request->jp_model;
-		
-		$wp_id 		= $request->wp_id;
+    {				
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		//echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
+		//echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$request->wp_id." \r\n";
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		switch($model_type){
-			case 'jobs' : $data = $this->jp_model($request,'Job'); break;
-		}
+		$data = $this->jp_model($request,$request->jp_model);
 		
 		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
