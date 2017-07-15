@@ -52,9 +52,9 @@ class WordpressController extends Controller
 			case 'jobs' : $data = $this->jp_model($request,'Job'); break;
 		}
 		
-		echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
+		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
-		var_dump($data);
+		//var_dump($data);
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
@@ -83,7 +83,7 @@ class WordpressController extends Controller
 
 			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
 			
-			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			//echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
 			//var_dump($data);
 								
@@ -108,9 +108,7 @@ class WordpressController extends Controller
 		
 		try{
 			$resource = $model_name::where('wp_id', $wp_id)->first();
-			
-			var_dump($resource->id);
-			
+						
 			if($resource->id){
 				return $resource->id;
 			}else{
