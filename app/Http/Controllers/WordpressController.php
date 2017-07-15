@@ -107,7 +107,7 @@ class WordpressController extends Controller
 		$model_name = "App\\".$model;
 		
 		try{
-			$resource = $model_name::where('wp_id', $wp_id);
+			$resource = $model_name::where('wp_id', $wp_id)->first();
 			
 			var_dump($resource->id);
 			
