@@ -80,7 +80,7 @@ class WordpressController extends Controller
 			
 			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
-			var_dump($data;);
+			var_dump($data);
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 								
