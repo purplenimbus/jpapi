@@ -75,15 +75,15 @@ class WordpressController extends Controller
 		
 		try{
 			$sample_model = new $model_name;
-			
-			//get jpApi company id
-			if ($request->has('wp_company_id')) {
-				$request->company_id = $this->get_jp_resource_id($request->wp_company_id,'Company');
-			}
 
 			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
 			
 			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			
+			//get jpApi company id
+			if ($request->has('wp_company_id')) {
+				$data->company_id = $this->get_jp_resource_id($request->wp_company_id,'Company');
+			}
 			
 			var_dump($data);
 								
