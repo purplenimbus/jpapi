@@ -44,7 +44,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
-		echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
+		//echo "WP ID : ".$id." , MODEL TYPE : ".$model_type." , WORDPRESS ID : ".$wp_id." \r\n";
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 		
@@ -85,7 +85,7 @@ class WordpressController extends Controller
 			
 			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
-			var_dump($data);
+			//var_dump($data);
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 								
