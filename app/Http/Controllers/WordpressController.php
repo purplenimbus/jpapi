@@ -77,6 +77,10 @@ class WordpressController extends Controller
 			$sample_model = new $model_name;
 			
 			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
+			
+			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			
+			var_dump($data;);
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 								
