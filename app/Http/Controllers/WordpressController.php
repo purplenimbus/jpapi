@@ -79,10 +79,19 @@ class WordpressController extends Controller
 			if ($request->has('wp_company_id')) {
 				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
-			
+						
 			//var_dump($data);
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
+			
+			//save location details
+			if($resource->has('location')){
+				
+				$location = Location::firstOrNew(['ref_id' => $request->input('location.ref_id')],$request->only('location'));
+				
+				$resource->location()->save($location);
+			}
+
 								
 			return $resource;
 
