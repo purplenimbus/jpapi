@@ -58,11 +58,9 @@ class CompanyController extends Controller
     {
         $company	=	Company::findorfail($id);
 		
-		$company['jobs']		= 	$company->jobs;
-		$company['company_category']	= 	$company->category;
+		$company['jobs']		= 	$company->jobs()->latest()->limit(5);
 		
-		//echo $company['jobs'][0];
-		
+		$company['company_category']	= 	$company->category;		
 				
 		return $company->toJson();
     }

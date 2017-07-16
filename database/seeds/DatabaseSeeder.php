@@ -550,7 +550,6 @@ class DatabaseSeeder extends Seeder
 		$requests = $request->all();
 				
 		foreach($requests as $key => $req){
-						
 			if(array_search($key,$array) === false){
 				unset($requests[$key]);
 			}

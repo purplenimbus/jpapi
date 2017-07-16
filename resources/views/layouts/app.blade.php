@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="{{ URL::secureAsset('css/main.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto" rel="stylesheet">
 </head>
-<body class=" @{{ $location.base }} bg-grey uk-height-viewport">
+<body class=" @{{ $location.base }} bg-grey">
 	@include('partials.nav')
 	
 	<div class="progress">
