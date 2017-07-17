@@ -49,11 +49,11 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
-		//var_dump($data);
+		var_dump($data);
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
-		return response()->json(['id' => $data->id ],200);
+		return response()->json(['id' => $data->id , 'location_id' => $data->location->id ],200);
 
     }
 	
@@ -91,13 +91,16 @@ class WordpressController extends Controller
 				
 				$sample_location = new Location;
 				
-				var_dump(json_decode($request->input('location'),true));
-				
 				$loc_data = $this->seeder->parse_request(json_decode($request->input('location'),true),$sample_location->getFillable());
 								
 				$location = Location::firstOrNew(['ref_id' => $loc_data['ref_id']],$loc_data);
 				
+				echo "Resource location \r\n";
+				
+				var_dump(json_decode($request->input('location'),true));
+				
 				$resource->location()->save($location);
+				
 			}
 
 								
