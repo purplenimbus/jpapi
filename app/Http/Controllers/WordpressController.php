@@ -73,7 +73,7 @@ class WordpressController extends Controller
 
 			$data = $this->seeder->parse_request($request->all(),$sample_model->getFillable());
 			
-			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			//echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
 			//get jpApi company id
 			if (null !== $request->has('wp_company_id')) {
@@ -84,26 +84,26 @@ class WordpressController extends Controller
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			
-			var_dump(isset($resource->location));
+			//var_dump(isset($resource->location));
 			
 			//save location details
 			if(isset($resource->location) && $request->has('location')){
 				
-				echo "Resource has location \r\n";
+				//echo "Resource has location \r\n";
 				
 				$sample_location = new Location;
 				
 				$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
 				
-				var_dump($loc_data);
+				//var_dump($loc_data);
 				
 				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 				
-				var_dump($parsed_loc_data);
+				//var_dump($parsed_loc_data);
 								
 				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
-				echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
+				//echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
 				
 				//var_dump($location);
 								
