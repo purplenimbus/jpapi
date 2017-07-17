@@ -131,7 +131,7 @@ class WordpressController extends Controller
 			
 			$resource = $model_name::where('wp_id', $wp_id)->first();
 						
-			if($resource->id){
+			if(isset($resource->id)){
 				return $resource->id;
 			}else{
 				return false;
