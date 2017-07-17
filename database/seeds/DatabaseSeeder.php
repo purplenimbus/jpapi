@@ -556,4 +556,23 @@ class DatabaseSeeder extends Seeder
 		return $requests;
 	}
 	
+	/**
+     * Parse location array and map keys to jp location model
+     *
+     * @param  araay  $requests - Incoming requests to be prsed
+     * @return $parsed
+     */
+	public function parse_location($requests){
+						
+		foreach($requests as $key => $req){
+			switch($key){
+				case 'political ' : $requests['locality'] = $requests['political']; break;
+				case 'locality' : $requests['city'] = $requests['locality']; break;
+				case 'administrative_area_level_1' : $requests['state'] = $requests['administrative_area_level_1']; break;
+				default: continue;
+			}
+		}
+		
+		return $requests;
+	}
 }
