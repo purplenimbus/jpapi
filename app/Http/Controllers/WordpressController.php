@@ -87,7 +87,7 @@ class WordpressController extends Controller
 			//save location details
 			if($resource->has('location')){
 				
-				echo "Resource has location";
+				echo "Resource has location \r\n";
 				
 				var_dump(json_encode($request->input('location'),true));
 				
