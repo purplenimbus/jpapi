@@ -24,7 +24,7 @@ body{
 				margin:0px !important;
 			}
 		}
-		main.job-info{
+		main,aside{
 			margin-top: -70px;
 		}
 		section{
@@ -48,7 +48,7 @@ body{
 		aside{
 			&.header{
 				min-height:180px;
-				background:url('/images/view-job-bg.jpg');
+				background:url('http://images1.andersonautogroup.com/header-background.jpg');
 				background-size:cover;
 				padding:0px;
 				background-position: center bottom;
