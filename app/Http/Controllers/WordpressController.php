@@ -84,10 +84,12 @@ class WordpressController extends Controller
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			
+			var_dump($resource->has('location'));
+			
 			//save location details
 			if(null !==  $resource->has('location')){
 				
-				//echo "Resource has location \r\n";
+				echo "Resource has location \r\n";
 				
 				$sample_location = new Location;
 				
