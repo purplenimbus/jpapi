@@ -104,6 +104,9 @@ section {
 .uk-thumbnail {
   border: 0px; }
 
+.view_asset main, .view_asset aside {
+  margin-top: -70px; }
+
 .job_list ul li article header {
   margin: 0px;
   border: 0px; }
@@ -151,8 +154,6 @@ body {
     border-bottom: 1px solid lightgray; }
     body .navbar .navbar-right {
       margin: 0px !important; }
-  body main, body aside {
-    margin-top: -70px; }
   body section#home {
     height: 87vh;
     position: relative; }
