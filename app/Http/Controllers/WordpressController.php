@@ -49,7 +49,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++ WP DATA +++++++++++++++++++++ \r\n";
 				
-		var_dump($data);
+		//var_dump($data);
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
@@ -87,7 +87,7 @@ class WordpressController extends Controller
 			//save location details
 			if($resource->has('location')){
 				
-				echo "Resource has location \r\n";
+				//echo "Resource has location \r\n";
 				
 				$sample_location = new Location;
 				
@@ -95,11 +95,11 @@ class WordpressController extends Controller
 				
 				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 				
-				var_dump($parsed_loc_data);
+				//var_dump($parsed_loc_data);
 								
 				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
-				echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
+				//echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
 				
 				//var_dump($location);
 								
