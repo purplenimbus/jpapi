@@ -97,7 +97,7 @@ class WordpressController extends Controller
 				
 				var_dump($parsed_loc_data);
 								
-				$location = Location::firstOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
+				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
 				echo "Resource location FK:".strtolower($request->jp_model)."location_id:".$location->id." \r\n";
 				
