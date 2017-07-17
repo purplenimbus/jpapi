@@ -93,15 +93,13 @@ class WordpressController extends Controller
 				
 				$loc_data = $this->seeder->parse_request(json_decode($request->input('location'),true),$sample_location->getFillable());
 								
-				$location = Location::firstOrNew(['ref_id' => $loc_data['ref_id']],$loc_data);
+				$location = Location::firstOrCreate(['ref_id' => $loc_data['ref_id']],$loc_data);
 				
-				echo "Resource location \r\n";
+				echo "Resource location FK:".strtolower($request->jp_model)."location_id \r\n";
 				
 				var_dump($location);
-				
-				var_dump($resource);
-				
-				$resource->location()->save($location);
+								
+				$resource[strtolower($request->jp_model).'location_id']->save();
 				
 			}
 
