@@ -540,14 +540,14 @@ class DatabaseSeeder extends Seeder
 	/**
      * Parse request for valid data
      *
-     * @param  araay  $data - Incoming data to be prsed
+     * @param  araay  $requests - Incoming requests to be prsed
      * @param  array $array  required fields to return from request
      * @return \Illuminate\Http\Response
      */
 	
-	public function parse_request($data,$array){
+	public function parse_request($requests,$array){
 						
-		foreach($data as $key => $req){
+		foreach($requests as $key => $req){
 			if(array_search($key,$array) === false){
 				unset($requests[$key]);
 			}
