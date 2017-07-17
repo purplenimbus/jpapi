@@ -131,7 +131,12 @@ class WordpressController extends Controller
 			
 			$resource = $model_name::where('wp_id', $wp_id)->first();
 						
-			return $resource->id;
+			if($resource->id){
+				return $resource->id;
+			}else{
+				return false;
+			};
+			
 				
 		}catch(Exception $e) {
 			return $e->getMessage();
