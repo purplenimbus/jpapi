@@ -103,7 +103,7 @@ class WordpressController extends Controller
 				
 				//var_dump($location);
 								
-				$resource[strtolower($request->jp_model).'location_id']->save();
+				$resource[strtolower($request->jp_model).'_location_id']->save();
 				
 			}
 
