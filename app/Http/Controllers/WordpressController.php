@@ -97,7 +97,9 @@ class WordpressController extends Controller
 				
 				echo "Resource location \r\n";
 				
-				var_dump(json_decode($request->input('location'),true));
+				var_dump($location);
+				
+				var_dump($resource);
 				
 				$resource->location()->save($location);
 				
