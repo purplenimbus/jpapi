@@ -30,7 +30,7 @@ class Location extends Model
     ];
 	
 	protected $visible = [
-		'name','locality','city','state','country','zip_code','lng','lat','url'
+		'name','locality','city','state','country','zip_code','lng','lat','url','jobs'
     ];
 	//Get all Jobs from Location
 	public function jobs(){

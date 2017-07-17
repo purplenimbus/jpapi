@@ -328,7 +328,7 @@ class JobController extends Controller
 				$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
 				return $location->toJson();
 			}else{
-				return 'No Jobs Found';
+				return 'Location with id '.$location_id.' not found';
 			}
 		}
 	}
