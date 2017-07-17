@@ -124,6 +124,9 @@ aside.toolbar {
     .jobs_component .uk-panel article header h4 {
       font-size: 12px; }
 
+.company_widget .logo {
+  max-width: 80px; }
+
 .login {
   transition: all 0.5s; }
   .login .uk-modal-dialog.error {
