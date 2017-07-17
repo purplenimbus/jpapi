@@ -95,7 +95,7 @@ class WordpressController extends Controller
 				
 				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 				
-				var_dump($loc_data);
+				var_dump($parsed_loc_data);
 								
 				$location = Location::firstOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
