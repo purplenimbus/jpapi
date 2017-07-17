@@ -569,6 +569,7 @@ class DatabaseSeeder extends Seeder
 				case 'political ' : $requests['locality'] = $requests['political']; break;
 				case 'locality' : $requests['city'] = $requests['locality']; break;
 				case 'administrative_area_level_1' : $requests['state'] = $requests['administrative_area_level_1']; break;
+				case 'postal_code' : $requests['zip_code'] = $requests['postal_code']; break;
 				default: continue;
 			}
 		}
