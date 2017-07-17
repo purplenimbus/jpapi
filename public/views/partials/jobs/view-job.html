@@ -9,12 +9,7 @@
 			<main class="uk-width-medium-7-10 uk-width-small-1-1 job-info">
 				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
 					<div class="uk-grid">
-						<div class="uk-width-3-10">
-							<div class="uk-thumbnail uk-thumbnail-expand">
-								<img src="{{ currentAsset.company.logo }}" />
-							</div>
-						</div>
-						<div class="uk-width-7-10">
+						<div class="uk-width-1-11">
 							<article class="uk-article">
 								<p class="uk-article-lead">{{ currentAsset.title }}</p>
 								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
@@ -64,7 +59,22 @@
 				</div>
 			</main>
 			<aside class="uk-width-medium-3-10 uk-width-small-1-11">
-			
+				<div class="uk-panel uk-panel-box">
+					<div class="uk-panel-teaser">
+						<img src="https://tranquil-reaches-27375.herokuapp.com/images/view-job-bg.jpg" alt="">
+					</div>
+					<div class="uk-thumbnail uk-thumbnail-expand">
+						<img src="{{ currentAsset.company.logo }}" />
+					</div>
+					<article class="uk-article">
+						<p class="uk-article-lead ng-binding">{{ currentAsset.company.name }}</p>
+						<p class="uk-article-meta info">
+							<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
+
+							</ul>
+						</p>
+					</article>
+				</div>
 			</aside>
 		</div>
 	</div>
