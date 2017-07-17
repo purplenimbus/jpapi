@@ -80,14 +80,18 @@ class WordpressController extends Controller
 				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 						
-			//var_dump($data);
+			//var_dump($request->input('location.ref_id'));
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			
 			//save location details
 			if($resource->has('location')){
 				
-				$location = Location::firstOrNew(['ref_id' => $request->input('location.ref_id')],$request->only('location'));
+				echo "Resource has location";
+				
+				var_dump(json_encode($request->input('location'),true));
+				
+				//$location = Location::firstOrNew(['ref_id' => $request->input('location.ref_id')],$request->only('location'));
 				
 				$resource->location()->save($location);
 			}
