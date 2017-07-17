@@ -326,6 +326,7 @@ class JobController extends Controller
 			$location = Location::find($location_id);
 			if($location){
 				$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
+				$location['companies'] = isset($location->companies) ? $location->companies->latest()->limit(5) : null;
 				return $location->toJson();
 			}else{
 				return 'Location with id '.$location_id.' not found';
