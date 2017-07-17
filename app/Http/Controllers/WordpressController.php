@@ -89,11 +89,12 @@ class WordpressController extends Controller
 				
 				echo "Resource has location \r\n";
 				
-				var_dump(json_encode($request->input('location'),true));
+				var_dump(json_decode($request->input('location'),true));
+				//var_dump(json_encode($request->input('location'),true));
 				
 				//$location = Location::firstOrNew(['ref_id' => $request->input('location.ref_id')],$request->only('location'));
 				
-				$resource->location()->save($location);
+				//$resource->location()->save($location);
 			}
 
 								
