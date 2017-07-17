@@ -53,7 +53,7 @@ class WordpressController extends Controller
 		
 		//echo "++++++++++++++++++++++++++++++++++++++++++++ \r\n";
 
-		return response()->json(['id' => $data->id , 'location_id' => $data->location->id ],200);
+		return response()->json(['id' => $data->id , 'location_id' => isset($data->location->id) ? $data->location->id : null ],200);
 
     }
 	
