@@ -95,11 +95,15 @@ class WordpressController extends Controller
 				
 				$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
 				
-				//var_dump($loc_data);
+				echo "location data \r\n";
+				
+				var_dump($loc_data);
 				
 				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 				
-				//var_dump($parsed_loc_data);
+				echo "Parsed location \r\n";
+				
+				var_dump($parsed_loc_data);
 								
 				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
