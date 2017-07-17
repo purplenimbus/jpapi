@@ -71,7 +71,7 @@ class WordpressController extends Controller
 		try{
 			$sample_model = new $model_name;
 
-			$data = $this->seeder->parse_request($request,$sample_model->getFillable());
+			$data = $this->seeder->parse_request($request->all(),$sample_model->getFillable());
 			
 			//echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
@@ -89,12 +89,15 @@ class WordpressController extends Controller
 				
 				echo "Resource has location \r\n";
 				
+				$sample_location = new Location;
+				
 				var_dump(json_decode($request->input('location'),true));
-				//var_dump(json_encode($request->input('location'),true));
 				
-				//$location = Location::firstOrNew(['ref_id' => $request->input('location.ref_id')],$request->only('location'));
+				$loc_data = $this->seeder->parse_request(json_decode($request->input('location'),true),$sample_location->getFillable());
+								
+				$location = Location::firstOrNew(['ref_id' => $loc_data['ref_id']],$loc_data);
 				
-				//$resource->location()->save($location);
+				$resource->location()->save($location);
 			}
 
 								
