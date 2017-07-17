@@ -12,7 +12,21 @@ class Location extends Model
      * @var array
      */
     protected $fillable = [
-        'id','name','locality','city','city_code','state','state_code','country','country_code','zip_code','lng','lat','ref_id','url'
+        'id',
+		'locality',
+		'city',
+		'state',
+		'country',
+		'zip_code',
+		'lng',
+		'lat',
+		'ref_id',
+		'url',		
+		/*
+		'name',
+		'state_code',
+		'city_code',
+		'country_code'*/
     ];
 	
 	protected $visible = [
