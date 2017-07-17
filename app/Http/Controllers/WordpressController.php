@@ -73,7 +73,7 @@ class WordpressController extends Controller
 
 			$data = $this->seeder->parse_request($request->all(),$sample_model->getFillable());
 			
-			//echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
 			//get jpApi company id
 			if (null !== $request->has('wp_company_id')) {
@@ -84,7 +84,7 @@ class WordpressController extends Controller
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			
-			var_dump($resource->has('location'));
+			var_dump(isset($resource->location));
 			
 			//save location details
 			if(null !==  $resource->has('location')){
