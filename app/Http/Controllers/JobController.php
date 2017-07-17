@@ -327,7 +327,7 @@ class JobController extends Controller
 			if($location){
 				$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
 				
-				$location['companies'] = isset($location->companies) ? $location->companies->latest()->limit(5) : null;
+				$location['companies'] = isset($location->companies) ? $location->companies()->latest()->limit(5) : null;
 				
 				return $location->toJson();
 			}else{
