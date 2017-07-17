@@ -34,7 +34,7 @@ class Location extends Model
     ];
 	//Get all Jobs from Location
 	public function jobs(){
-		return $this->hasMany('App\Job','job_location_id');
+		return $this->hasMany('App\Job','job_location_id','id');
 	}
 	//Get all Companies
 	public function companies(){
