@@ -84,14 +84,14 @@ class WordpressController extends Controller
 				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 						
-			//var_dump($request->input('location.ref_id'));
+			var_dump($request->input('location.ref_id'));
 								
 			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			
-			//var_dump(isset($resource->location));
+			var_dump(isset($resource->location));
 			
 			//save location details
-			if(isset($resource->location) && isset($request->input('location'))){
+			if(isset($resource->location) && isset($request->location)){
 				
 				echo "Resource has location \r\n";
 				
