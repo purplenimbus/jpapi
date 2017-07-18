@@ -12,7 +12,7 @@
 	<!-- endbower -->
 	<link rel="stylesheet" href="/bower_components/uikit/css/components/notify.gradient.min.css" />
 	
-	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
+	<link rel="stylesheet" href="{{ URL::secureAsset('css/main.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto" rel="stylesheet">
 	
 	<script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
@@ -62,14 +62,10 @@
 	<script src="/bower_components/uikit/js/components/grid.min.js"></script>
 	<script src="/bower_components/uikit/js/components/notify.min.js"></script>
 	
-	<script src="{{ URL::asset('js/all.js') }}"></script>
+	<script src="{{ URL::secureAsset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
 	<script>
-		mapboxgl.accessToken = env('MAP_BOX_TOKEN');
-		var map = new mapboxgl.Map({
-			container: 'map',
-			style: 'mapbox://styles/mapbox/streets-v9'
-		});
-		</script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoicHVycGxlbmltYnVzIiwiYSI6ImNqNTk1anM2OTA1NHIyd3AxdWtxMWU4anUifQ.4yRS2kMp9qWtmAmOW7YGvg';
+	</script>
 </body>
 </html>

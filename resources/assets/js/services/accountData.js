@@ -25,6 +25,8 @@ angular.module('jpApp')
 			 * Sets the Users Location in the $rootScope
 			 */
 			setUserLocation : function(){
+				
+				var deferred = $q.defer();
 				if(!$rootScope.user){
 					$rootScope.user = {};
 				}
@@ -37,13 +39,19 @@ angular.module('jpApp')
 					
 					return location.getLocation().then(function(result){
 						
-						console.log('Location Result',result);
+						//console.log('Location Result',result);
 						
 						$rootScope.user.location.location = result[1].formatted_address;
 							
 						$rootScope.user.location.place_id = result[1].place_id;
+						
+						$rootScope.user.location.lat 	=	result[1].geometry.location.lat();
+						
+						$rootScope.user.location.lng	=	result[1].geometry.location.lng();
 														
-						return result;
+						deferred.resolve(result);
+						
+						return deferred.promise;
 						
 					});
 

@@ -44,7 +44,7 @@ angular.module('jpApp')
 					deferred = $q.defer();
 		
 				geo.geocode({'location': {lat: lat, lng: lng}}, function(result, status) {
-					console.log('Geo Coder Result',result,status);
+					//console.log('Geo Coder Result',result,status);
 					if(result.length >= 1){
 						deferred.resolve(result);
 					}else{
