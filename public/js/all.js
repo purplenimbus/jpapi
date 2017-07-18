@@ -922,8 +922,8 @@ angular.module('jpApp')
 				map.on('load', function () {
 					if(JobCtrl.currentAsset.location){
 						var marker = new mapboxgl.Marker()
-								  .setLngLat([parseInt(JobCtrl.currentAsset.location.lng), parseInt(JobCtrl.currentAsset.location.lat)])
-								  .addTo(map);
+					  .setLngLat([parseInt(JobCtrl.currentAsset.location.lng), parseInt(JobCtrl.currentAsset.location.lat)])
+					  .addTo(map);
 					}					
 				});
 			});
