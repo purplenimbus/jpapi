@@ -75,6 +75,9 @@
 							</ul>
 						</p>
 						<hr class="uk-article-divider">
+						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line">
+							<li ng-repeat="job in currentAsset.company.jobs">{{ job }}</li>
+						</ul>
 					</article>
 				</div>
 			</aside>
