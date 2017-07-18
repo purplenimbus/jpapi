@@ -677,7 +677,7 @@ angular.module('jpApp')
 				
 				var map = new mapboxgl.Map({
 					container: 'map',
-					style: 'mapbox://styles/mapbox/streets-v10',
+					style: 'mapbox://styles/mapbox/traffic-night-v2',
 					center: home,
 					zoom: 10
 				});
@@ -911,7 +911,7 @@ angular.module('jpApp')
 				
 				var map = new mapboxgl.Map({
 					container: 'map',
-					style: 'mapbox://styles/mapbox/streets-v10',
+					style: 'mapbox://styles/mapbox/traffic-night-v2',
 					center: home,
 					zoom: 10
 				});
@@ -1211,7 +1211,7 @@ angular.module('jpApp')
 				
 				var map = new mapboxgl.Map({
 					container: 'map',
-					style: 'mapbox://styles/mapbox/streets-v10',
+					style: 'mapbox://styles/mapbox/traffic-night-v2',
 					center: home,
 					zoom: 10
 				});
