@@ -115,7 +115,10 @@ class JobController extends Controller
 		
 		//var_dump(Auth);
 		if($job):
-			$job['company']			= isset($job->company->name) ? $job->company->name : '';
+			if(isset($job->company->name)):
+				$job['company']			=  $job->company->name;
+				$job['company']['location'] = $job->company->location;
+			endif;
 			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : '';
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : '';
 			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : '';
