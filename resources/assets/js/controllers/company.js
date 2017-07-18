@@ -41,14 +41,11 @@ angular.module('jpApp')
 				map.addControl(new mapboxgl.GeolocateControl());
 				
 				map.on('load', function () {
-					angular.forEach(JobsCtrl.jobs,function(value){
-						if(value.location){
-							var marker = new mapboxgl.Marker()
-									  .setLngLat([parseInt(value.location.lng), parseInt(value.location.lat)])
-									  .addTo(map);
-						}
-					});
-					
+					if(CompanyCtrl.currentAsset.location){
+						var marker = new mapboxgl.Marker()
+								  .setLngLat([parseInt(CompanyCtrl.currentAsset.location.lng), parseInt(CompanyCtrl.currentAsset.location.lat)])
+								  .addTo(map);
+					}					
 				});
 			});
 		}
