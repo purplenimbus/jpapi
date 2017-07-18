@@ -91,9 +91,9 @@ class WordpressController extends Controller
 			//var_dump(isset($resource->location));
 			
 			//save location details
-			if(isset($resource->location) && $request->has('location')){
+			if(isset($resource->location) && isset($request->input('location'))){
 				
-				//echo "Resource has location \r\n";
+				echo "Resource has location \r\n";
 				
 				$sample_location = new Location;
 				
