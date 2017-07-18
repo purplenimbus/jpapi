@@ -28,4 +28,9 @@ class Company extends Model
 	public function category(){
 		return $this->hasMany('App\Company_Category','id','company_category_id');
 	}
+	
+	//Bind Job to Location
+	public function location(){
+		return $this->belongsTo('App\Location','company_location_id');
+	}
 }
