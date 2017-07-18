@@ -89,21 +89,21 @@ class WordpressController extends Controller
 			//save location details
 			if(isset($resource->location) && $request->has('location')){
 				
-				echo "Resource has location \r\n";
+				//echo "Resource has location \r\n";
 				
 				$sample_location = new Location;
 				
 				$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
 				
-				echo "location data \r\n";
+				//echo "location data \r\n";
 				
-				var_dump($loc_data);
+				//var_dump($loc_data);
 				
 				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 				
-				echo "Parsed location \r\n";
+				//echo "Parsed location \r\n";
 				
-				var_dump($parsed_loc_data);
+				//var_dump($parsed_loc_data);
 								
 				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
 				
