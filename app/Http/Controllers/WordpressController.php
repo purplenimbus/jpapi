@@ -68,6 +68,8 @@ class WordpressController extends Controller
 		
 		$model_name = "App\\".$model;
 		
+		var_dump($request->all());
+		
 		try{
 			$sample_model = new $model_name;
 
