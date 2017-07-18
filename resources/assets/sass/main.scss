@@ -114,8 +114,12 @@ body{
 					}
 				}
 			}
-			&.sidebar{
+			&#sidebar{
+				margin-top: -70px;
+			}
+			/*&.sidebar{
 				font-size: 12px;
+				margin-top: -70px;
 				.panel{
 					.panel-body{
 						.header{
@@ -159,13 +163,14 @@ body{
 					}
 				}
 			}
+			*/
 			&.inset{
 			
 			}
 		}
 		main{
-			#content{
-				position:relative;
+			&#content{
+				/*position:relative;
 				.jobs{
 					li{
 						padding-right: 10px;
@@ -206,6 +211,7 @@ body{
 						}
 					}
 				}
+				*/
 			}
 			.view-asset{
 				h1,h6{
