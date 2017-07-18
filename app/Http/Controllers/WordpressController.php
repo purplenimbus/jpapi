@@ -85,6 +85,7 @@ class WordpressController extends Controller
 			}
 			
 			var_dump($request->location);
+			
 			try{					
 				$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 			}catch(Exception $e) {

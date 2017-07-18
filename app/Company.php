@@ -31,6 +31,6 @@ class Company extends Model
 	
 	//Bind Job to Location
 	public function location(){
-		return $this->hasMany('App\Location');
+		return $this->belongsTo('App\Location','job_location_id');
 	}
 }
