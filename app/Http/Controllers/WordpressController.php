@@ -124,15 +124,14 @@ class WordpressController extends Controller
 						echo "++++++++++++++++++ FINAL ".$model_name." RESOURCE +++++++++++++++++++++ \r\n";
 						
 						var_dump($resource);
+						
+						return $resource;
 					
 					}catch(Exception $e) {
 						echo $e->getMessage();
 					}
 					
 				}
-
-									
-				return $resource;
 			
 			}catch(Exception $e) {
 				echo $e->getMessage();
