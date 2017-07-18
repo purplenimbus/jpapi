@@ -84,7 +84,8 @@ class WordpressController extends Controller
 				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 			
-			echo "++++++++++++++++++ Request Location +++++++++++++++++++++ \r\n";
+			echo "++++++++++++++++++ Resource Location ? ".isset($resource->location)." +++++++++++++++++++++ \r\n";
+			echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
 			
 			var_dump($request->location);
 								
