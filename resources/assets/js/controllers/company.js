@@ -32,7 +32,7 @@ angular.module('jpApp')
 				
 				var map = new mapboxgl.Map({
 					container: 'map',
-					style: 'mapbox://styles/mapbox/traffic-night-v2',
+					style: 'mapbox://styles/purplenimbus/cj59u1c0r69x52sl0qejv56mm',
 					center: home,
 					zoom: 10
 				});
