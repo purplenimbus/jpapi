@@ -21,7 +21,7 @@ class Company extends Model
 	
 	//Get all jobs from this company
 	public function jobs(){
-		return $this->hasMany('App\Job','id','company_id');
+		return $this->hasMany('App\Job','company_id','id');
 	}
 	
 	//Get all jobs from this company
@@ -31,6 +31,6 @@ class Company extends Model
 	
 	//Bind Job to Location
 	public function location(){
-		return $this->belongsTo('App\Location','company_location_id');
+		return $this->belongsTo('App\Location','id','company_location_id');
 	}
 }
