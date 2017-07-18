@@ -43,19 +43,19 @@
 					</div>
 				</div>
 				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
-					<section ng-if="currentAsset.description" class="description">
-						<h3 class="uk-panel-title">Job Description</h3>
+					<section ng-if="currentAsset.description" class="description uk-article">
+						<p class="uk-article-lead">Job Description</p>
 						<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 					</section>
-					<section class="skills" ng-if="currentAsset.job_skills.length >= 1">
-						<h3 class="uk-panel-title">Required Skills</h3>
+					<section class="skills uk-article" ng-if="currentAsset.job_skills.length >= 1">
+						<p class="uk-article-lead">Required Skills</p>
 						<div class="skills">
 							<div class="chip" ng-repeat="skill in currentAsset.job_skills">{{ skill.tag }}</div>
 						</div>
 					</section>	
 				</div>
-				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
-					<h3 class="uk-panel-title">About {{ currentAsset.company.name }}</h3>
+				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white uk-article">
+					<p class="uk-article-lead">About {{ currentAsset.company.name }}</p>
 					<div ng-bind-html="currentAsset.company.description">{{ currentAsset.company.description }}</div>
 				</div>
 			</main>
