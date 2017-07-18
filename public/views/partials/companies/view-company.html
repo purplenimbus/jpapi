@@ -31,13 +31,13 @@
 				</div>
 			</main>
 			<aside id="sidebar" class="uk-width-medium-3-10 uk-width-small-1-1">
-				<div ng-if="currentAsset.jobs" class="uk-panel uk-panel uk-panel-box uk-text-center bg-white job_list">
-					<h3 class="uk-panel-title">Job Openings</h3>
+				<div ng-if="currentAsset.jobs" class="uk-panel uk-panel uk-panel-box bg-white job_list">
+					<h3 class="uk-panel-title uk-text-center">Job Openings</h3>
 					<ul class="uk-list uk-list-line">
 						<li ng-repeat="job in currentAsset.jobs">
 							<article class="uk-comment">
 								<header class="uk-comment-header">
-									<p><a href="#jobs/{{ job.id }}">{{ job.title }} </a> <small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment:'YYYYMMDD' }}</small></p>
+									<p><a href="#jobs/{{ job.id }}">{{ job.title }} </a>  <small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment:'YYYYMMDD' }}</small></p>
 								</header>
 							</article>
 						</li>
