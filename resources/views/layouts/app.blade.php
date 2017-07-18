@@ -60,5 +60,12 @@
 	
 	<script src="{{ URL::secureAsset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
+	<script>
+		mapboxgl.accessToken = env('MAP_BOX_TOKEN');
+		var map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/streets-v9'
+		});
+		</script>
 </body>
 </html>
