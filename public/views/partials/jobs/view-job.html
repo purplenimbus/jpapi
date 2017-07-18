@@ -37,7 +37,7 @@
 									<button ng-if="currentAsset.status && currentAsset.user_applied" class="uk-button uk-button-primary"><i class="uk-icon-check-circle-o"></i> Applied</a>
 									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
 								</div>
-								<p><small class="uk-text-muted uk-text-uppercase uk-text-small uk-text-">Posted {{ currentAsset.created_at | moment }}</small></p>
+								<p><small class="uk-text-muted uk-text-uppercase uk-text-small">Posted {{ currentAsset.created_at | moment }}</small></p>
 							</article>
 						</div>
 					</div>
