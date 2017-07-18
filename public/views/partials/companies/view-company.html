@@ -37,7 +37,10 @@
 						<li ng-repeat="job in currentAsset.jobs">
 							<article class="uk-comment">
 								<header class="uk-comment-header">
-									<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}">{{ job.title }} </a>  <small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment:'YYYYMMDD' }}</small></p>
+									<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}">{{ job.title }} </a></p>
+									<div class="uk-comment-meta">
+										<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment:'YYYYMMDD' }}</small>
+									</div>
 								</header>
 							</article>
 						</li>
