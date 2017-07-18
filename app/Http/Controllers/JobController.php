@@ -115,17 +115,14 @@ class JobController extends Controller
 		
 		//var_dump(Auth);
 		if($job):
-			if(isset($job->company->name)):
-				$job['company']			=  $job->company->name;
-				$job['company']['location'] = isset($job->company->location) ? $job->company->location : null;
-				$job['company']['jobs'] = isset($job->company->jobs) ? $job->company->jobs()->latest()->limit(5) : null;
-			endif;
-			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : '';
-			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : '';
-			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : '';
-			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : '';
-			$job['location'] 		= isset($job->location->name) ? $job->location->name : '';
-			$job['job_skills'] 		= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+			$company = $job->company;
+			$job['company']			= isset($job->company->name) ? $job->company->name : null;
+			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : null;
+			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : null;
+			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : null;
+			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : null;
+			$job['location'] 		= isset($job->location->name) ? $job->location->name : null;
+			$job['job_skills'] 		= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : null;
 			$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
 			
 				
