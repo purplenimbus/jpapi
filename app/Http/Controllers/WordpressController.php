@@ -73,7 +73,7 @@ class WordpressController extends Controller
 
 			$data = $this->seeder->parse_request($request->all(),$sample_model->getFillable());
 			
-			echo "++++++++++++++++++ MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			echo "++++++++++++++++++ ".$model_name." MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
 			var_dump($data);
 			
