@@ -88,50 +88,56 @@ class WordpressController extends Controller
 			
 			try{					
 				$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
+				
+				//echo "++++++++++++++++++ Resource Location ? ".$resource->has('location')." +++++++++++++++++++++ \r\n";
+				
+				echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
+							
+				//save location details
+				if(isset($request->location)){
+					
+					echo "Resource has location \r\n";
+					
+					$sample_location = new Location;
+					
+					$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
+					
+					echo "location data \r\n";
+					
+					var_dump($loc_data);
+					
+					$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
+					
+					echo "Parsed location \r\n";
+					
+					var_dump($parsed_loc_data);
+					
+					try{				
+						$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id'],'locality' => $loc_data['locality']],$parsed_loc_data);
+						
+						echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
+													
+						$resource[strtolower($request->jp_model).'_location_id'] = $location->id;
+					
+						$resource->save();
+						
+						echo "++++++++++++++++++ FINAL ".$model_name." RESOURCE +++++++++++++++++++++ \r\n";
+						
+						var_dump($resource);
+					
+					}catch(Exception $e) {
+						echo $e->getMessage();
+					}
+					
+				}
+
+									
+				return $resource;
+			
 			}catch(Exception $e) {
 				echo $e->getMessage();
 			}
-			//echo "++++++++++++++++++ Resource Location ? ".$resource->has('location')." +++++++++++++++++++++ \r\n";
-			
-			echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
-						
-			//save location details
-			if(isset($request->location)){
-				
-				echo "Resource has location \r\n";
-				
-				$sample_location = new Location;
-				
-				$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
-				
-				echo "location data \r\n";
-				
-				var_dump($loc_data);
-				
-				$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
-				
-				echo "Parsed location \r\n";
-				
-				var_dump($parsed_loc_data);
-				
-				try{				
-					$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id'],'locality' => $loc_data['locality']],$parsed_loc_data);
-				}catch(Exception $e) {
-					echo $e->getMessage();
-				}
-				
-				echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
-				
-				var_dump($location);
-								
-				$resource[strtolower($request->jp_model).'_location_id'] = $location->id;
-				
-				$resource->save();
-				
-			}
 
-								
-			return $resource;
 
 		}catch(Exception $e) {
 			return $e->getMessage();
