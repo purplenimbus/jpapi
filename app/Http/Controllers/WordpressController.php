@@ -85,10 +85,13 @@ class WordpressController extends Controller
 			}
 			
 			var_dump($request->location);
-								
-			$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
-			
+			try{					
+				$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
+			}catch(Exception $e) {
+				echo $e->getMessage();
+			}
 			echo "++++++++++++++++++ Resource Location ? ".isset($resource->location)." +++++++++++++++++++++ \r\n";
+			
 			echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
 						
 			//save location details
@@ -109,8 +112,12 @@ class WordpressController extends Controller
 				echo "Parsed location \r\n";
 				
 				var_dump($parsed_loc_data);
-								
-				$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
+				
+				try{				
+					$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
+				}catch(Exception $e) {
+					echo $e->getMessage();
+				}
 				
 				echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
 				
