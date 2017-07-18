@@ -104,7 +104,7 @@ section {
 .uk-thumbnail {
   border: 0px; }
 
-#view .view_asset main, #view .view_asset aside {
+#view .view_asset main, #view .view_asset aside.sidebar {
   margin-top: -70px; }
 
 .job_list ul li article header {
