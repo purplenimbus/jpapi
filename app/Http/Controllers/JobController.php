@@ -118,6 +118,7 @@ class JobController extends Controller
 			if(isset($job->company->name)):
 				$job['company']			=  $job->company->name;
 				$job['company']['location'] = $job->company->location;
+				$job['company']['jobs'] = $job->company->jobs()->latest()->limit(5);
 			endif;
 			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : '';
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : '';
