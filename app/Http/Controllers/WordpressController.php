@@ -91,7 +91,7 @@ class WordpressController extends Controller
 			}catch(Exception $e) {
 				echo $e->getMessage();
 			}
-			echo "++++++++++++++++++ Resource Location ? ".isset($resource->location)." +++++++++++++++++++++ \r\n";
+			echo "++++++++++++++++++ Resource Location ? ".isset($resource->has('location')." +++++++++++++++++++++ \r\n";
 			
 			echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
 						
@@ -115,7 +115,7 @@ class WordpressController extends Controller
 				var_dump($parsed_loc_data);
 				
 				try{				
-					$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id']],$parsed_loc_data);
+					$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id'],'locality' => $loc_data['locality']],$parsed_loc_data);
 				}catch(Exception $e) {
 					echo $e->getMessage();
 				}
