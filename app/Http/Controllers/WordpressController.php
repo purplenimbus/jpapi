@@ -91,12 +91,12 @@ class WordpressController extends Controller
 			}catch(Exception $e) {
 				echo $e->getMessage();
 			}
-			echo "++++++++++++++++++ Resource Location ? ".$resource->has('location')." +++++++++++++++++++++ \r\n";
+			//echo "++++++++++++++++++ Resource Location ? ".$resource->has('location')." +++++++++++++++++++++ \r\n";
 			
 			echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
 						
 			//save location details
-			if(isset($resource->location) && isset($request->location)){
+			if(isset($request->location)){
 				
 				echo "Resource has location \r\n";
 				
