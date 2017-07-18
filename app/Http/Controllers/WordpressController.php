@@ -68,62 +68,62 @@ class WordpressController extends Controller
 		
 		$model_name = "App\\".$model;
 		
-		var_dump($request->all());
+		//var_dump($request->all());
 		
 		try{
 			$sample_model = new $model_name;
 
 			$data = $this->seeder->parse_request($request->all(),$sample_model->getFillable());
 			
-			echo "++++++++++++++++++ ".$model_name." MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
+			//echo "++++++++++++++++++ ".$model_name." MODEL INCOMING PARSED DATA +++++++++++++++++++++ \r\n";
 			
-			var_dump($data);
+			//var_dump($data);
 			
 			//get jpApi company id
 			if (null !== $request->has('wp_company_id')) {
 				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 			
-			var_dump($request->location);
+			//var_dump($request->location);
 			
 			try{					
 				$resource = $model_name::updateOrCreate(['wp_id' => $request->wp_id],$data);
 				
 				//echo "++++++++++++++++++ Resource Location ? ".$resource->has('location')." +++++++++++++++++++++ \r\n";
 				
-				echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
+				//echo "++++++++++++++++++ Request Location ? ".isset($request->location)." +++++++++++++++++++++ \r\n";
 							
 				//save location details
 				if(isset($request->location)){
 					
-					echo "Resource has location \r\n";
+					//echo "Resource has location \r\n";
 					
 					$sample_location = new Location;
 					
 					$loc_data = $this->seeder->parse_location(json_decode($request->input('location'),true));
 					
-					echo "location data \r\n";
+					//echo "location data \r\n";
 					
-					var_dump($loc_data);
+					//var_dump($loc_data);
 					
 					$parsed_loc_data = $this->seeder->parse_request($loc_data,$sample_location->getFillable());
 					
-					echo "Parsed location \r\n";
+					//echo "Parsed location \r\n";
 					
-					var_dump($parsed_loc_data);
+					//var_dump($parsed_loc_data);
 					
 					try{				
 						$location = Location::updateOrCreate(['ref_id' => $loc_data['ref_id'],'locality' => $loc_data['locality']],$parsed_loc_data);
 						
-						echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
+						//echo "Resource location FK:".strtolower($request->jp_model)."_location_id:".$location->id." \r\n";
 													
 						$resource[strtolower($request->jp_model).'_location_id'] = $location->id;
 					
 						$resource->save();
 						
-						echo "++++++++++++++++++ FINAL ".$model_name." RESOURCE +++++++++++++++++++++ \r\n";
+						//echo "++++++++++++++++++ FINAL ".$model_name." RESOURCE +++++++++++++++++++++ \r\n";
 						
-						var_dump($resource);
+						//var_dump($resource);
 						
 						return $resource;
 					
