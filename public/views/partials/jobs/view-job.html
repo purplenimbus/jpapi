@@ -11,7 +11,7 @@
 					<div class="uk-grid">
 						<div class="uk-width-1-11">
 							<article class="uk-article">
-								<p class="uk-article-lead">{{ currentAsset.title }} <small class="uk-text-muted uk-text-uppercase uk-text-small">Posted {{ currentAsset.created_at | moment }}</small></p>
+								<p class="uk-article-lead">{{ currentAsset.title }} <small class="uk-text-muted uk-text-uppercase uk-text-small uk-text-">Posted {{ currentAsset.created_at | moment }}</small></p>
 								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
 								<p class="uk-article-meta info">
 									<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
@@ -61,13 +61,13 @@
 			<aside class="uk-width-medium-3-10 uk-width-small-1-1">
 				<div class="uk-panel uk-panel-box uk-text-center company_widget">
 					<div class="uk-panel-teaser">
-						<div class="uk-thumbnail uk-thumbnail-expand logo">
-							<img src="{{ currentAsset.company.logo }}" />
-						</div>
-						<p class="uk-article-lead ng-binding">{{ currentAsset.company.name }}</p>
 						<img src="https://tranquil-reaches-27375.herokuapp.com/images/view-job-bg.jpg" alt="">
 					</div>
 					<article class="uk-article">
+						<div class="uk-thumbnail uk-thumbnail-expand logo">
+							<img src="{{ currentAsset.company.logo }}" />
+							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name }}</p>
+						</div>
 						<p class="uk-article-meta info">
 							<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
 
