@@ -75,7 +75,7 @@
 							</ul>
 						</p>
 						<hr class="uk-article-divider">
-						<a href="#" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View Jobs</a>
+						<a href="#/companies/{{ currentAsset.company.id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View Jobs</a>
 						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line">
 							<li ng-repeat="job in currentAsset.company.jobs">{{ job }}</li>
 						</ul>
