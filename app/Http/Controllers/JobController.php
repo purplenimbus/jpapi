@@ -70,7 +70,7 @@ class JobController extends Controller
     public function index(Request $request)
     {		
 		if ($request->has('location')) {
-		    $location_id = 	Location::where('name',$request->location)->get()->id;	
+		    $location_id = 	Location::where('locality',$request->location)->get()->id;	
 		    $jobs	 =	Job::where('job_location_id',$location_id)->orderBy('updated_at', 'desc')->get();
 		}else{
 		     $jobs	 =	Job::all();
