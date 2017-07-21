@@ -73,7 +73,7 @@ class JobController extends Controller
 		    $location_id = 	Location::where('locality',$request->location)->first()->id;	
 		    $jobs	 =	Job::where('job_location_id',$location_id)->orderBy('updated_at', 'desc')->get();
 		}else{
-		     $jobs	 =	Job::all()->orderBy('updated_at', 'desc')->get();
+		     $jobs	 =	Job::orderBy('updated_at', 'desc')->get();
 		}
 		
 		if($jobs):
