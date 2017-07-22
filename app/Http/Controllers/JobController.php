@@ -118,7 +118,7 @@ class JobController extends Controller
 			$company = $job->company;
 			if(isset($job->company->name)){
 				$job['company']			=  $job->company;
-				$job['company']['jobs']    = Job::where('company_id',$job['company']->id)->latest()->limit(5)->get(['id','title','created_at']);
+				$job['company']['jobs'] = Job::where('company_id',$job['company']->id)->latest()->limit(5)->get(['id','title','created_at']);
 			}
 			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : null;
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : null;

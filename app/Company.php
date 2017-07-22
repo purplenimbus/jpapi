@@ -16,7 +16,7 @@ class Company extends Model
     ];
 	
 	protected $visible = [
-        'id','name','description','address','zipcode','company_location_id','email','phone','logo','company_category','jobs','location','created_at','jobs'
+        'id','name','description','address','zipcode','company_location_id','email','phone','logo','company_category','company_category_id','jobs','location','created_at','jobs'
     ];
 	
 	//Get all jobs from this company
@@ -26,7 +26,7 @@ class Company extends Model
 	
 	//Get all jobs from this company
 	public function category(){
-		return $this->hasMany('App\Company_Category','id','company_category_id');
+		return $this->hasMany('App\Company_Category','wp_id');
 	}
 	
 	//Bind Job to Location
