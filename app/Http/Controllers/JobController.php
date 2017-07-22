@@ -116,7 +116,10 @@ class JobController extends Controller
 		//var_dump(Auth);
 		if($job):
 			$company = $job->company;
-			$job['company']			= isset($job->company->name) ? $job->company->name : null;
+			if(isset($job->company->name)){
+				$job['company']			=  $job->company;
+				$job['company']['jobs']    = Job::where('company_id',$job['company']->id)->latest()->limit(5)->get(['id','title','created_at']);
+			}
 			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : null;
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : null;
 			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : null;

@@ -56,25 +56,33 @@
 				</div>
 			</main>
 			<aside id="sidebar" class="uk-width-medium-3-10 uk-width-small-1-1">
-				<div class="uk-panel uk-panel-box uk-text-center company_widget bg-white">
-					<div class="uk-panel-teaser">
+				<div class="uk-panel uk-panel-box company_widget bg-white job_list">
+					<div class="uk-panel-teaser uk-text-center">
 						<img src="/images/header-bg.jpg" alt="">
 					</div>
 					<article class="uk-article">
-						<div class="uk-thumbnail uk-thumbnail-expand logo">
+						<div class="uk-thumbnail uk-thumbnail-expand logo uk-text-center">
 							<img src="{{ currentAsset.company.logo }}" />
-							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name }}</p>
+							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name | uppercase }}</p>
 						</div>
-						<p class="uk-article-meta info">
-							<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
-
+						<p class="uk-article-meta info job_list">
+							<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line">
+								<li ng-repeat="job in currentAsset.company.jobs">
+									<article class="uk-comment">
+										<header class="uk-comment-header">
+											<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>
+											<div class="uk-comment-meta">
+												<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment }}</small>
+											</div>
+										</header>
+									</article>
+								</li>
 							</ul>
 						</p>
 						<hr class="uk-article-divider">
-						<a href="#/companies/{{ currentAsset.company.id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View Jobs</a>
-						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line">
-							<li ng-repeat="job in currentAsset.company.jobs">{{ job }}</li>
-						</ul>
+						<p class="uk-text-center">
+							<a href="#/companies/{{ currentAsset.company.id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View More Jobs</a>
+						</p>
 					</article>
 				</div>
 			</aside>

@@ -405,12 +405,6 @@ class DatabaseSeeder extends Seeder
 				$job->title = $wp_job['title'] ? $wp_job['title']['rendered'] : null;
 				$job->description = $wp_job['content'] ? $wp_job['content']['rendered'] : null;
 								
-				isset($wp_job['meta']['wp_company_id']) ?
-					$job->company_id =  $this->get_jp_resource_id($wp_job['meta']['wp_company_id'],'Company')
-				: null;
-				
-				echo "company id ".$job->company_id."\r\n";
-				
 				isset($wp_job['job_types']) ? 
 					$job->job_type_id = implode(',',$wp_job['job_types']) 
 				: null;
@@ -427,37 +421,12 @@ class DatabaseSeeder extends Seeder
 					$job->job_salary_id =  implode(',',$wp_job['salary_types']) 
 				: null;
 				
-				isset($wp_job['meta']['application_deadline'][0]) ?
-					$job->application_deadline =  $wp_job['meta']['application_deadline'][0] 
+				$job = $this->parse_wp_meta($wp_job['meta'],$job);
+				
+				isset($wp_job['meta']['wp_company_id']) ?
+					$job->company_id =  $this->get_jp_resource_id($wp_job['meta']['wp_company_id'],'Company')
 				: null;
 				
-				isset($wp_job['meta']['job_ref_id'][0]) ? 
-					$job->job_ref_id = $wp_job['meta']['job_ref_id'][0] 
-				: null;
-				
-				isset($wp_job['meta']['ref_url'][0]) ?
-					$job->ref_url = $wp_job['meta']['ref_url'][0] 
-				: null;
-				
-				isset($wp_job['meta']['ref_date'][0]) ?
-					$job->ref_date =  $wp_job['meta']['ref_date'][0] 
-				: null;
-				
-				isset($wp_job['meta']['min_experience'][0]) ?
-					$job->min_experience =  $wp_job['meta']['min_experience'][0] 
-				: null;
-				
-				isset($wp_job['meta']['min_qualification'][0]) ? 
-					$job->min_qualification = $wp_job['meta']['min_qualification'][0] 
-				: null;
-				
-				isset($wp_job['meta']['salary'][0]) ? 
-					$job->salary = $wp_job['meta']['salary'][0]
-				: null;
-				
-				isset($wp_job['meta']['location_id'][0]) ? 
-					$job->job_location_id = $wp_job['meta']['location_id'][0]
-				: null;
 				
 				$job->status = true;
 				
@@ -465,8 +434,10 @@ class DatabaseSeeder extends Seeder
 				
 				$job->save();
 				
-				echo $wp_job['title']['rendered']."\r\n";;
+				echo $wp_job['title']['rendered']."\r\n";
 				
+				
+												
 			}
 		
 		}
@@ -494,20 +465,10 @@ class DatabaseSeeder extends Seeder
 					$company->company_category_id	=	implode(',',$wp_company['categories'])
 				: null;
 				
-				isset($wp_company['meta']['address'][0])?
-					$company->address	=	$wp_company['meta']['address'][0]
-				: null;
+				$company = $this->parse_wp_meta($wp_company['meta'],$company);
 				
 				isset($wp_company['meta']['location_id'][0])?
 					$company->company_location_id	=	$wp_company['meta']['location_id'][0]
-				: null;
-				
-				isset($wp_company['meta']['email'][0])?
-					$company->email	=	$wp_company['meta']['email'][0]
-				: null;
-				
-				isset($wp_company['meta']['phone'][0])?
-					$company->phone	=	$wp_company['meta']['phone'][0]
 				: null;
 				
 				isset($wp_company['meta']['logo_url'])?
@@ -606,5 +567,27 @@ class DatabaseSeeder extends Seeder
 			return $e->getMessage();
 		}
 		
+	}
+	
+	/**
+     *	Parse WP Meta Fields
+     *
+     * @param  array $wp_meta
+     * @param  array $model
+     * @return array $data
+     */
+	public function parse_wp_meta($wp_meta,$model){
+						
+
+		foreach($wp_meta as $key => $meta){
+			
+			isset($model->$key) ? 
+				$model->$key = $wp_meta[$key][0]
+			: null;	
+
+		}
+		
+		return $model;
+
 	}
 }
