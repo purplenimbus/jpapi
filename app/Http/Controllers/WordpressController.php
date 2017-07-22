@@ -81,7 +81,7 @@ class WordpressController extends Controller
 			
 			//get jpApi company id
 			if (null !== $request->has('wp_company_id')) {
-				$data['company_id'] = $this->get_jp_resource_id($request->wp_company_id,'Company');
+				$data['company_id'] = $this->seeder->get_jp_resource_id($request->wp_company_id,'Company');
 			}
 			
 			//var_dump($request->location);
@@ -143,32 +143,7 @@ class WordpressController extends Controller
 		}
 
 	}
-	/**
-     * Get jp model id based on wp id
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function get_jp_resource_id($wp_id,$model){
-		
-		$model_name = "App\\".$model;
-		
-		try{
-			
-			$resource = $model_name::where('wp_id', $wp_id)->first();
-						
-			if(isset($resource->id)){
-				return $resource->id;
-			}else{
-				return false;
-			};
-			
-				
-		}catch(Exception $e) {
-			return $e->getMessage();
-		}
-		
-	}
+
 	
 	
 	/**

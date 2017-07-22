@@ -406,9 +406,11 @@ class DatabaseSeeder extends Seeder
 				$job->description = $wp_job['content'] ? $wp_job['content']['rendered'] : null;
 								
 				isset($wp_job['meta']['wp_company_id']) ?
-					$job->company_id =  Company::where('wp_id',$wp_job['meta']['wp_company_id'])->first()->id
+					$job->company_id =  $this->get_jp_resource_id($wp_job['meta']['wp_company_id'],'Company')
 				: null;
-								
+				
+				echo "company id ".$job->company_id."\r\n";
+				
 				isset($wp_job['job_types']) ? 
 					$job->job_type_id = implode(',',$wp_job['job_types']) 
 				: null;
@@ -574,5 +576,35 @@ class DatabaseSeeder extends Seeder
 		}
 		
 		return $requests;
+	}
+	
+	
+	/**
+     * Get jp model id based on wp id
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function get_jp_resource_id($wp_id,$model){
+		
+		$model_name = "App\\".$model;
+		
+		try{
+			
+			$resource_id = $model_name::where('wp_id', $wp_id)->value('id');
+			
+			echo "resource_id:".$resource_id." \r\n";
+			
+			if($resource_id){
+				return $resource_id;
+			}else{
+				return false;
+			};
+			
+				
+		}catch(Exception $e) {
+			return $e->getMessage();
+		}
+		
 	}
 }
