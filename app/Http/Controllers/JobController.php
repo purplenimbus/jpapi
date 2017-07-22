@@ -69,9 +69,35 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {		
-		if ($request->has('location')) {
-		    $location_id = 	Location::where('locality',$request->location)->first()->id;	
-		    $jobs	 =	Job::where('job_location_id',$location_id)->orderBy('updated_at', 'desc')->get();
+		$requests = $request->all();
+		$query = array();
+		if (sizeof($requests)) {
+			foreach($requests as $key => $value){
+				echo "key : $key , value : $value \r\n";
+				switch($key){
+					case 'location' 	: 	$location = Location::where('locality',$value)->first(); 
+											$location ? array_push($query,['job_location_id','=',$location->id]) :  null;
+											break;
+											
+					case 'type' 	: 		$job_type = Job_Type::where('name',$value)->first(); 
+											$job_type ? array_push($query,['job_type_id','=',$job_type->wp_id]) :  null;
+											break;
+											
+					case 'category' 	: 	$job_cat = Job_Category::where('name',$value)->first(); 
+											$job_cat ? array_push($query,['job_category_id','=',$job_cat->wp_id]) :  null;
+											break;
+					
+					case 'level' 	: 		$job_level = Job_Level::where('name',$value)->first(); 
+											$job_level ? array_push($query,['job_level_id','=',$job_level->wp_id]) :  null;
+											break;
+				}
+			}
+			
+			//var_dump($query);
+			
+		    $jobs	 =	Job::where($query)->orderBy('updated_at', 'desc')->get();
+			
+			//var_dump($jobs);
 		}else{
 		     $jobs	 =	Job::orderBy('updated_at', 'desc')->get();
 		}
@@ -81,6 +107,7 @@ class JobController extends Controller
 				$job['company'] = isset($job->company->name) ? $job->company->name : '';
 				$job['location'] = isset($job->location->name) ? $job->location->name : '';
 				$job['job_type'] = isset($job->job_type->name) ? $job->job_type->name : '';
+				$job['job_level'] = isset($job->job_level->name) ? $job->job_level->name : '';
 				//$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
 			}
 
