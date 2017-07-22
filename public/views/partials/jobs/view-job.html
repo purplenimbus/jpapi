@@ -65,21 +65,18 @@
 							<img src="{{ currentAsset.company.logo }}" />
 							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name | uppercase }}</p>
 						</div>
-						<p class="uk-article-meta info job_list">
-							<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line">
-								<li ng-repeat="job in currentAsset.company.jobs">
-									<article class="uk-comment">
-										<header class="uk-comment-header">
-											<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>
-											<div class="uk-comment-meta">
-												<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment }}</small>
-											</div>
-										</header>
-									</article>
-								</li>
-							</ul>
-						</p>
-						<hr class="uk-article-divider">
+						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line uk-margin-remove">
+							<li ng-repeat="job in currentAsset.company.jobs">
+								<article class="uk-comment">
+									<header class="uk-comment-header">
+										<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>
+										<div class="uk-comment-meta">
+											<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment }}</small>
+										</div>
+									</header>
+								</article>
+							</li>
+						</ul>
 						<p class="uk-text-center">
 							<a href="#/companies/{{ currentAsset.company.id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View More Jobs</a>
 						</p>
