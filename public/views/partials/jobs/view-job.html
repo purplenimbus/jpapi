@@ -66,7 +66,7 @@
 							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name | uppercase }}</p>
 						</div>
 						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line uk-margin-remove">
-							<li ng-repeat="job in currentAsset.company.jobs">
+							<li ng-repeat="job in currentAsset.company.jobs" ng-hide="job.id === currentAsset.id">
 								<article class="uk-comment">
 									<header class="uk-comment-header">
 										<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>

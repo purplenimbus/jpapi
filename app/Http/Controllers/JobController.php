@@ -73,33 +73,33 @@ class JobController extends Controller
 		$query = array();
 		if (sizeof($requests)) {
 			foreach($requests as $key => $value){
-				echo "key : $key , value : $value \r\n";
+				//echo "key : $key , value : $value \r\n";
 				switch($key){
-					case 'location' 	: 	$location = Location::where('locality',$value)->first(); 
-											$location ? array_push($query,['job_location_id','=',$location->id]) :  null;
-											break;
+					case 'location' : 	$location = Location::where('locality',$value)->first(); 
+										$location ? array_push($query,['job_location_id','=',$location->id]) :  null;
+										break;
 											
-					case 'type' 	: 		$job_type = Job_Type::where('name',$value)->first(); 
-											$job_type ? array_push($query,['job_type_id','=',$job_type->wp_id]) :  null;
-											break;
+					case 'type' 	: 	$job_type = Job_Type::where('name',$value)->first(); 
+										$job_type ? array_push($query,['job_type_id','=',$job_type->wp_id]) :  null;
+										break;
 											
-					case 'category' 	: 	$job_cat = Job_Category::where('name',$value)->first(); 
-											$job_cat ? array_push($query,['job_category_id','=',$job_cat->wp_id]) :  null;
-											break;
+					case 'category' : 	$job_cat = Job_Category::where('name',$value)->first(); 
+										$job_cat ? array_push($query,['job_category_id','=',$job_cat->wp_id]) :  null;
+										break;
 					
-					case 'level' 	: 		$job_level = Job_Level::where('name',$value)->first(); 
-											$job_level ? array_push($query,['job_level_id','=',$job_level->wp_id]) :  null;
-											break;
+					case 'level' 	: 	$job_level = Job_Level::where('name',$value)->first(); 
+										$job_level ? array_push($query,['job_level_id','=',$job_level->wp_id]) :  null;
+										break;
 				}
 			}
 			
 			//var_dump($query);
 			
-		    $jobs	 =	Job::where($query)->orderBy('updated_at', 'desc')->get();
+		    $jobs	 =	Job::where($query)->orderBy('updated_at', 'desc')->paginate(10);
 			
 			//var_dump($jobs);
 		}else{
-		     $jobs	 =	Job::orderBy('updated_at', 'desc')->get();
+		     $jobs	 =	Job::orderBy('updated_at', 'desc')->paginate(10);
 		}
 		
 		if($jobs):
@@ -111,7 +111,7 @@ class JobController extends Controller
 				//$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
 			}
 
-		return $jobs->toJson();
+		return $jobs;
 		
 		else:
 			return response()->json(['message' => 'no jobs found'],401);

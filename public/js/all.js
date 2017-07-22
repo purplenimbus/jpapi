@@ -70,7 +70,7 @@ angular
 						return jobs.getData('jobs').then(function(result){
 							console.log('Got some jobs',result);
 							angular.element('.loader').hide();
-							return result.data;
+							return result.data.data;
 						});
 					}
 				}
