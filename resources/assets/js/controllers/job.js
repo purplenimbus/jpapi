@@ -57,8 +57,8 @@ angular.module('jpApp')
 				
 				console.log('User Home Geo',home);
 				
-				var map = new mapboxgl.Map({
-					container: 'map',
+				var map = mapboxgl.Map({
+					//container: 'map',
 					style: 'mapbox://styles/purplenimbus/cj59u1c0r69x52sl0qejv56mm',
 					center: home,
 					zoom: 10
@@ -74,6 +74,10 @@ angular.module('jpApp')
 					  .addTo(map);
 					}					
 				});
+				
+				/*$scope.$on('mapboxglMap:load', function (angularEvent, mapboxglEvent) {
+				   console.log('Map Loaded',angularEvent,mapboxglEvent);
+				});*/
 			});
 		}		
 		/**

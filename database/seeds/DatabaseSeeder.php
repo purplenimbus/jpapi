@@ -401,15 +401,14 @@ class DatabaseSeeder extends Seeder
 		foreach($wp_jobs as $wp_job){
 						
 			if(strtolower($wp_job['status']) == 'publish'){
-				
 				$job = new Job;
 				$job->title = $wp_job['title'] ? $wp_job['title']['rendered'] : null;
 				$job->description = $wp_job['content'] ? $wp_job['content']['rendered'] : null;
-				
-				isset($wp_job['tags']) ?
-					$job->skills =  implode(',',$wp_job['tags']) 
+								
+				isset($wp_job['meta']['wp_company_id']) ?
+					$job->company_id =  Company::where('wp_id',$wp_job['meta']['wp_company_id'])->first()->id
 				: null;
-				
+								
 				isset($wp_job['job_types']) ? 
 					$job->job_type_id = implode(',',$wp_job['job_types']) 
 				: null;
@@ -532,8 +531,8 @@ class DatabaseSeeder extends Seeder
 		$this->import('job_types');
 		$this->import('job_levels');
 		$this->import('salary_types');
-		$this->import('jobs');
 		$this->import('companies');
+		$this->import('jobs');
 		//$this->call(JobSeeder::class);
     }
 	

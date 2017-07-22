@@ -17,7 +17,8 @@ angular
 		'ngSanitize',
 		'ngTouch',
 		'ui.router', 
-		'satellizer'
+		'satellizer',
+		'mapboxgl-directive'
 	])
 	.config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
@@ -239,6 +240,10 @@ angular
 			relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
 			
 			return relative_str;
+		};
+	}).constant('mapSettings', function() {
+		return {
+			styleUrl : 'mapbox://styles/purplenimbus/cj59voeq26auw2snweqgxunkf'
 		};
 	});
   

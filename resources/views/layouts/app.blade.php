@@ -8,11 +8,12 @@
     <title>Job Portal | @{{ $location.title }}</title>
 	
 	<!-- bower:css -->
-	<link rel="stylesheet" href="/bower_components/uikit/css/uikit.almost-flat.min.css" />
+	<link rel='stylesheet' href='/bower_components/uikit/css/uikit.almost-flat.min.css' />
 	<!-- endbower -->
 	<link rel="stylesheet" href="/bower_components/uikit/css/components/notify.gradient.min.css" />
 	
-	<link rel="stylesheet" href="{{ URL::secureAsset('css/main.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('css/main.css') }}">
+	
 	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto" rel="stylesheet">
 	
 	<script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
@@ -56,16 +57,17 @@
 	<script src="/bower_components/ckeditor/ckeditor.js"></script>
 	<script src="/bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
 	<script src="/bower_components/angular-typeahead/dist/angular-typeahead.js"></script>
-	<script src="/bower_components/uikit/js/uikit.min.js"></script>
+	<script src="/bower_components/angular-mapboxgl-directive/dist/angular-mapboxgl-directive.min.js"></script>
 	<!-- endbower -->
 	
+	<script src="/bower_components/uikit/js/uikit.min.js"></script>
 	<script src="/bower_components/uikit/js/components/grid.min.js"></script>
 	<script src="/bower_components/uikit/js/components/notify.min.js"></script>
 	
-	<script src="{{ URL::secureAsset('js/all.js') }}"></script>
+	<script src="{{ URL::asset('js/all.js') }}"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJylJX3j_6B3PuKAGsdhczPDebk-dBBrE&libraries=places"></script>
 	<script>
-		mapboxgl.accessToken = 'pk.eyJ1IjoicHVycGxlbmltYnVzIiwiYSI6ImNqNTk1anM2OTA1NHIyd3AxdWtxMWU4anUifQ.4yRS2kMp9qWtmAmOW7YGvg';
+		mapboxgl.accessToken = 'pk.eyJ1IjoicHVycGxlbmltYnVzIiwiYSI6ImNqMmVoNjVmeTA2ZGozMmx2ZGVqeGFkNnAifQ.i24L-uIzQMloE6Pz-W1-xw';
 	</script>
 </body>
 </html>

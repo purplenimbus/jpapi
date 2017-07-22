@@ -162,52 +162,6 @@ aside.header {
   background-size: cover;
   padding: 0px;
   background-position: center bottom; }
-  aside.header .row {
-    background-color: rgba(0, 0, 0, 0.7);
-    margin: 0px; }
-    aside.header .row .title {
-      padding: 15px 0;
-      margin: 0px;
-      position: relative; }
-      aside.header .row .title img.circle {
-        width: 100px; }
-      aside.header .row .title .location {
-        font-size: 13px;
-        margin-top: 15px; }
-        aside.header .row .title .location i {
-          font-size: inherit; }
-      aside.header .row .title h1 {
-        margin: 0px;
-        font-size: 30px; }
-      aside.header .row .title .chips {
-        margin-top: 15px;
-        border: none !important;
-        margin-bottom: 0px;
-        min-height: 0px; }
-        aside.header .row .title .chips .chip {
-          background: transparent;
-          border: 2px solid lightgray;
-          margin: 0px;
-          line-height: 26px; }
-          aside.header .row .title .chips .chip a {
-            color: lightgray; }
-      aside.header .row .title .info ul {
-        margin: 10px 0;
-        border: 0px; }
-        aside.header .row .title .info ul li {
-          text-transform: uppercase;
-          margin-right: 10px;
-          display: inline-block;
-          background: transparent;
-          border: 0px;
-          font-size: 10px;
-          min-height: initial; }
-          aside.header .row .title .info ul li i {
-            font-size: inherit;
-            margin-right: 5px;
-            vertical-align: middle; }
-    aside.header .row span {
-      line-height: 33px; }
 
 body {
   font-family: 'Roboto', sans-serif; }

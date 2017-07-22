@@ -15,7 +15,8 @@
     "ckeditor": "^4.6.0",
     "typeahead.js": "^0.11.1",
     "angular-typeahead": "^1.0.2",
-    "uikit": "^2.27.4"
+    "uikit": "^2.27.4",
+    "angular-mapboxgl-directive": "^0.38.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
@@ -25,7 +26,7 @@
   "overrides": {
     "uikit": {
       "main": [
-        "css/uikit.almost-flat.min.css",
+        "css/uikit.almost-flat.min.css"
       ]
     }
   }
