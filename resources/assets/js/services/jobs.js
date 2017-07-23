@@ -8,7 +8,7 @@
  * Service in the jpApp.
  */
 angular.module('jpApp')
-	.service('jobs', function ($http,elements) {
+	.service('jobs', function ($http,elements,$rootScope,$auth) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
@@ -17,13 +17,10 @@ angular.module('jpApp')
 			 * @param {integer} $id - The id for the GET request
 			 * @returns {Promise}
 			 */
-			getData	:	function($data,$id){
-				console.log($data+' id',$id);
-				if($id){
-					return $http.get('api/'+$data+'/'+$id);
-				}else{
-					return	$http.get('api/'+$data);
-				}
+			getData	:	function($data,$id,$params){	
+				var logged_in = $auth.isAuthenticated();
+								
+				return	$http.get('api/'+$data+($id ? '/'+$id : '')+(logged_in ? '?token='+$auth.getToken() : ''));
 			},
 			/**
 			 * Returns a $http.put or post promise to store a job based on job id and its data
@@ -34,11 +31,7 @@ angular.module('jpApp')
 			 */
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
-				if($id){
-					return $http.put('api/'+$name+'/'+$id,$data);
-				}else{
-					return	$http.post('api/'+$name,$data);
-				}
+				return	$http.post('api/'+$name+($id ? '/'+$id : ''),$data);
 			},
 			/**
 			 * Returns a $http.put or post promise to store a job based on job id and its data

@@ -54,5 +54,6 @@ angular.module('jpApp')
 				
 				return deferred.promise;
 			}
+			
 		};
 	});

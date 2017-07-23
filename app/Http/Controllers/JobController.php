@@ -60,7 +60,7 @@ class JobController extends Controller
 				]
 			];
 				
-		//$this->middleware('jwt.auth',['only' => ['store','update','apply']]);
+		$this->middleware('jwt.auth',['only' => ['store','update','apply']]);
 	}
 	/**
      * Display a listing of the resource.
@@ -109,6 +109,14 @@ class JobController extends Controller
 				$job['job_type'] = isset($job->job_type->name) ? $job->job_type->name : '';
 				$job['job_level'] = isset($job->job_level->name) ? $job->job_level->name : '';
 				//$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+				if($request->has('token')):
+					$application = Application::where(['job_id'=> $job->id , 'user_id' => $this->getAuthenticatedUser()->getData()->user->id])->first();
+					if(isset($application->id)):
+						$job['user_applied']	=  true;
+					
+						$job['application_date']	= $application->created_at;
+					endif;
+				endif;
 			}
 
 		return $jobs;
@@ -135,17 +143,12 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-		//var_dump($id);
-		
+    public function show(Request $request , $id)
+    {		
         $job	=	Job::find($id);
-		
-		$application = Application::where('job_id',$id)->first();
-		
+					
 		//$user = AuthenticateController->get_user();
-		
-		//var_dump(Auth);
+								
 		if($job):
 			$company = $job->company;
 			if(isset($job->company->name)){
@@ -158,13 +161,22 @@ class JobController extends Controller
 			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : null;
 			$job['location'] 		= isset($job->location->name) ? $job->location->name : null;
 			$job['job_skills'] 		= isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : null;
-			$job['user_applied']	= false;//$application->user_id == $user->id ? true : false;
 			
+			if($request->has('token')):
+				$application = Application::where(['job_id'=> $id , 'user_id' => $this->getAuthenticatedUser()->getData()->user->id])->first();
+				
+				if(isset($application->id)):
+					$job['user_applied']	= true;
+				
+					$job['application_date']	= $application->created_at;
+				endif;
+			endif;
 				
 			return $job->toJson();
 		else:
 			return response()->json(['message' => 'no job found with the id '.$id],401);
 		endif;
+		
     }
 
     /**
@@ -350,27 +362,7 @@ class JobController extends Controller
     {
 		return json_encode($this->min_qualifications);
 	}
-	/**
-     * Return a list of jobs based on location id
-     *
-     * @return object 
-     */
-	public function get_jobs($location_id,$job_id = null){
-		if($job_id){
-			return 'Found Jobs!!!';
-		}else{
-			$location = Location::find($location_id);
-			if($location){
-				$location['jobs'] = isset($location->jobs) ? $location->jobs : null;
-				
-				$location['companies'] = isset($location->companies) ? $location->companies()->latest()->limit(5) : null;
-				
-				return $location->toJson();
-			}else{
-				return 'Location with id '.$location_id.' not found';
-			}
-		}
-	}
+
 	/**
      * Return a list of jobs titles and their ids
      *
@@ -386,16 +378,38 @@ class JobController extends Controller
      *
      * @return object 
      */
-	public function apply(Request $request){
-		//TO DO add checks if application exsists
-		$application = new Application;
-		
-		$application->job_id = $request->job_id;
-		
-		$application->user_id = Auth::user()->id;
-		
-		$application->save();
+	public function apply($job_id){
+						
+		$application = Application::updateOrCreate(['job_id' => $job_id , 'user_id' => $this->getAuthenticatedUser()->getData()->user->id ]);
 		
 		return response()->json(['id'	=>	$application->id ],200);
+		
+		//Send Email to User
+	}
+	
+	public function getAuthenticatedUser()
+	{
+		try {
+
+			if (! $user = JWTAuth::parseToken()->authenticate()) {
+				return response()->json(['user_not_found'], 404);
+			}
+
+		} catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+			return response()->json(['token_expired'], $e->getStatusCode());
+
+		} catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+			return response()->json(['token_invalid'], $e->getStatusCode());
+
+		} catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+			return response()->json(['token_absent'], $e->getStatusCode());
+
+		}
+
+		// the token is valid and we have found the user via the sub claim
+		return response()->json(compact('user'));
 	}
 }

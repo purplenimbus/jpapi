@@ -13,6 +13,7 @@ use GuzzleHttp;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Config;
 use MongoDB;
+use	App\Application;
 
 class AuthenticateController extends Controller
 {
@@ -131,6 +132,19 @@ class AuthenticateController extends Controller
 				
 		$profile = $this->mongo->users->profiles->findOne([ 'user_id' => (int)$id ]);
 		
+		//var_dump($profile);
+		$job_applications = Application::where(['user_id' => $this->getAuthenticatedUser()->getData()->user->id])
+											->latest()
+											->limit(10)
+											->get()
+											->each(function($a){
+												$a->has('job') ? $a['job'] = $a->job : null;
+											});
+		
+		//var_dump($job_applications);
+		
+		$profile->applications = $job_applications;
+		
 		if($profile){
 			return response()->json([$profile],200);
 		}else{
@@ -164,5 +178,32 @@ class AuthenticateController extends Controller
 				return response()->json(['message' => 'profile not found'],200);
 			}*/
 		}
+	}
+	
+	// somewhere in your controller
+	public function getAuthenticatedUser()
+	{
+		try {
+
+			if (! $user = JWTAuth::parseToken()->authenticate()) {
+				return response()->json(['user_not_found'], 404);
+			}
+
+		} catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+			return response()->json(['token_expired'], $e->getStatusCode());
+
+		} catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+			return response()->json(['token_invalid'], $e->getStatusCode());
+
+		} catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+			return response()->json(['token_absent'], $e->getStatusCode());
+
+		}
+
+		// the token is valid and we have found the user via the sub claim
+		return response()->json(compact('user'));
 	}
 }

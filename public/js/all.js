@@ -19,8 +19,37 @@ angular
 		'ui.router', 
 		'satellizer',
 		'mapboxgl-directive'
-	])
-	.config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
+	]).run(function($rootScope,$state,$stateParams,$location,$auth,auth) {
+			
+		$rootScope.$location = {};
+	
+		$rootScope.$location.base = $location.path().split('\/')[1];
+		
+		angular.element('.loader').show();
+		
+		//console.log('Runtime State',$state);
+		//Bind when to rootScope
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$auth = $auth;
+		
+		console.log('Runtime RootScope',$rootScope);
+		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
+		console.log('Logged payload',$rootScope.$auth.getPayload());
+		console.log('Logged Token',$rootScope.$auth.getToken());
+
+		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
+		
+		$rootScope.user = {};
+		
+		$rootScope.$auth.isAuthenticated() && typeof(userData) !== 'undefined' ?
+			
+			$rootScope.user.info = userData
+			
+		: null;
+
+	
+	}).config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
 		
 		$authProvider.loginUrl = '/api/login';
@@ -80,12 +109,14 @@ angular
 				controller	:	'JobCtrl',
 				controllerAs: 	'job',
 				resolve : {
-					
-					jobData : function(jobs,$route,$rootScope){
+			
+					jobData : function(jobs,$route,$rootScope,auth){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
 						angular.element('.loader').show();
+						
+						console.log('$rootScope.user', $rootScope.$auth.isAuthenticated());
 						
 						return jobs.getData('jobs',$route.current.params.jobId).then(function(result){
 							angular.element('.loader').hide();
@@ -199,36 +230,6 @@ angular
 				}
 			});
 
-	}).run(function($rootScope,$state,$stateParams,$location,$auth,auth) {
-			
-		$rootScope.$location = {};
-	
-		$rootScope.$location.base = $location.path().split('\/')[1];
-		
-		angular.element('.loader').show();
-		
-		//console.log('Runtime State',$state);
-		//Bind when to rootScope
-		$rootScope.$state = $state;
-		$rootScope.$stateParams = $stateParams;
-		$rootScope.$auth = $auth;
-		
-		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
-		console.log('Logged payload',$rootScope.$auth.getPayload());
-		console.log('Logged Token',$rootScope.$auth.getToken());
-
-		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
-		
-		$rootScope.user = {};
-		
-		$rootScope.$auth.isAuthenticated() && typeof(userData) !== 'undefined' ?
-			
-			$rootScope.user.info = userData
-			
-		: null;
-
-	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);
@@ -865,7 +866,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth)
 	{
 		
 		var JobCtrl = this;
@@ -1179,11 +1180,16 @@ angular.module('jpApp')
 		 * Apply to Job
 		 * @param {integer} id  - The name of the PUT/POST endpoint
 		 */
-		$scope.apply	=	function(id){
-			console.log('Job Id',id);
+		$scope.apply	=	function(id,user_id){
+			$scope.loading = true;
 			jobs.sendData('jobs',id+'/apply').then(function(result){
 				console.log('Application Result',result);
-				JobCtrl.reset();
+				if(result.status === 200){
+					$scope.currentAsset.user_applied = true;
+					$scope.loading = false;
+				}else{
+					//handle error
+				}
 			}).catch(function(error){
 				console.log('Application Error',error);
 				//TO DO  DO something
@@ -1634,7 +1640,7 @@ angular.module('jpApp')
 					}
 				}
 				return "";
-			} 
+			}
 		};
 	});
 
@@ -2351,7 +2357,7 @@ angular.module('jpApp')
  * Service in the jpApp.
  */
 angular.module('jpApp')
-	.service('jobs', function ($http,elements) {
+	.service('jobs', function ($http,elements,$rootScope,$auth) {
 		// AngularJS will instantiate a singleton by calling "new" on this function
 		return{
 			/**
@@ -2360,13 +2366,10 @@ angular.module('jpApp')
 			 * @param {integer} $id - The id for the GET request
 			 * @returns {Promise}
 			 */
-			getData	:	function($data,$id){
-				console.log($data+' id',$id);
-				if($id){
-					return $http.get('api/'+$data+'/'+$id);
-				}else{
-					return	$http.get('api/'+$data);
-				}
+			getData	:	function($data,$id,$params){	
+				var logged_in = $auth.isAuthenticated();
+								
+				return	$http.get('api/'+$data+($id ? '/'+$id : '')+(logged_in ? '?token='+$auth.getToken() : ''));
 			},
 			/**
 			 * Returns a $http.put or post promise to store a job based on job id and its data
@@ -2377,11 +2380,7 @@ angular.module('jpApp')
 			 */
 			sendData	:	function($name,$id,$data){
 				console.log($name+' id',$id);
-				if($id){
-					return $http.put('api/'+$name+'/'+$id,$data);
-				}else{
-					return	$http.post('api/'+$name,$data);
-				}
+				return	$http.post('api/'+$name+($id ? '/'+$id : ''),$data);
 			},
 			/**
 			 * Returns a $http.put or post promise to store a job based on job id and its data
@@ -2452,6 +2451,7 @@ angular.module('jpApp')
 				
 				return deferred.promise;
 			}
+			
 		};
 	});
 

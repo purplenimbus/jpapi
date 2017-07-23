@@ -46,8 +46,6 @@ Route::group(['prefix'	=>	'api'],function(){
 		'names' => ['jobtypes' => 'jobs.job_types']
 	]);
 	
-	Route::get('locations/{location_id}/jobs/', 'JobController@get_jobs'); //Search jobs based on locaton
-	Route::get('locations/{location_id}/jobs/{job_id}', 'JobController@get_jobs'); //Search jobs based on locaton id and job id
 	Route::get('job_titles', 'JobController@job_titles'); //Get Job Titles
 	
 	Route::get('company/categories', 'CompanyController@company_categories'); //Get Company Categories
@@ -57,7 +55,7 @@ Route::group(['prefix'	=>	'api'],function(){
 		'names' => ['companytypes' => 'companies.companytypes']
 	]);
 	
-	Route::put('jobs/{job_id}/apply', 'JobController@apply');
+	Route::post('jobs/{job_id}/apply', 'JobController@apply');
 	//Route::get('job/{job_id}/apply/apply_id', 'JobController@apply');
 	Route::get('jobs/{job_id}/applications', 'JobController@get_applications');
 	Route::get('myaccount', 'AuthenticateController@get_user');

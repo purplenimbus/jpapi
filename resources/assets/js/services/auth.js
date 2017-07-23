@@ -48,6 +48,6 @@ angular.module('jpApp')
 					}
 				}
 				return "";
-			} 
+			}
 		};
 	});

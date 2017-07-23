@@ -19,8 +19,37 @@ angular
 		'ui.router', 
 		'satellizer',
 		'mapboxgl-directive'
-	])
-	.config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
+	]).run(function($rootScope,$state,$stateParams,$location,$auth,auth) {
+			
+		$rootScope.$location = {};
+	
+		$rootScope.$location.base = $location.path().split('\/')[1];
+		
+		angular.element('.loader').show();
+		
+		//console.log('Runtime State',$state);
+		//Bind when to rootScope
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$auth = $auth;
+		
+		console.log('Runtime RootScope',$rootScope);
+		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
+		console.log('Logged payload',$rootScope.$auth.getPayload());
+		console.log('Logged Token',$rootScope.$auth.getToken());
+
+		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
+		
+		$rootScope.user = {};
+		
+		$rootScope.$auth.isAuthenticated() && typeof(userData) !== 'undefined' ?
+			
+			$rootScope.user.info = userData
+			
+		: null;
+
+	
+	}).config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
 		
 		$authProvider.loginUrl = '/api/login';
@@ -80,12 +109,14 @@ angular
 				controller	:	'JobCtrl',
 				controllerAs: 	'job',
 				resolve : {
-					
-					jobData : function(jobs,$route,$rootScope){
+			
+					jobData : function(jobs,$route,$rootScope,auth){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
 						angular.element('.loader').show();
+						
+						console.log('$rootScope.user', $rootScope.$auth.isAuthenticated());
 						
 						return jobs.getData('jobs',$route.current.params.jobId).then(function(result){
 							angular.element('.loader').hide();
@@ -199,36 +230,6 @@ angular
 				}
 			});
 
-	}).run(function($rootScope,$state,$stateParams,$location,$auth,auth) {
-			
-		$rootScope.$location = {};
-	
-		$rootScope.$location.base = $location.path().split('\/')[1];
-		
-		angular.element('.loader').show();
-		
-		//console.log('Runtime State',$state);
-		//Bind when to rootScope
-		$rootScope.$state = $state;
-		$rootScope.$stateParams = $stateParams;
-		$rootScope.$auth = $auth;
-		
-		console.log('Runtime RootScope',$rootScope);
-		console.log('Logged in?',$rootScope.$auth.isAuthenticated());
-		console.log('Logged payload',$rootScope.$auth.getPayload());
-		console.log('Logged Token',$rootScope.$auth.getToken());
-
-		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
-		
-		$rootScope.user = {};
-		
-		$rootScope.$auth.isAuthenticated() && typeof(userData) !== 'undefined' ?
-			
-			$rootScope.user.info = userData
-			
-		: null;
-
-	
 	}).filter('trusted', function ($sce) {
 		return function(url) {
 			return $sce.trustAsResourceUrl(url);

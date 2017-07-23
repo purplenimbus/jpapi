@@ -1,5 +1,5 @@
 <div class="view-asset">
-	<aside id="map" class="header" mapboxgl></aside>
+	<aside id="map" class="header"></aside>
 	<div class="uk-container uk-container-center bg-grey" style="z-index: 1000;position: relative;">
 		<div class="uk-grid">
 			<main id="content" class="uk-width-medium-7-10 uk-width-small-1-1">
@@ -29,9 +29,9 @@
 									</ul>
 								</p>
 								<div class="uk-button-group">
-									<button ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id)" class="uk-button uk-button-primary">Apply</a>
-									<button ng-if="currentAsset.status && currentAsset.user_applied" class="uk-button uk-button-primary"><i class="uk-icon-check-circle-o"></i> Applied</a>
-									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
+									<button ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id,$root.user.info.id)" class="uk-button uk-button-primary">Apply <i ng-show="loading" class="uk-icon-spinner uk-icon-spin"></i></a>
+									<button ng-if="currentAsset.status && currentAsset.user_applied" class="uk-button uk-button-success">Applied <i class="uk-icon-check-circle-o"></i></a>
+									<button ng-hide="true" ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
 								</div>
 								<p><small class="uk-text-muted uk-text-uppercase uk-text-small">Posted {{ currentAsset.created_at | moment }}</small></p>
 							</article>

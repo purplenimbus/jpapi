@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth)
 	{
 		
 		var JobCtrl = this;
@@ -322,11 +322,16 @@ angular.module('jpApp')
 		 * Apply to Job
 		 * @param {integer} id  - The name of the PUT/POST endpoint
 		 */
-		$scope.apply	=	function(id){
-			console.log('Job Id',id);
+		$scope.apply	=	function(id,user_id){
+			$scope.loading = true;
 			jobs.sendData('jobs',id+'/apply').then(function(result){
 				console.log('Application Result',result);
-				JobCtrl.reset();
+				if(result.status === 200){
+					$scope.currentAsset.user_applied = true;
+					$scope.loading = false;
+				}else{
+					//handle error
+				}
 			}).catch(function(error){
 				console.log('Application Error',error);
 				//TO DO  DO something
