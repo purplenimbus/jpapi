@@ -33,9 +33,9 @@ angular.module('jpApp')
 			
 			console.log('Modal $window',$window);
 			
-			var modal = $window.UIkit.modal('#modal').show();
+			$scope.modal = $window.UIkit.modal('#modal').show();
 			
-			modal.on({
+			$scope.modal.on({
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
 				}

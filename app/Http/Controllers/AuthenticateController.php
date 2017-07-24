@@ -56,6 +56,8 @@ class AuthenticateController extends Controller
     public function linkedin(Request $request)
     {
         $client = new GuzzleHttp\Client();
+		
+		var_dump($request->all());
         $params = [
             'code' => $request->input('code'),
             'client_id' => $request->input('clientId'),
@@ -67,6 +69,7 @@ class AuthenticateController extends Controller
         $accessTokenResponse = $client->request('POST', 'https://www.linkedin.com/uas/oauth2/accessToken', [
             'form_params' => $params
         ]);
+		
         $accessToken = json_decode($accessTokenResponse->getBody(), true);
         // Step 2. Retrieve profile information about the current user.
         $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)', [
