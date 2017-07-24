@@ -641,7 +641,7 @@ class DatabaseSeeder extends Seeder
 		$profile = $this->mongo->users->profiles->updateOne(
 			['user_id' 	=> (int)$id ],
 			['$set' 	=> ['resume' => json_encode($profile_data) ] ]
-		)
+		);
 
 		return $profile;
 	}
