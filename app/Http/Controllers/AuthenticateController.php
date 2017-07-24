@@ -69,29 +69,31 @@ class AuthenticateController extends Controller
             'form_params' => $params
         ]);
 		
-		echo "ACCESS TOKEN \r\n";
-		var_dump($accessTokenResponse->getBody());
+		//echo "ACCESS TOKEN \r\n";
+		//var_dump($accessTokenResponse->getBody());
 		
         $accessToken = json_decode($accessTokenResponse->getBody(), true);
         
-		echo "===================================================== \r\n";
+		//echo "===================================================== \r\n";
 		
-		echo "PROFILE RESPONSE \r\n";
+		//echo "PROFILE RESPONSE \r\n";
 		
 		// Step 2. Retrieve profile information about the current user.
-        $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)', [
+        $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,positions,picture-url,public-profile-url)', [
             'query' => [
                 'oauth2_access_token' => $accessToken['access_token'],
                 'format' => 'json'
             ]
         ]);
 		
-		var_dump($profileResponse);
+		//var_dump($profileResponse);
 		
-		echo "---------------------------------------------------- \r\n";
+		//echo "---------------------------------------------------- \r\n";
 		
         $profile = json_decode($profileResponse->getBody(), true);
+		
 		echo "PROFILE \r\n";
+		
 		var_dump($profile);
 		
 		echo "===================================================== \r\n";
@@ -115,6 +117,14 @@ class AuthenticateController extends Controller
         // Step 3b. Create a new user account or return an existing one.
         else
         {
+			//save to mongo
+			
+			//create new location
+			
+			//create new company
+			
+			//save to wordpress
+			
             $user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
@@ -125,6 +135,7 @@ class AuthenticateController extends Controller
             $user->fname =  $profile['firstName'];
             $user->lname =  $profile['lastName'];
             $user->save();
+
             return response()->json(['token' => $this->createToken($user)]);
         }
     }
