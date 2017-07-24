@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
 			$table->string('access_level')->default('user');
 			$table->integer('location_id')->nullable();
-			$table->string('skills_id')->nullable();
+			$table->string('skills')->nullable();
 			$table->integer('company_id')->nullable();
 			$table->string('linkedin')->nullable();
 			$table->string('image_url')->nullable();

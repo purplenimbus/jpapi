@@ -129,7 +129,15 @@ class AuthenticateController extends Controller
         {
 			echo "User Not Signed In \r\n";
 			
-            $user = User::where('linkedin', '=', $profile['id']);
+			'email','dob','password','image_url','dob','sex','wp_id','access_level','location_id'
+			
+			$user = User::firstOrCreate(['linkedin', $profile['id']],[
+										'fname' => $profile['firstName'],
+										'lname'	=>	$profile['lastName'],
+										'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
+									]);
+			
+            /*$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
                 return response()->json(['token' => $this->createToken($user->first())]);
@@ -138,7 +146,7 @@ class AuthenticateController extends Controller
             $user->linkedin = $profile['id'];
             $user->fname =  $profile['firstName'];
             $user->lname =  $profile['lastName'];
-            $user->save();
+            $user->save();*/
 
             return response()->json(['token' => $this->createToken($user)]);
         }
