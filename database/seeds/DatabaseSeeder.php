@@ -608,7 +608,7 @@ class DatabaseSeeder extends Seeder
 			
 			switch($data_key){
 				case 'positions'	: 	foreach($data[$data_key]['values'] as $key => $value){
-											var_dump($value['startDate']);
+											var_dump($this->date_from_array($value['startDate']));
 											array_push($parsed['experience'],[ 
 												'job_title' => isset($value['title']) ? $value['title'] : '',
 												'company' => isset($value['company']['name']) ? $value['company']['name'] : '',
@@ -629,6 +629,12 @@ class DatabaseSeeder extends Seeder
 		
 		return $parsed;
 
+	}
+	
+	public function date_from_array($date_array){
+		$date_string = date('Y-m-d H:i:s', mktime($date_array['hour'], $date_array['minute'], $date_array['second'], $date_array['month'], $date_array['day'], $date_array['year'])); 
+		
+		return $date_string;
 	}
 	
 	/**
