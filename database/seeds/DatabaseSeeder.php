@@ -590,4 +590,59 @@ class DatabaseSeeder extends Seeder
 		return $model;
 
 	}
+	
+	/**
+     *	Parse Linkedin user profile
+     *
+     * @param  array $data
+     * @return array $parsed
+     */
+	public function parse_user_profiles($data){
+						
+		$parsed = 	[ 
+						'education' => [],
+						'experience' => [],
+					];
+					
+		foreach($data as $data_key => $data_value){
+			
+			switch($data_key){
+				case 'positions'	: 	foreach($data[$data_key]['values'] as $key => $value){
+											array_push($parsed->['experience'],[ 
+												'job_title' => isset($value['title']) ? $value['title'] : '',
+												'company' => isset($value['company']['name']) ? $value['company']['name'] : '',
+												'location' => isset($value['location']) ? $value['location']['name'] : '',
+												'is_current' => isset($value['isCurrent']) ? $value['isCurrent'] : '',
+												'dates' => [ 
+													'start' => isset($value['startDate']) ? date($value['startDate']) : '', 
+													'end' => isset($value['endDate']) ? date($value['endDate']) : '',
+												]
+											]);
+										}; break;
+				
+				//add more profile fields here
+				
+				default : continue; break;
+			}
+		}
+		
+		return $parsed;
+
+	}
+	
+	/**
+     *	Parse Linkedin user profile
+     *
+     * @param  array $data
+     * @return array $id
+     */
+	public function save_profile($profile_data){
+						
+		$profile = $this->mongo->users->profiles->updateOne(
+			['user_id' 	=> (int)$id ],
+			['$set' 	=> ['resume' => json_encode($profile_data) ] ]
+		)
+
+		return $profile;
+	}
 }

@@ -14,6 +14,7 @@ use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Config;
 use MongoDB;
 use	App\Application;
+use DatabaseSeeder as Seeder;
 
 class AuthenticateController extends Controller
 {
@@ -79,7 +80,7 @@ class AuthenticateController extends Controller
 		//echo "PROFILE RESPONSE \r\n";
 		
 		// Step 2. Retrieve profile information about the current user.
-        $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,positions,picture-url,public-profile-url)', [
+        $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,positions,picture-url,public-profile-url,industry)', [
             'query' => [
                 'oauth2_access_token' => $accessToken['access_token'],
                 'format' => 'json'
@@ -92,13 +93,11 @@ class AuthenticateController extends Controller
 		
         $profile = json_decode($profileResponse->getBody(), true);
 		
-		echo "PROFILE \r\n";
+		//echo "PROFILE \r\n";
 		
-		var_dump($profile);
+		//var_dump($profile);
 		
-		echo "===================================================== \r\n";
-		
-		//save to mongo
+		//echo "===================================================== \r\n";
 			
 		//create new location
 		
@@ -109,7 +108,7 @@ class AuthenticateController extends Controller
         // Step 3a. If user is already signed in then link accounts.
         if ($request->header('Authorization'))
         {
-            echo "User Signed In \r\n";
+            //echo "User Signed In \r\n";
 			$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
@@ -135,6 +134,19 @@ class AuthenticateController extends Controller
 										'lname'	=>	$profile['lastName'],
 										'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
 									]);
+			//save to mongo
+			$profile_data = $this->seeder->parse_user_profiles($profile);
+			
+			echo "Profile Data \r\n";
+			
+			var_dump($profile_data);
+			
+			$resume = $this->seeder->save_profile($profile_data);
+			
+			echo "Resume Data \r\n";
+			
+			var_dump($resume);
+
 			
             /*$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
