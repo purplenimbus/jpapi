@@ -98,7 +98,7 @@ class AuthenticateController extends Controller
         // Step 3a. If user is already signed in then link accounts.
         if ($request->header('Authorization'))
         {
-            $user = User::where('linkedin', '=', (int)$profile['id']);
+            $user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
                 return response()->json(['message' => 'There is already a LinkedIn account that belongs to you'], 409);
