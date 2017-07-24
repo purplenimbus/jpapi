@@ -175,7 +175,7 @@ class AuthenticateController extends Controller
             $user->lname =  $profile['lastName'];
             $user->save();*/
 
-            return response()->json(['token' => $this->createToken($user)]);
+            return response()->json(['token' => JWTAuth::fromUser($user)]);
         }
     }
 	
