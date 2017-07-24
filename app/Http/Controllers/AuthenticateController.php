@@ -140,7 +140,7 @@ class AuthenticateController extends Controller
 			$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
-                return response()->json(['token' => JWTAuth::fromUser($user->first()) , 'user' => $user ]);
+                return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user->first()) ]);
             }else{
 				$user = new User;
 				$user->linkedin = $profile['id'];
@@ -163,7 +163,7 @@ class AuthenticateController extends Controller
 				
 				var_dump($resume);
 
-				return response()->json(['token' => JWTAuth::fromUser($user) , 'user' => $user ]);
+				return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) ]);
 			}
         }
     }
