@@ -115,7 +115,7 @@ angular.module('jpApp')
 				console.log('Logged in Auth',$auth.isAuthenticated());
 				console.log('Logged in token',$auth.getToken());
 				console.log('Logged in payload',$auth.getPayload());
-				auth.setCookie('auth',JSON.stringify(result.data.token),9);
+				auth.setCookie('auth',JSON.stringify(result.data.user),9);
 				$rootScope.user.info = result.data.user;
 				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 				$scope.closeModal();
