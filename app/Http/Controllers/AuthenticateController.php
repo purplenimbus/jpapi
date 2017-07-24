@@ -97,10 +97,20 @@ class AuthenticateController extends Controller
 		var_dump($profile);
 		
 		echo "===================================================== \r\n";
+		
+		//save to mongo
+			
+		//create new location
+		
+		//create new company
+		
+		//save to wordpress
+		
         // Step 3a. If user is already signed in then link accounts.
         if ($request->header('Authorization'))
         {
-            $user = User::where('linkedin', '=', $profile['id']);
+            echo "User Signed In \r\n";
+			$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
                 return response()->json(['message' => 'There is already a LinkedIn account that belongs to you'], 409);
@@ -117,13 +127,7 @@ class AuthenticateController extends Controller
         // Step 3b. Create a new user account or return an existing one.
         else
         {
-			//save to mongo
-			
-			//create new location
-			
-			//create new company
-			
-			//save to wordpress
+			echo "User Not Signed In \r\n";
 			
             $user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())

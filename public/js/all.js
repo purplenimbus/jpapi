@@ -613,6 +613,7 @@ angular.module('jpApp')
 		};
 		
 		$scope.authenticate = function(provider) {
+			console($auth.authenticate());
 			$auth.authenticate(provider);
 		};
 		
