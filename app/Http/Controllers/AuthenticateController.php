@@ -129,7 +129,7 @@ class AuthenticateController extends Controller
 			echo "User Not Signed In \r\n";
 			
 			
-			$user = User::firstOrCreate(['linkedin', $profile['id']],[
+			$user = User::updateOrCreate(['linkedin', $profile['id']],[
 										'fname' => $profile['firstName'],
 										'lname'	=>	$profile['lastName'],
 										'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
