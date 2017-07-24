@@ -128,7 +128,7 @@ class AuthenticateController extends Controller
         // Step 3b. Create a new user account or return an existing one.
         else
         {
-			echo "User Not Signed In \r\n";
+			//echo "User Not Signed In \r\n";
 			
 			
 			/*$user = User::updateOrCreate(['linkedin', $profile['id']],[
@@ -141,41 +141,30 @@ class AuthenticateController extends Controller
             if ($user->first())
             {
                 return response()->json(['token' => JWTAuth::fromUser($user->first())]);
-            }
-            $user = new User;
-            $user->linkedin = $profile['id'];
-            $user->fname =  $profile['firstName'];
-            $user->lname =  $profile['lastName'];
-            $user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '';
-            $user->email =  isset($profile['emailAddress']) ? $profile['emailAddress'] : '';
-            $user->save();
-			
-			//save to mongo
-			$profile_data = $this->seeder->parse_user_profile($profile);
-			
-			echo "Profile Data \r\n";
-			
-			var_dump($profile_data);
-			
-			$resume = $this->seeder->save_profile($profile_data,$user->id);
-			
-			echo "Resume Data \r\n";
-			
-			var_dump($resume);
+            }else{
+				$user = new User;
+				$user->linkedin = $profile['id'];
+				$user->fname =  $profile['firstName'];
+				$user->lname =  $profile['lastName'];
+				$user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '';
+				$user->email =  isset($profile['emailAddress']) ? $profile['emailAddress'] : '';
+				$user->save();
+				
+				//save to mongo
+				$profile_data = $this->seeder->parse_user_profile($profile);
+				
+				echo "Profile Data \r\n";
+				
+				var_dump($profile_data);
+				
+				$resume = $this->seeder->save_profile($profile_data,$user->id);
+				
+				echo "Resume Data \r\n";
+				
+				var_dump($resume);
 
-			
-            /*$user = User::where('linkedin', '=', $profile['id']);
-            if ($user->first())
-            {
-                return response()->json(['token' => $this->createToken($user->first())]);
-            }
-            $user = new User;
-            $user->linkedin = $profile['id'];
-            $user->fname =  $profile['firstName'];
-            $user->lname =  $profile['lastName'];
-            $user->save();*/
-
-            return response()->json(['token' => JWTAuth::fromUser($user)]);
+				return response()->json(['token' => JWTAuth::fromUser($user)]);
+			}
         }
     }
 	
