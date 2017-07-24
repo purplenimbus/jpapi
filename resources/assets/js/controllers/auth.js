@@ -153,6 +153,7 @@ angular.module('jpApp')
 		
 		$scope.closeModal	=	function(){
 			angular.element('#modal').hide().remove();
+			angular.element('html').removeClass('uk-modal-page');
 		};
 	
 	});
