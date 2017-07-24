@@ -144,7 +144,7 @@ class AuthenticateController extends Controller
             $user->linkedin = $profile['id'];
             $user->fname =  $profile['firstName'];
             $user->lname =  $profile['lastName'];
-            $user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
+            $user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '';
             $user->save();
 			
 			//save to mongo
