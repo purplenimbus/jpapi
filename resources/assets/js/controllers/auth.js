@@ -99,11 +99,11 @@ angular.module('jpApp')
 		$scope.logout = function() {
 			$auth.logout();
 			
-			$location.path("/");
+			//$location.path("/");
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').hide();
+			angular.element('#modal').hide().remove();
 		};
 	
 	});

@@ -619,11 +619,11 @@ angular.module('jpApp')
 		$scope.logout = function() {
 			$auth.logout();
 			
-			$location.path("/");
+			//$location.path("/");
 		};
 		
 		$scope.closeModal	=	function(){
-			angular.element('#modal').hide();
+			angular.element('#modal').hide().remove();
 		};
 	
 	});
@@ -2479,6 +2479,8 @@ angular.module('jpApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
 	return	{
 		modal	:	function(type,title,body,footer,$scope){
+			
+			$scope.modal = {};
 						
 			var str	=	'',
 				deferred	=	$q.defer();
@@ -2500,13 +2502,12 @@ angular.module('jpApp')
 			
 			console.log('Modal $window',$window);
 			
-			$scope.modal = $window.UIkit.modal('#modal').show();
-			
-			$scope.modal.on({
+			$window.UIkit.modal('#modal').show().on({
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
 				}
 			});
+			
 			
 			return deferred.promise;
 			
