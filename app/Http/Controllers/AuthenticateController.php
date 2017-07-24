@@ -148,7 +148,6 @@ class AuthenticateController extends Controller
 				$user->lname =  $profile['lastName'];
 				$user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '';
 				$user->email =  isset($profile['emailAddress']) ? $profile['emailAddress'] : '';
-				$user->save();
 				
 				//save to mongo
 				$profile_data = $this->seeder->parse_user_profile($profile);
@@ -162,6 +161,8 @@ class AuthenticateController extends Controller
 				echo "Resume Data \r\n";
 				
 				var_dump($resume);
+				
+				$user->save();
 
 				return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) ]);
 			}
