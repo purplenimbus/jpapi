@@ -28,6 +28,8 @@ class AuthenticateController extends Controller
 	   $this->middleware('jwt.auth', ['except' => ['authenticate','linkedin','getProfile','saveProfile']]);
 	   
 	   $this->mongo = new MongoDB\Client(env('MONGOURI', false));
+	   
+	   $this->seeder = New Seeder;
 	}
 	
 	public function authenticate(Request $request)
@@ -95,7 +97,7 @@ class AuthenticateController extends Controller
 		
 		//echo "PROFILE \r\n";
 		
-		var_dump($profile);
+		//var_dump($profile);
 		
 		//echo "===================================================== \r\n";
 			
@@ -149,7 +151,7 @@ class AuthenticateController extends Controller
             $user->save();
 			
 			//save to mongo
-			$profile_data = $this->seeder->parse_user_profiles($profile);
+			$profile_data = $this->seeder->parse_user_profile($profile);
 			
 			echo "Profile Data \r\n";
 			

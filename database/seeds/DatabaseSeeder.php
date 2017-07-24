@@ -597,7 +597,7 @@ class DatabaseSeeder extends Seeder
      * @param  array $data
      * @return array $parsed
      */
-	public function parse_user_profiles($data){
+	public function parse_user_profile($data){
 						
 		$parsed = 	[ 
 						'education' => [],
