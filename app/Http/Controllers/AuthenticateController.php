@@ -58,10 +58,13 @@ class AuthenticateController extends Controller
         $client = new GuzzleHttp\Client();
 		
 		var_dump($request->all());
+		
+		echo "linked in secret".env('LINKEDIN_SECRET');
+		
         $params = [
             'code' => $request->input('code'),
             'client_id' => $request->input('clientId'),
-            'client_secret' => Config::get('app.linkedin_secret'),
+            'client_secret' => env('LINKEDIN_SECRET'),
             'redirect_uri' => $request->input('redirectUri'),
             'grant_type' => 'authorization_code',
         ];
