@@ -668,7 +668,7 @@ angular.module('jpApp')
 		
 		$scope.logout = function() {
 			$auth.logout();
-			
+			$route.reload();
 			//$location.path("/");
 		};
 		
