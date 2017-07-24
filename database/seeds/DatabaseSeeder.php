@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
 			[
 				"fname"	=>	"Anthony",
 				"lname"	=>	"Akpan",
-				"displayName"	=>	"anthonyakpan",
+				//"displayName"	=>	"anthonyakpan",
 				"email"	=>	"info@biosart.com.ng",
 				"sex"	=>	"M",
 				"dob"	=>	"2016-03-09",
@@ -132,7 +132,7 @@ class DatabaseSeeder extends Seeder
 			],[
 				"fname"	=>	"Andem",
 				"lname"	=>	"Emmanuel",
-				"displayName"	=>	"andemewa",
+				//"displayName"	=>	"andemewa",
 				"email"	=>	"andem.ewa@gmail.com",
 				"sex"	=>	"M",
 				"dob"	=>	"2016-03-09",
