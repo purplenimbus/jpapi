@@ -614,8 +614,8 @@ angular.module('jpApp')
 		
 		$scope.authenticate = function(provider) {
 			console.log('Auth',$auth.authenticate(provider));
-			$auth.authenticate(provider).then(function(result){
-				console.log('Data',result);
+			$auth.authenticate(provider).catch(function(result){
+				console.log('Auth Data',result);
 						
 				angular.element('#modal .uk-modal-dialog').removeClass('error')
 										.addClass('success');
@@ -634,10 +634,10 @@ angular.module('jpApp')
 				auth.setCookie('auth',JSON.stringify(result.data.user),9);
 				$rootScope.user.info = result.data.user;
 				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
-				$scope.closeModal();
-				$route.reload();
+				//$scope.closeModal();
+				//$route.reload();
 				
-			}).catch(function(error){
+			})/*.catch(function(error){
 				//handle error
 				console.log('Login Error',error);
 				//TO DO Add Error Message to login modal
@@ -650,7 +650,7 @@ angular.module('jpApp')
 						.addClass('uk-alert-danger')
 						.children('p')
 						.html('Invalid Login');//Add error message
-			});
+			})*/;
 		};
 		
 		$scope.logout = function() {
