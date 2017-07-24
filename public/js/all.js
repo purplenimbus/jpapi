@@ -614,7 +614,43 @@ angular.module('jpApp')
 		
 		$scope.authenticate = function(provider) {
 			console.log('Auth',$auth.authenticate(provider));
-			$auth.authenticate(provider);
+			$auth.authenticate(provider).then(function(result){
+				console.log('Data',result);
+						
+				angular.element('#modal .uk-modal-dialog').removeClass('error')
+										.addClass('success');
+										
+				angular.element('#modal .uk-alert')
+						.removeClass('uk-hidden uk-alert-danger')
+						.addClass('uk-alert-success')
+						.children('p')
+						.html('Logged In Successfully'); //Show Success Alert
+						
+				$rootScope.user = {};
+				console.log('Logged in Rootscope',$rootScope);
+				console.log('Logged in Auth',$auth.isAuthenticated());
+				console.log('Logged in token',$auth.getToken());
+				console.log('Logged in payload',$auth.getPayload());
+				auth.setCookie('auth',JSON.stringify(result.data.user),9);
+				$rootScope.user.info = result.data.user;
+				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
+				$scope.closeModal();
+				$route.reload();
+				
+			}).catch(function(error){
+				//handle error
+				console.log('Login Error',error);
+				//TO DO Add Error Message to login modal
+				angular.element('#modal .uk-modal-dialog').removeClass('success')
+										.addClass('error');
+										
+				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+				angular.element('#modal .uk-alert')
+						.removeClass('uk-hidden uk-alert-success')
+						.addClass('uk-alert-danger')
+						.children('p')
+						.html('Invalid Login');//Add error message
+			});
 		};
 		
 		$scope.logout = function() {
