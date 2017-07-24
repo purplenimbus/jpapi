@@ -38,7 +38,7 @@ angular
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
 
-		var userData = null;//auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
+		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
 		
 		$rootScope.user = {};
 		
@@ -549,7 +549,7 @@ angular.module('jpApp')
 			validation.validate(form).then(function(result){
 				
 				console.log(result);
-				//angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
+				angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
 				if(result.valid){											
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
@@ -572,7 +572,7 @@ angular.module('jpApp')
 						console.log('Logged in payload',$auth.getPayload());
 						auth.setCookie('auth',JSON.stringify(result.data.user),9);
 						$rootScope.user.info = result.data.user;
-						//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
 						$route.reload();
 
@@ -584,7 +584,7 @@ angular.module('jpApp')
 						angular.element('#modal .uk-modal-dialog').removeClass('success')
 												.addClass('error');
 												
-						//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 						angular.element('#modal .uk-alert')
 								.removeClass('uk-hidden uk-alert-success')
 								.addClass('uk-alert-danger')
@@ -640,7 +640,7 @@ angular.module('jpApp')
 				console.log('Logged in payload',$auth.getPayload());
 				auth.setCookie('auth',JSON.stringify(result.data.user),9);
 				$rootScope.user.info = result.data.user;
-				//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
+				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 				$scope.closeModal();
 				$route.reload();
 				
@@ -656,7 +656,7 @@ angular.module('jpApp')
 					.removeClass('uk-form-success')
 					.addClass('uk-form-danger');
 										
-				//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 				angular.element('#modal .uk-alert')
 						.removeClass('uk-hidden uk-alert-success')
 						.addClass('uk-alert-danger')
@@ -2265,10 +2265,10 @@ angular.module('jpApp')
 													});
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row">';
-				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login <i ng-class="loginLoading : '': \'uk-hidden\'" class="uk-icon-spinner uk-icon-spin"></i></a>';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login</a>';
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row">';
-				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i> <i ng-class="authLoading : '': \'uk-hidden\'" class="uk-icon-spinner uk-icon-spin"></i></a>';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i></a>';
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row uk-text-small">';
 				str	+=	'			<label class="uk-float-left"><input type="checkbox"> Remember Me</label>';

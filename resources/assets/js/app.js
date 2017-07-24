@@ -38,7 +38,7 @@ angular
 		console.log('Logged payload',$rootScope.$auth.getPayload());
 		console.log('Logged Token',$rootScope.$auth.getToken());
 
-		var userData = null;//auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
+		var userData = auth.getCookie('auth') ? JSON.parse(auth.getCookie('auth')) : null;
 		
 		$rootScope.user = {};
 		
