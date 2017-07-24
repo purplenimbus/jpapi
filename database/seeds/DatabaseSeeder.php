@@ -605,7 +605,7 @@ class DatabaseSeeder extends Seeder
 					];
 					
 		foreach($data as $data_key => $data_value){
-			
+			var_dump($value['startDate']);
 			switch($data_key){
 				case 'positions'	: 	foreach($data[$data_key]['values'] as $key => $value){
 											array_push($parsed['experience'],[ 
