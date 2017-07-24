@@ -152,19 +152,19 @@ class AuthenticateController extends Controller
 				//save to mongo
 				$profile_data = $this->seeder->parse_user_profile($profile);
 				
-				echo "Profile Data \r\n";
+				/*echo "Profile Data \r\n";
 				
-				var_dump($profile_data);
+				var_dump($profile_data);*/
 				
 				$resume = $this->seeder->save_profile($profile_data,$user->id);
 				
-				echo "Resume Data \r\n";
+				/*echo "Resume Data \r\n";
 				
-				var_dump($resume);
+				var_dump($resume);*/
 				
 				$user->save();
 
-				return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) ]);
+				return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'resume' => $resume ]);
 			}
         }
     }
