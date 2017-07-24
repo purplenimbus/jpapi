@@ -93,18 +93,22 @@ angular.module('jpApp')
 		};
 		
 		$scope.authenticate = function(provider) {
-			console.log('Auth',$auth.authenticate(provider));
 			$auth.authenticate(provider).then(function(result){
 				console.log('Auth Data',result);
 						
 				angular.element('#modal .uk-modal-dialog').removeClass('error')
 										.addClass('success');
 										
+			angular.element('#modal.login form input')
+					.removeClass('uk-form-danger')
+					.addClass('uk-form-success');
+										
 				angular.element('#modal .uk-alert')
 						.removeClass('uk-hidden uk-alert-danger')
 						.addClass('uk-alert-success')
 						.children('p')
 						.html('Logged In Successfully'); //Show Success Alert
+						
 						
 				$rootScope.user = {};
 				console.log('Logged in Rootscope',$rootScope);
@@ -123,6 +127,10 @@ angular.module('jpApp')
 				//TO DO Add Error Message to login modal
 				angular.element('#modal .uk-modal-dialog').removeClass('success')
 										.addClass('error');
+										
+				angular.element('#modal.login form input')
+					.removeClass('uk-form-success')
+					.addClass('uk-form-danger');
 										
 				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 				angular.element('#modal .uk-alert')
