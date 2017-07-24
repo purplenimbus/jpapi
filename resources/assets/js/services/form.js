@@ -48,6 +48,9 @@ angular.module('jpApp')
 				str	+=	'		<div class="uk-form-row">';
 				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login</a>';
 				str	+=	'		</div>';
+				str	+=	'		<div class="uk-form-row">';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i></a>';
+				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row uk-text-small">';
 				str	+=	'			<label class="uk-float-left"><input type="checkbox"> Remember Me</label>';
 				str	+=	'			<a class="uk-float-right uk-link uk-link-muted" href="#">Forgot Password?</a>';

@@ -572,6 +572,7 @@ angular.module('jpApp')
 						$rootScope.user.info = result.data.user;
 						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+						$route.reload();
 
 						
 					}).catch(function(error){
@@ -866,7 +867,7 @@ angular.module('jpApp')
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth,$auth,$timeout)
 	{
 		
 		var JobCtrl = this;
@@ -1181,19 +1182,25 @@ angular.module('jpApp')
 		 * @param {integer} id  - The name of the PUT/POST endpoint
 		 */
 		$scope.apply	=	function(id,user_id){
-			$scope.loading = true;
-			jobs.sendData('jobs',id+'/apply').then(function(result){
-				console.log('Application Result',result);
-				if(result.status === 200){
-					$scope.currentAsset.user_applied = true;
-					$scope.loading = false;
-				}else{
-					//handle error
-				}
-			}).catch(function(error){
-				console.log('Application Error',error);
-				//TO DO  DO something
-			});
+			if(!$auth.isAuthenticated()){
+				$timeout(function(){
+					angular.element('button#login').trigger('click');
+				});
+			}else{
+				$scope.loading = true;
+				jobs.sendData('jobs',id+'/apply').then(function(result){
+					console.log('Application Result',result);
+					if(result.status === 200){
+						$scope.currentAsset.user_applied = true;
+						$scope.loading = false;
+					}else{
+						//handle error
+					}
+				}).catch(function(error){
+					console.log('Application Error',error);
+					//TO DO  DO something
+				});
+			}
 		}
 	});
 
@@ -2210,6 +2217,9 @@ angular.module('jpApp')
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row">';
 				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login</a>';
+				str	+=	'		</div>';
+				str	+=	'		<div class="uk-form-row">';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i></a>';
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row uk-text-small">';
 				str	+=	'			<label class="uk-float-left"><input type="checkbox"> Remember Me</label>';

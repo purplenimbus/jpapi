@@ -52,6 +52,7 @@ angular.module('jpApp')
 						$rootScope.user.info = result.data.user;
 						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
+						$route.reload();
 
 						
 					}).catch(function(error){

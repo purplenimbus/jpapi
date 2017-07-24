@@ -7,8 +7,8 @@
 					<div class="uk-grid">
 						<div class="uk-width-1-11">
 							<article class="uk-article">
-								<p class="uk-article-lead">{{ currentAsset.title }}</p>
-								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
+								<p class="uk-article-lead">{{ currentAsset.title }} <small class="uk-text-muted uk-text-uppercase uk-text-small">Posted {{ currentAsset.created_at | moment }}</small></p>
+								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name  | uppercase }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
 								<p class="uk-article-meta info">
 									<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
 										<li ng-if="currentAsset.job_category.name">
@@ -30,10 +30,11 @@
 								</p>
 								<div class="uk-button-group">
 									<button ng-if="currentAsset.status && !currentAsset.user_applied" ng-click="apply(currentAsset.id,$root.user.info.id)" class="uk-button uk-button-primary">Apply <i ng-show="loading" class="uk-icon-spinner uk-icon-spin"></i></a>
-									<button ng-if="currentAsset.status && currentAsset.user_applied" class="uk-button uk-button-success">Applied <i class="uk-icon-check-circle-o"></i></a>
-									<button ng-hide="true" ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
+									<button ng-if="false" ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
 								</div>
-								<p><small class="uk-text-muted uk-text-uppercase uk-text-small">Posted {{ currentAsset.created_at | moment }}</small></p>
+								<p>
+									<small ng-if="currentAsset.status && currentAsset.user_applied" class="uk-text-success uk-text-uppercase uk-text-small">You applied <i class="uk-icon-check-circle-o"></i> <span ng-if="currentAsset.application_date.date">( {{ currentAsset.application_date.date | moment }} )</span></small>
+								</p>
 							</article>
 						</div>
 					</div>

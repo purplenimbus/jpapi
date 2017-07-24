@@ -138,7 +138,7 @@ class AuthenticateController extends Controller
 											->limit(10)
 											->get()
 											->each(function($a){
-												$a->has('job') ? $a['job'] = $a->job : null;
+												$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
 											});
 		
 		//var_dump($job_applications);

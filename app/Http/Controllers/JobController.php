@@ -153,7 +153,22 @@ class JobController extends Controller
 			$company = $job->company;
 			if(isset($job->company->name)){
 				$job['company']			=  $job->company;
-				$job['company']['jobs'] = Job::where('company_id',$job['company']->id)->latest()->limit(5)->get(['id','title','created_at']);
+				$job['company']['jobs'] = Job::where('company_id',$job['company']->id)
+											->latest()
+											->limit(5)
+											/*->each(function($job){
+												//if($request->has('token')):
+													$application = Application::where(['job_id'=> $job->id , 'user_id' => $this->getAuthenticatedUser()->getData()->user->id])->first();
+													
+													if(isset($application->id)):
+														$job['user_applied']	= true;
+													
+														$job['application_date']	= $application->created_at;
+													endif;
+													
+												//endif;
+											})*/
+											->get(['id','title','created_at']);
 			}
 			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : null;
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : null;

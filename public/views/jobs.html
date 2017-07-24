@@ -19,7 +19,17 @@
 									<header class="uk-comment-header">
 										<img class="uk-comment-avatar" src="{{ job.company.logo }}" alt="{{ job.company.name }}" width="50" height="50">
 										<h4 class="uk-comment-title uk-margin-top-remove"><a href="#jobs/{{ job.id }}">{{ job.title }}</a></h4>
-										<div class="uk-comment-meta">{{ job.job_type.name }} | {{ job.created_at | moment }}</div>
+										<div class="uk-comment-meta">
+											{{ job.job_type.name | uppercase }} | {{ job.created_at | moment }} 
+											<span ng-if="job.user_applied"> |
+												<small class="uk-text-success uk-text-uppercase uk-text-small">
+													You applied <i class="uk-icon-check-circle-o"></i> 
+													<span ng-if="job.application_date.date">
+														( {{ job.application_date.date | moment }} )
+													</span>
+												</small>
+											</span>
+										</div>
 									</header>
 								</article>
 							</div>
