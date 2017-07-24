@@ -15,6 +15,7 @@ angular.module('jpApp')
         $scope.login = function($event) {
 			
 			//$event.preventDefault();
+			$scope.loginLoading = true;
 			
 			var modalContent	=	angular.element($event.currentTarget).parents()[1],
 				form			=	angular.element(modalContent).find('form').serializeArray(),
@@ -32,6 +33,7 @@ angular.module('jpApp')
 				if(result.valid){											
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
+						$scope.loginLoading = false;
 						console.log('Data',result);
 						
 						angular.element('#modal .uk-modal-dialog').removeClass('error')
@@ -50,18 +52,19 @@ angular.module('jpApp')
 						console.log('Logged in payload',$auth.getPayload());
 						auth.setCookie('auth',JSON.stringify(result.data.user),9);
 						$rootScope.user.info = result.data.user;
-						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
+						//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 						$scope.closeModal();
 						$route.reload();
 
 						
 					}).catch(function(error){
+						$scope.loginLoading = false;
 						console.log('Login Error',error);
 						//TO DO Add Error Message to login modal
 						angular.element('#modal .uk-modal-dialog').removeClass('success')
 												.addClass('error');
 												
-						angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+						//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 						angular.element('#modal .uk-alert')
 								.removeClass('uk-hidden uk-alert-success')
 								.addClass('uk-alert-danger')
@@ -93,9 +96,10 @@ angular.module('jpApp')
 		};
 		
 		$scope.authenticate = function(provider) {
+			$scope.authLoading = true;
 			$auth.authenticate(provider).then(function(result){
 				console.log('Auth Data',result);
-						
+				$scope.authLoading = false;		
 				angular.element('#modal .uk-modal-dialog').removeClass('error')
 										.addClass('success');
 										
@@ -117,11 +121,12 @@ angular.module('jpApp')
 				console.log('Logged in payload',$auth.getPayload());
 				auth.setCookie('auth',JSON.stringify(result.data.user),9);
 				$rootScope.user.info = result.data.user;
-				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
+				//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden');//remove spinner
 				$scope.closeModal();
 				$route.reload();
 				
 			}).catch(function(error){
+				$scope.authLoading = false;	
 				//handle error
 				//console.log('Login Error',error);
 				//TO DO Add Error Message to login modal
@@ -132,7 +137,7 @@ angular.module('jpApp')
 					.removeClass('uk-form-success')
 					.addClass('uk-form-danger');
 										
-				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
+				//angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 				angular.element('#modal .uk-alert')
 						.removeClass('uk-hidden uk-alert-success')
 						.addClass('uk-alert-danger')
