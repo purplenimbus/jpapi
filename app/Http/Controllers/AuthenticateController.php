@@ -129,11 +129,24 @@ class AuthenticateController extends Controller
 			echo "User Not Signed In \r\n";
 			
 			
-			$user = User::updateOrCreate(['linkedin', $profile['id']],[
+			/*$user = User::updateOrCreate(['linkedin', $profile['id']],[
 										'fname' => $profile['firstName'],
 										'lname'	=>	$profile['lastName'],
 										'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
-									]);
+									]);*/
+			
+			$user = User::where('linkedin', '=', $profile['id']);
+            if ($user->first())
+            {
+                return response()->json(['token' => $this->createToken($user->first())]);
+            }
+            $user = new User;
+            $user->linkedin = $profile['id'];
+            $user->fname =  $profile['firstName'];
+            $user->lname =  $profile['lastName'];
+            $user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',;
+            $user->save();
+			
 			//save to mongo
 			$profile_data = $this->seeder->parse_user_profiles($profile);
 			
@@ -141,7 +154,7 @@ class AuthenticateController extends Controller
 			
 			var_dump($profile_data);
 			
-			$resume = $this->seeder->save_profile($profile_data);
+			$resume = $this->seeder->save_profile($profile_data,$user->id);
 			
 			echo "Resume Data \r\n";
 			

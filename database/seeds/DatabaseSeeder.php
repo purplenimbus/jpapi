@@ -636,7 +636,7 @@ class DatabaseSeeder extends Seeder
      * @param  array $data
      * @return array $id
      */
-	public function save_profile($profile_data){
+	public function save_profile($profile_data,$id){
 						
 		$profile = $this->mongo->users->profiles->updateOne(
 			['user_id' 	=> (int)$id ],
