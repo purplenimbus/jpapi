@@ -1594,12 +1594,12 @@ angular.module('jpApp')
  * Service of the jpApp
  */
 angular.module('jpApp')
-	.service('accountData', function ($q,$http,jobs,$rootScope,location)
+	.service('accountData', function ($q,$http,jobs,$rootScope,location,$auth)
 	{
 		return {
 			user		: null,
 			getUserData : function(id){
-				return $http.get('/api/profile/'+id);
+				return $http.get('/api/profile/'+id+($auth.isAuthenticated() ? '?token='+$auth.getToken() : ''));
 			},
 			saveData 	:	function(id,data){
 				return $http.post('/api/profile/'+id,data);
