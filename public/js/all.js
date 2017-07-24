@@ -2550,6 +2550,7 @@ angular.module('jpApp')
 			$window.UIkit.modal('#modal').show().on({
 				'hide.uk.modal': function(){
 					angular.element('#modal').remove();
+					angular.element('html').removeClass('uk-modal-page');
 				}
 			});
 			
