@@ -56,11 +56,7 @@ class AuthenticateController extends Controller
     public function linkedin(Request $request)
     {
         $client = new GuzzleHttp\Client();
-		
-		var_dump($request->all());
-		
-		echo "linked in secret".env('LINKEDIN_SECRET');
-		
+				
         $params = [
             'code' => $request->input('code'),
             'client_id' => $request->input('clientId'),
@@ -73,19 +69,36 @@ class AuthenticateController extends Controller
             'form_params' => $params
         ]);
 		
+		echo "ACCESS TOKEN \r\n";
+		var_dump($accessTokenResponse->getBody());
+		
         $accessToken = json_decode($accessTokenResponse->getBody(), true);
-        // Step 2. Retrieve profile information about the current user.
+        
+		echo "===================================================== \r\n";
+		
+		echo "PROFILE RESPONSE \r\n";
+		
+		// Step 2. Retrieve profile information about the current user.
         $profileResponse = $client->request('GET', 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)', [
             'query' => [
                 'oauth2_access_token' => $accessToken['access_token'],
                 'format' => 'json'
             ]
         ]);
+		
+		var_dump($profileResponse);
+		
+		echo "---------------------------------------------------- \r\n";
+		
         $profile = json_decode($profileResponse->getBody(), true);
+		echo "PROFILE \r\n";
+		var_dump($profile);
+		
+		echo "===================================================== \r\n";
         // Step 3a. If user is already signed in then link accounts.
         if ($request->header('Authorization'))
         {
-            $user = User::where('linkedin', '=', $profile['id']);
+            $user = User::where('linkedin', '=', (int)$profile['id']);
             if ($user->first())
             {
                 return response()->json(['message' => 'There is already a LinkedIn account that belongs to you'], 409);

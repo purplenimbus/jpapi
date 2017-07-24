@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
 			$table->integer('location_id')->nullable();
 			$table->string('skills_id')->nullable();
 			$table->integer('company_id')->nullable();
-			$table->integer('linkedin')->nullable();
+			$table->string('linkedin')->nullable();
 			$table->integer('wp_id')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
