@@ -140,10 +140,19 @@ class AuthenticateController extends Controller
 											'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
 										]);*/
 				
-				$user = User::where('linkedin', '=', $profile['id']);
-				if ($user->first())
+				$user = User::where('linkedin', '=', $profile['id'])->first();
+				if ($user->id)
 				{
-					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user->first()) ]);
+					//save to mongo
+					$profile_data = $this->seeder->parse_user_profile($profile);
+					
+					/*echo "Profile Data \r\n";
+					
+					var_dump($profile_data);*/
+					
+					$resume = $this->seeder->save_profile($profile_data,$user->id);
+					
+					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'resume' => $resume ]);
 				}else{
 					$user = new User;
 					$user->linkedin = $profile['id'];
