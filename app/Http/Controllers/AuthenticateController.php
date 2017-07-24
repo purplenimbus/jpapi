@@ -129,7 +129,6 @@ class AuthenticateController extends Controller
         {
 			echo "User Not Signed In \r\n";
 			
-			'email','dob','password','image_url','dob','sex','wp_id','access_level','location_id'
 			
 			$user = User::firstOrCreate(['linkedin', $profile['id']],[
 										'fname' => $profile['firstName'],
@@ -151,20 +150,6 @@ class AuthenticateController extends Controller
             return response()->json(['token' => $this->createToken($user)]);
         }
     }
-	
-	/**
-     * Return Account Info
-     * @params Request
-     */
-	public function get_user(){
-		$user = Auth::user();
-		
-		if($user){
-			return $user;
-		}else{
-			return false;
-		}
-	}
 	
 	/**
      * get user profile details
