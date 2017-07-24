@@ -29,7 +29,7 @@ angular.module('jpApp')
 			validation.validate(form).then(function(result){
 				
 				console.log(result);
-				angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
+				//angular.element('#modal .uk-modal-spinner').removeClass('uk-hidden');
 				if(result.valid){											
 					//Use Satellizer's $auth service to login
 					$auth.login(credentials).then(function(result) {
@@ -96,7 +96,6 @@ angular.module('jpApp')
 		};
 		
 		$scope.authenticate = function(provider) {
-			$scope.authLoading = true;
 			$auth.authenticate(provider).then(function(result){
 				console.log('Auth Data',result);
 				$scope.authLoading = false;		

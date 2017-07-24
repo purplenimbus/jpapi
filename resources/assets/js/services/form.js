@@ -46,10 +46,10 @@ angular.module('jpApp')
 													});
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row">';
-				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login <i ng-show="loginLoading" class="uk-icon-spinner uk-icon-spin"></i></a>';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" ng-click="login($event)">Login <i ng-class="loginLoading : '': \'uk-hidden\'" class="uk-icon-spinner uk-icon-spin"></i></a>';
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row">';
-				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i> <i ng-show="authLoading" class="uk-icon-spinner uk-icon-spin"></i></a>';
+				str	+=	'			<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" ng-click="authenticate(\'linkedin\')">Login with <i class="uk-icon-linkedin-square"></i> <i ng-class="authLoading : '': \'uk-hidden\'" class="uk-icon-spinner uk-icon-spin"></i></a>';
 				str	+=	'		</div>';
 				str	+=	'		<div class="uk-form-row uk-text-small">';
 				str	+=	'			<label class="uk-float-left"><input type="checkbox"> Remember Me</label>';
