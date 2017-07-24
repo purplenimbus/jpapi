@@ -95,7 +95,7 @@ class AuthenticateController extends Controller
 		
 		//echo "PROFILE \r\n";
 		
-		//var_dump($profile);
+		var_dump($profile);
 		
 		//echo "===================================================== \r\n";
 			
