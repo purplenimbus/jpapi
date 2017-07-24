@@ -140,7 +140,7 @@ class AuthenticateController extends Controller
 			$user = User::where('linkedin', '=', $profile['id']);
             if ($user->first())
             {
-                return response()->json(['token' => $this->createToken($user->first())]);
+                return response()->json(['token' => JWTAuth::fromUser($user->first())]);
             }
             $user = new User;
             $user->linkedin = $profile['id'];
