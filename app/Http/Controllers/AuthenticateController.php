@@ -145,7 +145,7 @@ class AuthenticateController extends Controller
             $user->fname =  $profile['firstName'];
             $user->lname =  $profile['lastName'];
             $user->image_url =  isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '';
-            $user->email =  isset($profile['email-address']) ? $profile['email-address'] : '';
+            $user->email =  isset($profile['emailAddress']) ? $profile['emailAddress'] : '';
             $user->save();
 			
 			//save to mongo
