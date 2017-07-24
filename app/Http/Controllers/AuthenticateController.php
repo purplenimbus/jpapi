@@ -206,7 +206,7 @@ class AuthenticateController extends Controller
 		
 		//var_dump($job_applications);
 		
-		$profile->applications = $job_applications;
+		$profile->applications = $job_applications->id ? $job_applications : null;
 		
 		if($profile){
 			return response()->json([$profile],200);
