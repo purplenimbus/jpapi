@@ -615,8 +615,8 @@ class DatabaseSeeder extends Seeder
 												'location' => isset($value['location']) ? $value['location']['name'] : '',
 												'is_current' => isset($value['isCurrent']) ? $value['isCurrent'] : '',
 												'dates' => [ 
-													'start' => isset($value['startDate']) ? date($value['startDate']) : '', 
-													'end' => isset($value['endDate']) ? date($value['endDate']) : '',
+													'start' => isset($value['startDate']) ? date($this->date_from_array($value['startDate'])) : '', 
+													'end' => isset($value['endDate']) ? date($this->date_from_array($value['endDate'])) : '',
 												]
 											]);
 										}; break;
@@ -632,7 +632,7 @@ class DatabaseSeeder extends Seeder
 	}
 	
 	public function date_from_array($date_array){
-		$date_string = date('Y-m-d H:i:s', mktime($date_array['hour'], $date_array['minute'], $date_array['second'], $date_array['month'], $date_array['day'], $date_array['year'])); 
+		$date_string = date('Y-m-d H:i:s', mktime($date_array['month'], $date_array['year'])); 
 		
 		return $date_string;
 	}
