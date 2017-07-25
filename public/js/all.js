@@ -659,10 +659,9 @@ angular.module('jpApp')
 				angular.element('#modal .uk-modal-spinner').addClass('uk-hidden'); //remove spinner
 				angular.element('#modal .uk-alert')
 						.removeClass('uk-hidden uk-alert-success')
-						.addClass('uk-alert-danger')
-						.children('p');
+						.addClass('uk-alert-danger');
 						
-				error ? angular.element('#modal .uk-alert').html(error) : null;//Add error message
+				error ? angular.element('#modal .uk-alert').children('p').html(error) : null;//Add error message
 			});
 		};
 		
