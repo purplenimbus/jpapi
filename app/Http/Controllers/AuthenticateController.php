@@ -15,6 +15,7 @@ use Config;
 use MongoDB;
 use	App\Application;
 use DatabaseSeeder as Seeder;
+use MongoDB\BSON\ObjectID as MongoID;
 
 class AuthenticateController extends Controller
 {
@@ -148,9 +149,30 @@ class AuthenticateController extends Controller
 					
 					/*echo "Profile Data \r\n";
 					
-					var_dump($profile_data);*/
 					
-					$resume = $this->seeder->save_profile($profile_data,$user->id);
+					var_dump($profile_data);*/
+			
+					$data['_id'] 	 = new MongoID();
+					
+					$data['user_id'] = $user->id;
+								
+					$db = $this->mongo->users->profiles;
+			
+					//check mongo for user
+					$user = $db->findOne([ 'user_id' => (int)$user->id ]);
+					
+					//create if user dosent exist
+					if(!$user){
+						echo 'no user found in mongo with id:'.$user->id."\r\n";
+						isset($db) ? $response = $db->insertOne($profile_data) : null;
+						var_dump($response);
+					}else{
+						echo 'user found in mongo with id:'.$user->id."\r\n";
+						
+						$resume = $this->seeder->save_profile($profile_data,$user->id);
+						
+						//isset($db) ? $user = $db->findAndModify($data,true) : null;
+					}
 					
 					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'resume' => $resume ]);
 				}else{
