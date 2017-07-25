@@ -197,18 +197,18 @@ class AuthenticateController extends Controller
 		$profile = $this->mongo->users->profiles->findOne([ 'user_id' => (int)$id ]);
 		
 		//var_dump($profile);
-		if($request->has('token')):
-			$job_applications = Application::where(['user_id' => $this->getAuthenticatedUser()->getData()->user->id])
-												->latest()
-												->limit(10)
-												->get()
-												->each(function($a){
-													$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
-												});
-			$profile->applications = isset($job_applications->id) ? $job_applications : null;
-			
-			$profile['user_data'] = User::find($this->getAuthenticatedUser()->getData()->user->id)->first();
-		endif;
+		//if($request->has('token')):
+		$job_applications = Application::where(['user_id' => $id])
+											->latest()
+											->limit(10)
+											->get()
+											->each(function($a){
+												$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
+											});
+		$profile->applications = isset($job_applications->id) ? $job_applications : null;
+		
+		$profile['user_data'] = User::find($id)->first();
+		//endif;
 		
 		if($profile){
 			return response()->json([$profile],200);
