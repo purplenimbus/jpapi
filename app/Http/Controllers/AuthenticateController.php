@@ -132,7 +132,7 @@ class AuthenticateController extends Controller
 			// Step 3b. Create a new user account or return an existing one.
 			else
 			{
-				echo "User Not Signed In \r\n";
+				//echo "User Not Signed In \r\n";
 				
 				
 				/*$user = User::updateOrCreate(['linkedin', $profile['id']],[
@@ -151,13 +151,9 @@ class AuthenticateController extends Controller
 					
 					//var_dump($profile_data);
 			
-					$resume = $this->seeder->create_or_update_profile($user->first(),$profile_data);
+					$profile_id = $this->seeder->create_or_update_profile($user->first(),$profile_data);
 					
-					echo "Resume Data \r\n";
-					
-					var_dump($resume);
-					
-					return response()->json([ 'user' => $user->first() , 'token' => JWTAuth::fromUser($user->first()) , 'resume' => $resume ]);
+					return response()->json([ 'user' => $user->first() , 'token' => JWTAuth::fromUser($user->first()) ]);
 				}else{
 					$user = new User;
 					$user->linkedin = $profile['id'];
@@ -181,7 +177,7 @@ class AuthenticateController extends Controller
 					
 					var_dump($resume);
 
-					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'resume' => $resume ]);
+					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) ]);
 				}
 			}
 	
