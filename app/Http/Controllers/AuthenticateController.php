@@ -141,38 +141,21 @@ class AuthenticateController extends Controller
 											'image_url'	=>	isset($profile['pictureUrl']) ? $profile['pictureUrl'] : '',
 										]);*/
 				
-				$user = User::where('linkedin', '=', $profile['id'])->first();
-				if ($user->id)
+				$user = User::where('linkedin', '=', $profile['id']);
+				if ($user->first())
 				{
 					//save to mongo
 					$profile_data = $this->seeder->parse_user_profile($profile);
 					
-					/*echo "Profile Data \r\n";
+					echo "Profile Data \r\n";
 					
-					
-					var_dump($profile_data);*/
+					var_dump($profile_data);
 			
-					$data['_id'] 	 = new MongoID();
+					$resume = $this->seeder->create_or_update_profile($user,$profile_data);
 					
-					$data['user_id'] = $user->id;
-								
-					$db = $this->mongo->users->profiles;
-			
-					//check mongo for user
-					$user = $db->findOne([ 'user_id' => (int)$user->id ]);
+					echo "Resume Data \r\n";
 					
-					//create if user dosent exist
-					if(!$user){
-						echo 'no user found in mongo with id:'.$user->id."\r\n";
-						isset($db) ? $response = $db->insertOne($profile_data) : null;
-						var_dump($response);
-					}else{
-						echo 'user found in mongo with id:'.$user->id."\r\n";
-						
-						$resume = $this->seeder->save_profile($profile_data,$user->id);
-						
-						//isset($db) ? $user = $db->findAndModify($data,true) : null;
-					}
+					var_dump($resume);
 					
 					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'resume' => $resume ]);
 				}else{
@@ -186,15 +169,15 @@ class AuthenticateController extends Controller
 					//save to mongo
 					$profile_data = $this->seeder->parse_user_profile($profile);
 					
-					/*echo "Profile Data \r\n";
+					echo "Profile Data \r\n";
 					
-					var_dump($profile_data);*/
+					var_dump($profile_data);
 					
-					$resume = $this->seeder->save_profile($profile_data,$user->id);
+					$resume = $this->seeder->create_or_update_profile($user,$profile_data);
 					
-					/*echo "Resume Data \r\n";
+					echo "Resume Data \r\n";
 					
-					var_dump($resume);*/
+					var_dump($resume);
 					
 					$user->save();
 

@@ -652,4 +652,40 @@ class DatabaseSeeder extends Seeder
 
 		return $profile;
 	}
+	
+	/**
+     *	Parse Linkedin user profile
+     *
+     * @param  array $data
+     * @return array $id
+     */
+	public function create_or_update_profile($user,$data){
+						
+		$data = array();
+		
+		$data['_id'] 	 = new MongoID();
+					
+		$data['user_id'] = $user->id;
+					
+		$db = $this->mongo->users->profiles;
+
+		//check mongo for user
+		$user = $db->findOne([ 'user_id' => (int)$user->id ]);
+		
+		//create if user dosent exist
+		if(!$user){
+			echo 'no user found in mongo with id:'.$user->id."\r\n";
+			
+			isset($db) ? $response = $db->insertOne($data) : null;
+			
+		}else{
+			echo 'user found in mongo with id:'.$user->id."\r\n";
+			
+			$response = $this->save_profile($data,$user->id);
+			
+			//isset($db) ? $user = $db->findAndModify($data,true) : null;
+		}
+
+		return $response;
+	}
 }
