@@ -674,12 +674,12 @@ class DatabaseSeeder extends Seeder
 		
 		//create if user dosent exist
 		if(!$user_data){
-			echo 'no user found in mongo with id:'.$user->id."\r\n";
+			//echo 'no user found in mongo with id:'.$user->id."\r\n";
 			
 			isset($db) ? $response = $db->insertOne($data) : null;
 			
 		}else{
-			echo 'user found in mongo with id:'.$user->id."\r\n";
+			//echo 'user found in mongo with id:'.$user->id."\r\n";
 			
 			$response = $this->save_profile($profile_data,$user->id);
 			
