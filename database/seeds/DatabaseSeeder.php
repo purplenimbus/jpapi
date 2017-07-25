@@ -670,10 +670,10 @@ class DatabaseSeeder extends Seeder
 		$db = $this->mongo->users->profiles;
 
 		//check mongo for user
-		$user = $db->findOne([ 'user_id' => (int)$user->id ]);
+		$user_data = $db->findOne([ 'user_id' => (int)$user->id ]);
 		
 		//create if user dosent exist
-		if(!$user){
+		if(!$user_data){
 			echo 'no user found in mongo with id:'.$user->id."\r\n";
 			
 			isset($db) ? $response = $db->insertOne($data) : null;
