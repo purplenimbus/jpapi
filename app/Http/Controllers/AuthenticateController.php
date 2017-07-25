@@ -171,13 +171,13 @@ class AuthenticateController extends Controller
 					
 					$user->save();
 					
-					$resume = $this->seeder->create_or_update_profile($user,$profile_data);
+					$profile_id = $this->seeder->create_or_update_profile($user,$profile_data);
 					
 					echo "Resume Data \r\n";
 					
-					var_dump($resume);
+					var_dump($profile_id);
 
-					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) ]);
+					return response()->json([ 'user' => $user , 'token' => JWTAuth::fromUser($user) , 'new_profile' => true ]);
 				}
 			}
 	
@@ -206,6 +206,8 @@ class AuthenticateController extends Controller
 													$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
 												});
 			$profile->applications = isset($job_applications->id) ? $job_applications : null;
+			
+			$profile['user_data'] = User::find($this->getAuthenticatedUser()->getData()->user->id)->first();
 		endif;
 		
 		if($profile){
