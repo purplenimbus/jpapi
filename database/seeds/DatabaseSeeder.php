@@ -676,15 +676,12 @@ class DatabaseSeeder extends Seeder
 		if(!$user_data){
 			//echo 'no user found in mongo with id:'.$user->id."\r\n";
 			
-			isset($db) ? $response = $db->insertOne($data) : null;
+			isset($db) ? $new_profile = $db->insertOne($data) : null;
 			
-		}else{
-			//echo 'user found in mongo with id:'.$user->id."\r\n";
-			
-			$response = $this->save_profile($profile_data,$user->id);
-			
-			//isset($db) ? $user = $db->findAndModify($data,true) : null;
 		}
+			
+		$response = $this->save_profile($profile_data,$user->id);
+			
 
 		return $response;
 	}

@@ -153,9 +153,9 @@ class AuthenticateController extends Controller
 			
 					$resume = $this->seeder->create_or_update_profile($user->first(),$profile_data);
 					
-					//echo "Resume Data \r\n";
+					echo "Resume Data \r\n";
 					
-					//var_dump($resume);
+					var_dump($resume);
 					
 					return response()->json([ 'user' => $user->first() , 'token' => JWTAuth::fromUser($user->first()) , 'resume' => $resume ]);
 				}else{
