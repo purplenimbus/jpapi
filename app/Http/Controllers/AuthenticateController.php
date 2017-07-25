@@ -203,12 +203,12 @@ class AuthenticateController extends Controller
 											->limit(10)
 											->get()
 											->each(function($a){
-												$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
+												$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get(['title', 'id']) : null;
 											});
 		$profile->applications = sizeof($job_applications) ? $job_applications : null;
 		
 		if($request->has('token')):
-			$profile['user_data'] = User::find($this->getAuthenticatedUser()->getData()->user->id)->first();
+			$profile['user_data'] = User::find($id)->first();
 		endif;
 		
 		if($profile){
