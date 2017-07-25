@@ -108,7 +108,7 @@ class JobController extends Controller
 				$job['location'] = isset($job->location->name) ? $job->location->name : '';
 				$job['job_type'] = isset($job->job_type->name) ? $job->job_type->name : '';
 				$job['job_level'] = isset($job->job_level->name) ? $job->job_level->name : '';
-				//$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
+				$job['job_skills'] = isset($job->skills) ? Job_Skill::find(explode(',',$job->skills)) : '';
 				if($request->has('token')):
 					$application = Application::where(['job_id'=> $job->id , 'user_id' => $this->getAuthenticatedUser()->getData()->user->id])->first();
 					if(isset($application->id)):
