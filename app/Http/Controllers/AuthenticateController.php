@@ -132,7 +132,7 @@ class AuthenticateController extends Controller
 			// Step 3b. Create a new user account or return an existing one.
 			else
 			{
-				//echo "User Not Signed In \r\n";
+				echo "User Not Signed In \r\n";
 				
 				
 				/*$user = User::updateOrCreate(['linkedin', $profile['id']],[

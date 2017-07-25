@@ -660,8 +660,9 @@ angular.module('jpApp')
 				angular.element('#modal .uk-alert')
 						.removeClass('uk-hidden uk-alert-success')
 						.addClass('uk-alert-danger')
-						.children('p')
-						.html(error);//Add error message
+						.children('p');
+						
+				error ? angular.element('#modal .uk-alert').html(error) : null;//Add error message
 			});
 		};
 		

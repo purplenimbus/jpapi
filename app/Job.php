@@ -58,7 +58,7 @@ class Job extends Model
 		'created_at',
 		'user_applied',
 		'job_skills',
-		'wp_id',
+		//'wp_id',
 		'application_date'
     ];
 	
