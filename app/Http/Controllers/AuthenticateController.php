@@ -205,7 +205,7 @@ class AuthenticateController extends Controller
 											->each(function($a){
 												$a->has('job') ? $a['job'] = $a->job->select(array('title', 'id'))->get() : null;
 											});
-		$profile->applications = isset($job_applications->id) ? $job_applications : null;
+		$profile->applications = sizeof($job_applications) ? $job_applications : null;
 		
 		$profile['user_data'] = User::find($id)->first();
 		//endif;
