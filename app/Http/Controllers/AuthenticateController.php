@@ -147,11 +147,11 @@ class AuthenticateController extends Controller
 					//save to mongo
 					$profile_data = $this->seeder->parse_user_profile($profile);
 					
-					echo "Profile Data ".$user->id."\r\n";
+					echo "Profile Data ".$user->first()->id."\r\n";
 					
 					var_dump($profile_data);
 			
-					$resume = $this->seeder->create_or_update_profile($user,$profile_data);
+					$resume = $this->seeder->create_or_update_profile($user->first(),$profile_data);
 					
 					echo "Resume Data \r\n";
 					
