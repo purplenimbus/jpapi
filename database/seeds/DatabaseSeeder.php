@@ -599,15 +599,13 @@ class DatabaseSeeder extends Seeder
      */
 	public function parse_user_profile($data){
 						
-		$parsed = 	[ 
-						'education' => [],
-						'experience' => [],
-					];
+		$parsed = 	[];
 					
 		foreach($data as $data_key => $data_value){
 			
 			switch($data_key){
-				case 'positions'	: 	foreach($data[$data_key]['values'] as $key => $value){
+				case 'positions'	: 	$parsed['experience'] = [];
+								foreach($data[$data_key]['values'] as $key => $value){
 											
 											array_push($parsed['experience'],[ 
 												'job_title' => isset($value['title']) ? $value['title'] : '',
