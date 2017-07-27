@@ -262,7 +262,9 @@ angular
 		return function(val,format) {
 			var relative_str;
 			
-			relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			//relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			
+			relative_str = moment(val).fromNow();
 			
 			return relative_str;
 		};
