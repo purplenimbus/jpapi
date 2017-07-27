@@ -21,7 +21,7 @@
 					<!-- This is the dropdown -->
 					<div class="uk-dropdown uk-dropdown-small">
 						<ul class="uk-nav uk-nav-dropdown">
-							<li><a href="#myaccount" ui-sref-active="active">My Account</a></li>
+							<li><a href="#profile">My Account</a></li>
 						</ul>
 					</div>
 

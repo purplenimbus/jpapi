@@ -25,14 +25,14 @@
 						</div>
 					</div>
 				</div>
-				<section id="about" class="uk-panel uk-panel-box uk-margin-small-bottom bg-white" ng-if="currentAsset.highlights">
+				<section id="about" class="uk-panel uk-panel-box bg-white" ng-if="currentAsset.highlights">
 					<p>{{ currentAsset.highlights }}</p>
 				</section>
-				<section id="skills" class="uk-panel uk-panel-box uk-margin-small-bottom bg-white" ng-if="currentAsset.skills">
+				<section id="skills" class="uk-panel uk-panel-box bg-white" ng-if="currentAsset.skills">
 					<h5 class="teal-text">Skills</h5>
 					<div class="chip teal white-text" ng-repeat="skill in currentAsset.skills">Skill 1</div>
 				</section>
-				<section id="experience" class="uk-panel uk-panel-box uk-margin-small-bottom bg-white" ng-if="currentAsset.experience">
+				<section id="experience" class="uk-panel uk-panel-box bg-white" ng-if="currentAsset.experience">
 					<h5 class="teal-text">Experience</h5>
 					<div class="info" ng-repeat="exp in currentAsset.experience">
 						<h6>{{ exp.company }} <span class="teal-text">{{ exp.job_title }}</span></h6>
@@ -41,7 +41,7 @@
 						<div>{{ exp.description }}</div>
 					</div>
 				</section>
-				<section id="education" class="uk-panel uk-panel-box uk-margin-small-bottom bg-white" ng-if="currentAsset.education">
+				<section id="education" class="uk-panel uk-panel-box bg-white" ng-if="currentAsset.education">
 					<h5 class="teal-text">Education</h5>
 					<div class="info" ng-repeat="exp in currentAsset.education">
 						<h6>{{ exp.school }} <span class="teal-text">{{ exp.field }} ( {{ exp.degree }} )</span></h6>

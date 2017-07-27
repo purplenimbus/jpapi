@@ -162,24 +162,24 @@ aside.header {
   background-position: center bottom;
   display: none; }
 
-.myaccount aside h5 {
+.profile aside h5 {
   font-size: 16px; }
 
-.myaccount main section {
+.profile main section {
   font-size: 12px; }
-  .myaccount main section h5 {
+  .profile main section h5 {
     margin-top: 0px;
     font-size: 16px;
     text-transform: uppercase;
     font-weight: bold; }
-  .myaccount main section .info {
+  .profile main section .info {
     padding: 5px 0; }
-    .myaccount main section .info h6 {
+    .profile main section .info h6 {
       font-weight: bold;
       font-size: 14px; }
-    .myaccount main section .info span {
+    .profile main section .info span {
       color: gray; }
-    .myaccount main section .info p {
+    .profile main section .info p {
       text-transform: uppercase; }
 
 html {

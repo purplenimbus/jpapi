@@ -163,7 +163,7 @@ angular
 					
 				}
 			})
-			.when('/myaccount',{
+			.when('/profile',{
 				templateUrl	:	'/views/partials/account/view-account.html',
 				controller	:	'AccountCtrl',
 				controllerAs: 	'Account',
@@ -185,10 +185,34 @@ angular
 					}
 				}
 			})
-			.when('/myaccount/edit',{
+			.when('/profile/edit',{
 				template	:	function(d){
 					//console.log('Edit Profile',d);
 					return form.editProfile();
+				},
+				controller	:	'AccountCtrl',
+				controllerAs: 	'Account',
+				resolve 	: {
+					user : function(accountData,$rootScope){
+						
+						$rootScope.$location.title = $rootScope.$location.base;
+						
+						return accountData.getUserData().then(function(result){
+							console.log('Result',result);
+						
+							angular.element('.loader').hide();
+						
+							return result;
+						}).catch(function(error){
+							console.log('Error',error);
+						});
+					}
+				}
+			})
+			.when('/profile/jobs',{
+				template	:	function(d){
+					//console.log('Edit Profile',d);
+					return '/views/partials/account/view-jobs.html';
 				},
 				controller	:	'AccountCtrl',
 				controllerAs: 	'Account',
