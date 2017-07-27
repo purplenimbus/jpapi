@@ -1,7 +1,7 @@
 #view{	
 	.view_asset{
 		main,aside.sidebar{
-			margin-top: -70px;
+			//margin-top: -70px;
 		}
 	}
 }
@@ -29,17 +29,20 @@
 aside{
 	&.toolbar{
 		min-height:180px;
+		display:none;
 	}
 }
 
 .jobs_component{
 	.uk-panel{
 		background:white;
-		margin-top:-70px;
 		article{
+			border-bottom: 1px solid whitesmoke;
 			header{
 				border-radius: 0px;
 				margin:0px;
+				border: none;
+				background: transparent;
 				h4{
 					font-size: 12px;
 				}
@@ -49,6 +52,9 @@ aside{
 }
 
 .company_widget{
+	.uk-panel-teaser{
+		display:none;
+	}
 	.logo{
 		background:none;
 		img{

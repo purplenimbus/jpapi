@@ -104,9 +104,6 @@ section {
 .uk-thumbnail {
   border: 0px; }
 
-#view .view_asset main, #view .view_asset aside.sidebar {
-  margin-top: -70px; }
-
 .job_list ul li article header {
   margin: 0px;
   border: 0px;
@@ -117,16 +114,23 @@ section {
       padding-left: 0px; }
 
 aside.toolbar {
-  min-height: 180px; }
+  min-height: 180px;
+  display: none; }
 
 .jobs_component .uk-panel {
-  background: white;
-  margin-top: -70px; }
-  .jobs_component .uk-panel article header {
-    border-radius: 0px;
-    margin: 0px; }
-    .jobs_component .uk-panel article header h4 {
-      font-size: 12px; }
+  background: white; }
+  .jobs_component .uk-panel article {
+    border-bottom: 1px solid whitesmoke; }
+    .jobs_component .uk-panel article header {
+      border-radius: 0px;
+      margin: 0px;
+      border: none;
+      background: transparent; }
+      .jobs_component .uk-panel article header h4 {
+        font-size: 12px; }
+
+.company_widget .uk-panel-teaser {
+  display: none; }
 
 .company_widget .logo {
   background: none; }
@@ -150,50 +154,51 @@ h1, h2, h3, h4, h5, h6 {
 p {
   font-family: 'Lato', sans-serif; }
 
-#sidebar {
-  margin-top: -70px; }
-
-main#content {
-  margin-top: -70px; }
-
 aside.header {
   min-height: 380px;
   background: url("http://images1.andersonautogroup.com/header-background.jpg");
   background-size: cover;
   padding: 0px;
-  background-position: center bottom; }
+  background-position: center bottom;
+  display: none; }
 
-body {
-  font-family: 'Roboto', sans-serif; }
-  body .navbar {
-    margin: 0px;
-    border-bottom: 1px solid lightgray; }
-    body .navbar .navbar-right {
-      margin: 0px !important; }
-  body section#home {
-    height: 87vh;
-    position: relative; }
-    body section#home form {
-      width: 100%; }
-  body .sub-header h1 {
-    margin: 0px; }
-  body.myaccount aside h5 {
-    font-size: 16px; }
-  body.myaccount main section {
-    font-size: 12px; }
-    body.myaccount main section h5 {
-      margin-top: 0px;
-      font-size: 16px;
-      text-transform: uppercase;
-      font-weight: bold; }
-    body.myaccount main section .info {
-      padding: 5px 0; }
-      body.myaccount main section .info h6 {
-        font-weight: bold;
-        font-size: 14px; }
-      body.myaccount main section .info span {
-        color: gray; }
-      body.myaccount main section .info p {
-        text-transform: uppercase; }
+.myaccount aside h5 {
+  font-size: 16px; }
+
+.myaccount main section {
+  font-size: 12px; }
+  .myaccount main section h5 {
+    margin-top: 0px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold; }
+  .myaccount main section .info {
+    padding: 5px 0; }
+    .myaccount main section .info h6 {
+      font-weight: bold;
+      font-size: 14px; }
+    .myaccount main section .info span {
+      color: gray; }
+    .myaccount main section .info p {
+      text-transform: uppercase; }
+
+html {
+  background: transparent; }
+  html body {
+    font-family: 'Roboto', sans-serif; }
+    html body .navbar {
+      margin: 0px;
+      border-bottom: 1px solid lightgray; }
+      html body .navbar .navbar-right {
+        margin: 0px !important; }
+    html body #view {
+      padding-top: 25px; }
+    html body section#home {
+      height: 87vh;
+      position: relative; }
+      html body section#home form {
+        width: 100%; }
+    html body .sub-header h1 {
+      margin: 0px; }
 
 /*# sourceMappingURL=main.css.map */

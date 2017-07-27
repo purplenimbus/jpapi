@@ -1,8 +1,9 @@
 main{
 	&#content{
-		margin-top: -70px;
+	
 	}
 }
+
 
 aside{
 	&.header{
@@ -11,6 +12,7 @@ aside{
 		background-size:cover;
 		padding:0px;
 		background-position: center bottom;
+		display:none;
 	}
 	&.inset{
 	
