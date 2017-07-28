@@ -26,7 +26,7 @@ class Company extends Model
 	
 	//Get all jobs from this company
 	public function category(){
-		return $this->hasMany('App\Company_Category','company_category_id','wp_id');
+		return $this->belongsTo('App\Company_Category','company_category_id','wp_id');
 	}
 	
 	//Bind Job to Location
