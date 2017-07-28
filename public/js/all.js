@@ -91,12 +91,16 @@ angular
 				controller	:	'JobsCtrl',
 				controllerAs: 	'jobs',
 				resolve:	{
-					jobsData : function(jobs,$rootScope){
+					jobsData : function(jobs,$rootScope,$route,auth){
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						console.log('$routeParams',);
+						
+						var query = auth.objectToQuerystring( $route.current.params );
 						
 						angular.element('.loader').show();
 						
-						return jobs.getData('jobs').then(function(result){
+						return jobs.getData('jobs'+query).then(function(result){
 							console.log('Got some jobs',result);
 							angular.element('.loader').hide();
 							return result.data.data;
@@ -262,7 +266,9 @@ angular
 		return function(val,format) {
 			var relative_str;
 			
-			relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			//relative_str = moment(val, (format ? format : "YYYYMMDD")).fromNow();
+			
+			relative_str = moment(val).fromNow();
 			
 			return relative_str;
 		};
@@ -1721,6 +1727,25 @@ angular.module('jpApp')
 					}
 				}
 				return "";
+			},
+			objectToQuerystring : function(obj) {
+				var str = '';
+								
+				if(obj !== 'undefined'){
+					str = '?';
+					
+					for(var prop=0; prop < Object.keys(obj).length; prop++){
+													
+						str += Object.keys(obj)[prop]+'='+obj[Object.keys(obj)[prop]];
+											
+						Object.keys(obj)[prop + 1] ? 
+							str += '&'
+						: null;
+					}
+						
+				}
+				
+				return encodeURI(str);
 			}
 		};
 	});

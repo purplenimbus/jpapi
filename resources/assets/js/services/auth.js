@@ -48,6 +48,25 @@ angular.module('jpApp')
 					}
 				}
 				return "";
+			},
+			objectToQuerystring : function(obj) {
+				var str = '';
+								
+				if(obj !== 'undefined'){
+					str = '?';
+					
+					for(var prop=0; prop < Object.keys(obj).length; prop++){
+													
+						str += Object.keys(obj)[prop]+'='+obj[Object.keys(obj)[prop]];
+											
+						Object.keys(obj)[prop + 1] ? 
+							str += '&'
+						: null;
+					}
+						
+				}
+				
+				return encodeURI(str);
 			}
 		};
 	});

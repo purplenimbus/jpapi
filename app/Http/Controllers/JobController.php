@@ -14,6 +14,7 @@ use	App\Job_Level;
 use	App\Job_Skill;
 use	App\Location;
 use	App\Application;
+use	App\Company;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Auth;
@@ -118,7 +119,7 @@ class JobController extends Controller
 					endif;
 				endif;
 			}
-
+		
 		return $jobs;
 		
 		else:
@@ -170,7 +171,17 @@ class JobController extends Controller
 											})*/
 											->get(['id','title','created_at']);
 			}
-			$job['job_category'] 	= isset($job->job_category->name) ? $job->job_category->name : null;
+			if(isset($job->job_category->name)):
+				$job['job_category'] 	=  	$job->job_category->name;
+				$job['related'] 		= 	$this->related('Job',$job->job_category_id,['id','title','created_at','company_id'])->each(function($value,$key){
+					$value['company']	=	Company::where('id',$value->company_id)->first(['name']);
+					//if($value->id == $id){
+						//echo "related id: ".$value->id." , Job id : ".$id;
+						//unset($value[$key]);
+					//}
+				});
+			endif;
+			
 			$job['job_type'] 		= isset($job->job_type->name) ? $job->job_type->name : null;
 			$job['job_level'] 		= isset($job->job_level->name) ? $job->job_level->name : null;
 			$job['job_salary'] 		= isset($job->job_salary->name) ? $job->job_salary->name : null;
@@ -186,6 +197,8 @@ class JobController extends Controller
 					$job['application_date']	= $application->created_at;
 				endif;
 			endif;
+			
+			//var_dump($jobs['related']);
 				
 			return $job->toJson();
 		else:
@@ -401,7 +414,11 @@ class JobController extends Controller
 		
 		//Send Email to User
 	}
-	
+	/**
+     * Get logged in user
+     *
+     * @return object 
+     */
 	public function getAuthenticatedUser()
 	{
 		try {
@@ -426,5 +443,33 @@ class JobController extends Controller
 
 		// the token is valid and we have found the user via the sub claim
 		return response()->json(compact('user'));
+	}
+	
+	/**
+     * Store applications
+     *
+	 * @param  string  $model Related model
+	 * @param  int  $id Category id
+	 * @param  array  $fields Fields to return in array
+     * @return object 
+     */
+	public function related($model,$id,$fields = null){
+		
+		$model_name = "App\\".$model;
+		
+		try{
+			
+			$related = $model_name::where(strtolower($model).'_category_id',$id)
+								->latest()
+								->limit(5)
+								->get($fields);
+			
+			//var_dump($related);
+			
+			return $related;
+				
+		}catch(Exception $e) {
+			return $e->getMessage();
+		}
 	}
 }

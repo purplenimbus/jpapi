@@ -91,12 +91,16 @@ angular
 				controller	:	'JobsCtrl',
 				controllerAs: 	'jobs',
 				resolve:	{
-					jobsData : function(jobs,$rootScope){
+					jobsData : function(jobs,$rootScope,$route,auth){
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						console.log('$routeParams',);
+						
+						var query = auth.objectToQuerystring( $route.current.params );
 						
 						angular.element('.loader').show();
 						
-						return jobs.getData('jobs').then(function(result){
+						return jobs.getData('jobs'+query).then(function(result){
 							console.log('Got some jobs',result);
 							angular.element('.loader').hide();
 							return result.data.data;

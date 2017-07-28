@@ -59,7 +59,8 @@ class Job extends Model
 		'user_applied',
 		'job_skills',
 		//'wp_id',
-		'application_date'
+		'application_date',
+		'related'
     ];
 	
 	/* Relationships */
