@@ -71,6 +71,9 @@ class JobController extends Controller
     public function index(Request $request)
     {		
 		$requests = $request->all();
+				
+		//var_dump($request->header()['token'][0]);
+				
 		$query = array();
 		if (sizeof($requests)) {
 			foreach($requests as $key => $value){
@@ -460,7 +463,7 @@ class JobController extends Controller
 		try{
 			
 			$related = $model_name::where(strtolower($model).'_category_id',$id)
-								->latest()
+								->inRandomOrder()
 								->limit(5)
 								->get($fields);
 			

@@ -47,7 +47,8 @@ angular
 			$rootScope.user.info = userData
 			
 		: null;
-
+		
+		$rootScope.showProfileMenu = false;
 	
 	}).config(function ($routeProvider,$locationProvider,$stateProvider, $urlRouterProvider, $authProvider) {
 		console.log('Route Provider',$routeProvider);
@@ -72,10 +73,10 @@ angular
 						console.log('rootScope',$rootScope);
 						$rootScope.$location.title = $rootScope.$location.base;
 						
-						angular.element('.loader').hide();
+						$rootScope.showProfileMenu = false;
 						
-						$rootScope.logged_in = false;
-					
+						angular.element('.loader').hide();
+											
 						var location = accountData.setUserLocation();
 						
 						$rootScope.$location.title = 'Jobs in '+$rootScope.user.location.location;
@@ -98,6 +99,8 @@ angular
 						
 						var query = auth.objectToQuerystring( $route.current.params );
 						
+						$rootScope.showProfileMenu = false;
+						
 						angular.element('.loader').show();
 						
 						return jobs.getData('jobs'+query).then(function(result){
@@ -117,6 +120,8 @@ angular
 					jobData : function(jobs,$route,$rootScope,auth){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						$rootScope.showProfileMenu = false;
 						
 						angular.element('.loader').show();
 						
@@ -138,6 +143,8 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
+						$rootScope.showProfileMenu = false;
+						
 						angular.element('.loader').show();
 						
 						return companies.getData('companies').then(function(result){
@@ -156,6 +163,8 @@ angular
 					companyData : function(companies,$route,$rootScope){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						$rootScope.showProfileMenu = false;
 						
 						angular.element('.loader').show();
 						
@@ -177,6 +186,8 @@ angular
 						var user_id = JSON.parse(auth.getCookie('auth')).id;
 						
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						$rootScope.showProfileMenu = true;
 						
 						return accountData.getUserData(user_id).then(function(result){
 						
@@ -201,6 +212,8 @@ angular
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
+						$rootScope.showProfileMenu = true;
+						
 						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
 						
@@ -213,7 +226,7 @@ angular
 					}
 				}
 			})
-			.when('/profile/jobs',{
+			.when('/profile/applications',{
 				template	:	function(d){
 					//console.log('Edit Profile',d);
 					return '/views/partials/account/view-jobs.html';
@@ -224,6 +237,8 @@ angular
 					user : function(accountData,$rootScope){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
+						
+						$rootScope.showProfileMenu = true;
 						
 						return accountData.getUserData().then(function(result){
 							console.log('Result',result);
@@ -238,7 +253,12 @@ angular
 				}
 			})
 			.otherwise({
-				templateUrl : 	'Not Found'
+				templateUrl : 	'Not Found',
+				resolve : {
+					init : function($rootScope){
+						$rootScope.showProfileMenu = false;
+					}
+				}
 			});
    
 			$stateProvider

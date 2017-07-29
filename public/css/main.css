@@ -162,9 +162,6 @@ aside.header {
   background-position: center bottom;
   display: none; }
 
-.profile aside h5 {
-  font-size: 16px; }
-
 .profile main section {
   margin-bottom: 25px;
   font-size: 12px; }
@@ -182,6 +179,10 @@ aside.header {
       color: gray; }
     .profile main section .info p {
       text-transform: uppercase; }
+
+.submenu ul li.uk-active {
+  border: none;
+  background: none; }
 
 html {
   background: transparent; }
