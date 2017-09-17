@@ -207,9 +207,9 @@ class AuthenticateController extends Controller
 											});
 		$profile->applications = sizeof($job_applications) ? $job_applications : null;
 		
-		if($request->has('token')):
+		/*if($request->has('token')):
 			$profile['user_data'] = User::find($id);
-		endif;
+		endif;*/
 		
 		if($profile){
 			return response()->json([$profile],200);
