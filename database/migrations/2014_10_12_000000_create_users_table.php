@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
 			$table->string('linkedin')->nullable();
 			$table->string('image_url')->nullable();
 			$table->integer('wp_id')->unique()->nullable();
+			$table->json('resume');
             $table->rememberToken();
             $table->timestamps();
         });

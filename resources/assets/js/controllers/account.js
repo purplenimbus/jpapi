@@ -17,7 +17,7 @@ angular.module('jpApp')
 		
 		console.log('User',user);
 								
-		$scope.currentAsset = user.data[0].resume ? JSON.parse(user.data[0].resume) : { experience:[],education:[]};
+		$scope.currentAsset = user.data[0].resume ? JSON.parse(user.data[0].resume) : { experience:[],education:[] };
 		
 		$scope.currentAsset.user = AccountCtrl.user;
 		
