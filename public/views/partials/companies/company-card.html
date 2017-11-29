@@ -1,0 +1,36 @@
+<div class="uk-panel uk-panel-box company_widget bg-white job_list">
+	<div class="uk-panel-teaser uk-text-center" ng-if="false">
+		<div data-uk-slider>
+
+			<div class="uk-slider-container">
+				<ul class="uk-slider uk-grid-width-1-1">
+					<li ng-repeat="image in meta.images">
+						<img src="{{ image.guid }}" alt="{{ image.post_content }}">
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<article class="uk-article">
+		<div class="uk-thumbnail uk-thumbnail-expand logo uk-text-center">
+			<img ng-if="meta.logo_url" src="{{ meta.logo_url }}" class="uk-thumbnail" />
+			<p class="uk-article-lead ng-binding">{{ name | uppercase }}</p>
+		</div>
+		<ul ng-if="jobs" class="uk-list uk-list-line uk-margin-remove">
+			<li ng-repeat="job in jobs" ng-hide="job.id === currentAsset.id">
+				<article class="uk-comment">
+					<header class="uk-comment-header">
+						<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>
+						<div class="uk-comment-meta">
+							<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment }}</small>
+						</div>
+					</header>
+				</article>
+			</li>
+		</ul>
+		<p ng-if="currentAsset.company.jobs" class="uk-text-center">
+			<a href="#/companies/{{ id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View More Jobs</a>
+		</p>
+	</article>
+</div>

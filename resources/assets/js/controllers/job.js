@@ -8,7 +8,7 @@
  * Controller of the jpApp
  */
 angular.module('jpApp')
-	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth,$auth,$timeout)
+	.controller('JobCtrl', function ($scope,jobs,$route,$location,$filter,modal,elements,$rootScope,form,jobData,accountData,auth,$auth,$timeout,wordpress)
 	{
 		
 		var JobCtrl = this;

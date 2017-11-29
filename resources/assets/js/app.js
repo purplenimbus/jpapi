@@ -92,7 +92,7 @@ angular
 				controller	:	'JobsCtrl',
 				controllerAs: 	'jobs',
 				resolve:	{
-					jobsData : function(jobs,$rootScope,$route,auth){
+					jobsData : function(jobs,$rootScope,$route,auth,wordpress){
 						$rootScope.$location.title = $rootScope.$location.base;
 						
 						console.log('$routeParams',);
@@ -103,10 +103,11 @@ angular
 						
 						angular.element('.loader').show();
 						
-						return jobs.getData('jobs'+query).then(function(result){
-							console.log('Got some jobs',result);
+						return wordpress.getData('jobs'+query).then(function(result){
+							console.log('Got some jobs',result.data);
+							var data = result.data.map(function(value){ return wordpress.parseWPData(value); });
 							angular.element('.loader').hide();
-							return result.data.data;
+							return data;
 						});
 					}
 				}
@@ -117,7 +118,7 @@ angular
 				controllerAs: 	'job',
 				resolve : {
 			
-					jobData : function(jobs,$route,$rootScope,auth){
+					jobData : function(jobs,$route,$rootScope,auth,wordpress){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
@@ -127,9 +128,10 @@ angular
 						
 						console.log('$rootScope.user', $rootScope.$auth.isAuthenticated());
 						
-						return jobs.getData('jobs',$route.current.params.jobId).then(function(result){
+						return wordpress.getData('jobs',$route.current.params.jobId).then(function(result){
+							 
 							angular.element('.loader').hide();
-							return result.data;
+							return wordpress.parseWPData(result.data);
 						});
 					}
 				}
@@ -139,7 +141,7 @@ angular
 				controller	:	'CompaniesCtrl',
 				controllerAs: 	'Companies',
 				resolve : {
-					companiesData : function(companies,$route,$rootScope){
+					companiesData : function(wordpress,$route,$rootScope){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
@@ -147,9 +149,9 @@ angular
 						
 						angular.element('.loader').show();
 						
-						return companies.getData('companies').then(function(result){
+						return wordpress.getData('companies').then(function(result){
 							angular.element('.loader').hide();
-							return result.data;
+							return wordpress.parseWPData(result.data);
 						});
 					}
 				}
@@ -160,7 +162,7 @@ angular
 				controllerAs: 	'Company',
 				resolve 	: {
 					
-					companyData : function(companies,$route,$rootScope){
+					companyData : function(wordpress,$route,$rootScope){
 						
 						$rootScope.$location.title = $rootScope.$location.base;
 						
@@ -168,9 +170,9 @@ angular
 						
 						angular.element('.loader').show();
 						
-						return companies.getData('companies',$route.current.params.companyId).then(function(result){
+						return wordpress.getData('companies',$route.current.params.companyId).then(function(result){
 							angular.element('.loader').hide();
-							return result.data;
+							return wordpress.parseWPData(result.data);
 						});
 					}
 					

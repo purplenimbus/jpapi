@@ -7,13 +7,13 @@
 					<div class="uk-grid">
 						<div class="uk-width-3-10">
 							<div class="uk-thumbnail uk-thumbnail-expand">
-								<img ng-if="currentAsset.logo" src="{{ currentAsset.logo }}"/>
+								<img ng-if="currentAsset.meta.logo_url" src="{{ currentAsset.meta.logo_url }}"/>
 							</div>
 						</div>
 						<div class="uk-width-7-10">
 							<article class="uk-article">
-								<p class="uk-article-lead">{{ currentAsset.name }}</p>
-								<p class="uk-article-meta uk-text-uppercase">{{ currentAsset.company_category[0].name }}</p>
+								<p class="uk-article-lead">{{ currentAsset.title }}</p>
+								<p class="uk-article-meta uk-text-uppercase">{{ currentAsset.categories[0].name }}</p>
 								<div class="uk-button-group">
 									<button ng-if="$root.$auth.isAuthenticated() && $root.user.info.access_level === 'admin'" class="uk-button uk-button-default" ng-click="edit($event)">Edit</button>
 								</div>
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="uk-panel uk-panel-box uk-margin-small-bottom bg-white">
-					<h3 class="uk-panel-title">About {{ currentAsset.name }}</h3>
+					<h3 class="uk-panel-title">About {{ currentAsset.title }}</h3>
 					<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 				</div>
 			</main>

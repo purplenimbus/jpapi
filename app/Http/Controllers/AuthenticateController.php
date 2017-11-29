@@ -33,7 +33,7 @@ class AuthenticateController extends Controller
 	   $this->seeder = New Seeder;
 	}
 	
-	public function authenticate(Request $request)
+	public function authenticate($tenant_id,Request $request)
     {
 		
         $credentials = $request->only('email', 'password');

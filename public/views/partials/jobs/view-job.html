@@ -11,11 +11,11 @@
 								<p><a href="#companies/{{ currentAsset.company.id }}" ng-if="currentAsset.company.name">{{ currentAsset.company.name  | uppercase }}</a> <span ng-if="currentAsset.location.name">, {{ currentAsset.location.name }}</span></p>
 								<p class="uk-article-meta info">
 									<ul class="uk-subnav uk-subnav-line uk-text-muted uk-hidden-small uk-text-uppercase">
-										<li ng-if="currentAsset.job_category.name">
-											{{ currentAsset.job_category.name }}
+										<li ng-if="currentAsset.categories">
+											<span ng-repeat="category in currentAsset.categories">{{ category.name }}</span>
 										</li>
-										<li ng-if="currentAsset.job_type.name">
-											{{ currentAsset.job_type.name }}
+										<li ng-if="currentAsset.types">
+											<span ng-repeat="type in currentAsset.types">{{ type.name }}</span>
 										</li>
 										<li ng-if="currentAsset.job_level.name">
 											{{ currentAsset.job_level.name }}
@@ -44,10 +44,10 @@
 						<p class="uk-article-lead">Job Description</p>
 						<div ng-bind-html="currentAsset.description">{{ currentAsset.description }}</div>
 					</section>
-					<section class="skills uk-article" ng-if="currentAsset.job_skills.length >= 1">
+					<section class="skills uk-article" ng-if="currentAsset.skills.length >= 1">
 						<p class="uk-article-lead">Required Skills</p>
 						<div class="skills">
-							<div class="chip" ng-repeat="skill in currentAsset.job_skills">{{ skill.tag }}</div>
+							<div class="uk-badge" ng-repeat="skill in currentAsset.skills">{{ skill.name }} </div>
 						</div>
 					</section>	
 				</div>
@@ -57,32 +57,7 @@
 				</div>
 			</main>
 			<aside id="sidebar" class="uk-width-medium-3-10 uk-width-small-1-1">
-				<div class="uk-panel uk-panel-box company_widget bg-white job_list">
-					<div class="uk-panel-teaser uk-text-center">
-						<img src="/images/header-bg.jpg" alt="">
-					</div>
-					<article class="uk-article">
-						<div class="uk-thumbnail uk-thumbnail-expand logo uk-text-center">
-							<img src="{{ currentAsset.company.logo }}" />
-							<p class="uk-article-lead ng-binding">{{ currentAsset.company.name | uppercase }}</p>
-						</div>
-						<ul ng-if="currentAsset.company.jobs" class="uk-list uk-list-line uk-margin-remove">
-							<li ng-repeat="job in currentAsset.company.jobs" ng-hide="job.id === currentAsset.id">
-								<article class="uk-comment">
-									<header class="uk-comment-header">
-										<p class="uk-margin-remove"><a href="#jobs/{{ job.id }}" >{{ job.title }}</a></p>
-										<div class="uk-comment-meta">
-											<small class="uk-text-muted uk-text-uppercase uk-text-small">{{ job.created_at | moment }}</small>
-										</div>
-									</header>
-								</article>
-							</li>
-						</ul>
-						<p ng-if="currentAsset.company.jobs" class="uk-text-center">
-							<a href="#/companies/{{ currentAsset.company.id }}" class="uk-button-link uk-width-1-1 uk-margin-small-bottom">View More Jobs</a>
-						</p>
-					</article>
-				</div>
+				<company-card></company-card>
 			</aside>
 		</div>
 	</div>
